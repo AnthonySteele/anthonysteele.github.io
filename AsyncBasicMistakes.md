@@ -89,12 +89,12 @@ This is actual production code:
 ```
 
 As far as I can see, 
-* There is a method `protected async Task<T> DoTheThingAsync<T>(Func<Task<T>> action)` which wraps the `action` code in timer metrics and error logging.
-* Someone needed a sync version of `DoTheThingAsync`, and decided that a sync wrapper was the way to do it. First mistake.
-* When it didn't compile, they  just continued piling on code constructs until it compiled, and called it done. 
-* OK, it probably passed some unit tests as well. 
-* But it's still a catastrophe. People have learned from this "pattern" that if it doesn't compile, just add `Task.Run` and `.Result` until it does, and applied it elsewhere. Unreadable code is poor code. And there is significant unnecessary performance overhead from the heavyweight constructs. 
-* The best way to do this is to actually write a `DoTheThing` method that does the same `try...catch` and timers as `DoTheThingAsync` but without the Task and awaits. Sometimes the sync code is best as just a wrapper around the async code, but there are simpler wrappers than the code above, and this is not one of those times.
+ * There is a method `protected async Task<T> DoTheThingAsync<T>(Func<Task<T>> action)` which wraps the `action` code in timer metrics and error logging.
+ * Someone needed a sync version of `DoTheThingAsync`, and decided that a sync wrapper was the way to do it. First mistake.
+ * When it didn't compile, they  just continued piling on code constructs until it compiled, and called it done. 
+ * OK, it probably passed some unit tests as well. 
+ * But it's still a catastrophe. People have learned from this "pattern" that if it doesn't compile, just add `Task.Run` and `.Result` until it does, and applied it elsewhere. Unreadable code is poor code. And there is significant unnecessary performance overhead from the heavyweight constructs. 
+ * The best way to do this is to actually write a `DoTheThing` method that does the same `try...catch` and timers as `DoTheThingAsync` but without the Task and awaits. Sometimes the sync code is best as just a wrapper around the async code, but there are simpler wrappers than the code above, and this is not one of those times.
 
 Best refactor:
 
