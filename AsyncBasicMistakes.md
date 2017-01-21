@@ -36,7 +36,7 @@ A Task - the promise of a value later - is a general construct which says nothin
  Ideally, you hand the async Task off to your framework. You can do this in ASP MVC and WebApi as they allow [async methods on controllers](http://stackoverflow.com/questions/31185072/how-to-effectively-use-async-await-on-asp-net-web-api), you do this [in NUnit as tests can be async](http://stackoverflow.com/a/21617400/5599), [in NancyFx](https://github.com/NancyFx/Nancy/wiki/Async), etc. 
 Calling `.Result` forces the code to wait at that point, losing the main advantage that you can hand off whole blocks of code to be executed later when results are available.
 
-I heard Kathleen Dollard compare the async call stack to a [Light tube](https://en.wikipedia.org/wiki/Light_tube): Unless the tube from the basement is connected to the sunlight on the roof in an uninterupted way, no light will get through. And unless the task from the inner method is handed back to the framework, the app is not async.
+I heard [Kathleen Dollard](https://twitter.com/KathleenDollard) compare the async call stack to a [Light tube](https://en.wikipedia.org/wiki/Light_tube): Unless the tube from the basement is connected to the sunlight on the roof in an uninterupted way, no light will get through. And unless the task from the inner method is handed back to the framework, the app is not async.
  
  The most common exception is for commandline apps, where since `Main` cannot be async, you have to do something like this:
  
