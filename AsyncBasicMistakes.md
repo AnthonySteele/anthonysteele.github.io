@@ -88,7 +88,8 @@ This is actual production code:
  }
 ```
 
-As far as I can see, 
+As far as I can see:
+
  * There is a method `protected async Task<T> ExecWithLoggingAndTimingAsync<T>(Func<Task<T>> action)` which wraps the `action` code in timer metrics and error logging.
  * Someone needed a sync version of `ExecWithLoggingAndTimingAsync`, and decided that a sync wrapper was the way to do it. First mistake.
  * When it didn't compile, they  just continued piling on code constructs until it compiled, and called it done. 
