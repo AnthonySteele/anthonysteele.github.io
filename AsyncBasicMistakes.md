@@ -37,7 +37,7 @@ Calling `.Result` forces the code to wait at that point, losing the main advanta
  
  The most common exception is for commandline apps, where since `Main` cannot be async, you have to do something like this:
  
- ```csharp
+```csharp
     class Program
     {
         static void Main(string[] args)
@@ -79,7 +79,7 @@ There are patterns for converting code to async. e.g. `private bool SomeTest()` 
 This is actual production code:
 
 ```csharp
- protected T DoTheThing<T>(Func<T> func)
+ protected T ExecWithLoggingAndTiming<T>(Func<T> func)
  {
         return Task.Run(async () => await DoTheThingAsync(() => Task.FromResult(func()))).Result;
  }
@@ -99,7 +99,7 @@ Best refactor:
  // The sync the code to DoTheThingAsync, 
  // i.e. without the awaits 
  // this avoids the overhead and confusion of creating tasks and syncing them up again
- protected T DoTheThing<T>(Func<T> func)
+ protected T ExecWithLoggingAndTiming<T>(Func<T> func)
  {
    T result = default(T);
    var timer = Stopwatch.StartNew();
