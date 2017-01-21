@@ -84,22 +84,22 @@ This is actual production code:
 ```csharp
  protected T ExecWithLoggingAndTiming<T>(Func<T> func)
  {
-        return Task.Run(async () => await DoTheThingAsync(() => Task.FromResult(func()))).Result;
+        return Task.Run(async () => await ExecWithLoggingAndTimingAsync(() => Task.FromResult(func()))).Result;
  }
 ```
 
 As far as I can see, 
- * There is a method `protected async Task<T> DoTheThingAsync<T>(Func<Task<T>> action)` which wraps the `action` code in timer metrics and error logging.
- * Someone needed a sync version of `DoTheThingAsync`, and decided that a sync wrapper was the way to do it. First mistake.
+ * There is a method `protected async Task<T> ExecWithLoggingAndTimingAsync<T>(Func<Task<T>> action)` which wraps the `action` code in timer metrics and error logging.
+ * Someone needed a sync version of `ExecWithLoggingAndTimingAsync`, and decided that a sync wrapper was the way to do it. First mistake.
  * When it didn't compile, they  just continued piling on code constructs until it compiled, and called it done. 
  * OK, it probably passed some unit tests as well. 
  * But it's still a catastrophe. People have learned from this "pattern" that if it doesn't compile, just add `Task.Run` and `.Result` until it does, and applied it elsewhere. Unreadable code is poor code. And there is significant unnecessary performance overhead from the heavyweight constructs. 
- * The best way to do this is to actually write a `DoTheThing` method that does the same `try...catch` and timers as `DoTheThingAsync` but without the Task and awaits. Sometimes the sync code is best as just a wrapper around the async code, but there are simpler wrappers than the code above, and this is not one of those times.
+ * The best way to do this is to actually write a `ExecWithLoggingAndTiming` method that does the same `try...catch` and timers as `ExecWithLoggingAndTimingAsync` but without the Task and awaits. Sometimes the sync code is best as just a wrapper around the async code, but there are simpler wrappers than the code above, and this is not one of those times.
 
 Best refactor:
 
 ```csharp
- // The sync the code to DoTheThingAsync, 
+ // The sync version of the code to ExecWithLoggingAndTimingAsync, 
  // i.e. without the awaits 
  // this avoids the overhead and confusion of creating tasks and syncing them up again
  protected T ExecWithLoggingAndTiming<T>(Func<T> func)
@@ -117,7 +117,7 @@ Best refactor:
    }
    catch (Exception ex)
    {
-     _logger.Error("DoTheThing failed", ex);
+     _logger.Error("ExecWithLoggingAndTiming failed", ex);
      throw;
    }
  }
