@@ -1,6 +1,6 @@
 # Avoiding simple mistakes in async await
 
-I see a lot of code lately that makes some simple mistakes using the `async ... await` construct.
+I see a lot of code lately that makes some simple mistakes using the `async ... await` construct in C# code.
 
 ## TL;DR
 
