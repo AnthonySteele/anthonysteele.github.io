@@ -5,3 +5,8 @@
  * [Microservices Links](./MicroservicesLinks) May, 2016
  * [Optimization and Metrics](./OptimizationAndMetrics) Jan, 2016
  * [Agile Values](./AgileValues) Sept, 2015
+ 
+ ### Identity integration
+ 
+ * [Github](https://github.com/AnthonySteele/)
+ * [Twitter](https://twitter.com/AnthonySteele)
