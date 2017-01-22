@@ -31,7 +31,7 @@ A Task - the promise of a value later - is a general construct which says nothin
  Most of the time you should not need to use `.Result`. Let the async flow. This means that lots of methods have to be sprinkled with `async`, `Task` and `await`: the caller, the caller's caller and so on up the chain. This is just the cost of it, so get used to it. The model is not so much an "some async methods" in an app as "an async app". 
 
  
- If you have to use `.Result`, use it as few times as high up the call stack as possible.
+ If you have to use `.Result`, use it as few times as high up the call stack as possible. I generally do this while refactoring out `.Result` calls as it's a step towards the goal.
  
  Ideally, you hand the async Task off to your framework. You can do this in ASP MVC and WebApi as they allow [async methods on controllers](http://stackoverflow.com/questions/31185072/how-to-effectively-use-async-await-on-asp-net-web-api), you do this [in NUnit as tests can be async](http://stackoverflow.com/a/21617400/5599), [in NancyFx](https://github.com/NancyFx/Nancy/wiki/Async), etc. 
 Calling `.Result` forces the code to wait at that point, losing the main advantage that you can hand off whole blocks of code to be executed later when results are available.
