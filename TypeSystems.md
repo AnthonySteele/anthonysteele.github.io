@@ -30,4 +30,6 @@ There are 3 kinds of tuples. There is `var value = new Tuple<int, string>(1, "he
 
 For a new language in 2017 as opposed to 1997, I would expect more emphasis to be placed on values being *Immutable by default* and *Not null by default*. Allowing changes or nulls can be something that is opted into explicitly. [F#])(http://fsharp.org/) works this way. So does [Swift](https://swift.org/) and so does [Rust](https://www.rust-lang.org).
 
+C# has gained some small-scale functional features, but it is not a "functional-first" language. Along those lines, there is a convenience in F' and in java that is lacking in C#, and that is that the type `Func<TIn, TOut>` could be trivially convertible to or from a matching interface `interface IDoSomething { TOut TheMethod(TIn input); }`.
+
 C# did a better than reasonable job in the initial design, and a better than reasonable job in managing the evolution, but time has passed and thinking has moved on. Best practice isn't what it was.
