@@ -8,7 +8,7 @@ I see a lot of code lately that makes some simple mistakes using the `async ... 
  * Most of the time the wait is for network I/O, and [there is no thread waiting](http://blog.stephencleary.com/2013/11/there-is-no-thread.html).
  * Avoid `.Result` as much as possible. Let the async flow.
  * Avoid `Task.Run`. You don't need it.
- * Avoid `async void` methods
+ * Avoid `async void` methods.
  
 Async can't make your code wait faster, but it can free up threads for greater throughput. However some common antipatterns prevent that from happening.
  
@@ -20,7 +20,7 @@ Async can't make your code wait faster, but it can free up threads for greater t
  
 `Async ... await` is basically about allowing you to write code in the familiar linear style, but under the hood, it is reconfigured so that the code after the `await` completes is put in a callback that is executed later. Without `async ... await` we could still write equivalent code using callbacks, but it was just much harder. 
 
-This is not unique to C#. Look at how [this Javascript promises library](https://www.promisejs.org/) works with chained callbacks. 
+This is not unique to C#. Look at how [this Javascript promises library](https://www.promisejs.org/) works with chained callbacks. And [futures and promises in Java](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html).
  
 ## There is no thread
 
@@ -28,7 +28,7 @@ A Task - the promise of a value later - is a general construct which says nothin
  
 ## Avoid taking the result
  
- Most of the time you should not need to use `.Result`. Let the async flow. This means that lots of methods have to be sprinkled with `async`, `Task` and `await`: the caller, the caller's caller and so on up the chain. This is just the cost of it, so get used to it. It's not so much an "some async methods" in an app as "an async app". 
+ Most of the time you should not need to use `.Result`. Let the async flow. This means that lots of methods have to be sprinkled with `async`, `Task` and `await`: the caller, the caller's caller and so on up the chain. This is just the cost of it, so get used to it. The model is not so much an "some async methods" in an app as "an async app". 
 
  
  If you have to use `.Result`, use it as few times as high up the call stack as possible.
@@ -36,26 +36,28 @@ A Task - the promise of a value later - is a general construct which says nothin
  Ideally, you hand the async Task off to your framework. You can do this in ASP MVC and WebApi as they allow [async methods on controllers](http://stackoverflow.com/questions/31185072/how-to-effectively-use-async-await-on-asp-net-web-api), you do this [in NUnit as tests can be async](http://stackoverflow.com/a/21617400/5599), [in NancyFx](https://github.com/NancyFx/Nancy/wiki/Async), etc. 
 Calling `.Result` forces the code to wait at that point, losing the main advantage that you can hand off whole blocks of code to be executed later when results are available.
 
-I heard Kathleen Dollard compare the async call stack to a [Light tube](https://en.wikipedia.org/wiki/Light_tube): Unless the tube from the basement is connected to the sunlight on the roof in an uninterupted way, no light will get through. And unless the task from the inner method is handed back to the framework, the app is not async.
+I heard Kathleen Dollard compare the async call stack to a [Light tube](https://en.wikipedia.org/wiki/Light_tube): Any blockage between the basement and roof will prevent light getting through. And with async, any blocking code will prevent the task from getting through.
+
+### Exceptions to that rule
  
- The most common exception is for commandline apps, where since `Main` cannot be async, you have to do something like this:
+ The most common exception is for commandline apps, where since `Main` cannot be async, you have to do [something like this](http://stackoverflow.com/questions/9208921/cant-specify-the-async-modifier-on-the-main-method-of-a-console-app):
  
 ```csharp
-    class Program
-    {
-        static void Main(string[] args)
-        {
+class Program
+{
+	static void Main(string[] args)
+	{
 
-            var task = AsyncMain();
-            task.Wait();
-            Console.ReadLine();
-        }
+		var task = AsyncMain();
+		task.Wait();
+		Console.ReadLine();
+	}
 
-        private static async Task AsyncMain()
-        {
-          // await the rest of the code
-        }
-     }  
+	private static async Task AsyncMain()
+	{
+	  // await the rest of the code
+	}
+ }  
 ```
  
 ## Avoid Task.Run
@@ -66,7 +68,7 @@ You really don't need this in most cases (unless you're writing a scheduling eng
 
 ##  Avoid async void methods
 
-This type is only there for compatibility reasons. When you can, use e.g. `public async Task Foo()` instead of `public async void Foo()`.
+The type `async void` is only there for compatibility reasons. When you can, use e.g. `public async Task Foo()` instead of `public async void Foo()`.
 
 There are patterns for converting code to async. e.g. `private bool SomeTest()` becomes `private async Task<bool> SomeTest()`. `bool` becomes `Task<bool>` and `void` becomes `Task` - and where there is no return value we still need a task so that the caller can know when the async code has completed without a return value. You only drop the `Task` when it is necessary for a calling framework that specifically needs a `void` return.
 
