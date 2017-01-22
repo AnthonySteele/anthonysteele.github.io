@@ -6,7 +6,7 @@
  * [Optimization and Metrics in ASP Kestrel Benchmarks](./OptimizationAndMetrics) Jan, 2016
  * [Agile Values](./AgileValues) Sept, 2015
  
- ### Identity integration
+### Identity integration
  
  * [Github](https://github.com/AnthonySteele/)
  * [Twitter](https://twitter.com/AnthonySteele)
