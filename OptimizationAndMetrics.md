@@ -13,6 +13,7 @@ My thoughts were:
 
 What does this benchmark actually imply? 
 When one million requests are processed in a second what actually happens is somewhere between these two unrealistic extremes:
+
 * Requests are processed one at a time, each taking around a millionth of a second (AKA [1 microsecond](https://en.wikipedia.org/wiki/Microsecond), 1000 nanoseconds, or a 1000th of a millisecond). This is unrealistic as the machine would have unused capacity while processing just 1 request.
 * One million threads are spawned, and they all complete around a second later. And spend most of the time inbetween not doing anything. This is unrealistic as it's not useful or even feasible to run that many concurrent threads. 
  
@@ -41,7 +42,7 @@ Can you do 1 million requests per second when each one takes 10ms? i.e. is 1 mil
 
 ## Scenario planning
 
-The "1 million requests per second" scenario is [a benchmark of simplest code](https://github.com/aspnet/benchmarks/blob/dev/src/Benchmarks/PlaintextMiddleware.cs), so this will be the time to do the *simplest possible thing* with additional tweaking:  the minimum framework overhead to respond at all. 
+The "1 million requests per second" scenario is [a benchmark of simplest code](https://github.com/aspnet/benchmarks/blob/dev/src/Benchmarks/Middleware/PlaintextMiddleware.cs), so this will be the time to do the *simplest possible thing* with additional tweaking:  the minimum framework overhead to respond at all. 
 
 This high throughput will allow the ASP framework to be used in scenarios where previously it could not be, e.g. [pushing game frames over a socket](https://twitter.com/Illyriad). I don't know much about these scenarios, so I won't discuss them in detail. But I am sure that for all the attention-getting thrill of these cutting-edge low-latency cases, they are an unusual niche and it would be a mistake to tune the general purpose ASP framework to them at the expense of the normal case. But hopefully there's a synergy instead: fixing things that break at the limit might improve the normal state. 
 
@@ -75,7 +76,7 @@ So how would existing code be affected by this performance benchmark?
 
 Lets give some numbers: suppose the request is processed in an average of 10 milliseconds. This is optimistic. Suppose that the framework takes 50 microseconds of that. How much benefit is to be had from optimising the framework code? If framework processing now takes 25 microseconds, then the time is halved! Throughput is doubled! An amazing 100% performance improvement!
 
-Well, no, only part of it was halved. A small part. And the whole request that was was processed in 10ms, i.e. in 10 000 microseconds, is now processed in an average of 9 975 microseconds, i.e. an overall 0.25% performance improvement. This is such a smnall change that it would be lost in the noise. 
+Well, no, only part of it was halved. A small part. And the whole request that was was processed in 10ms, i.e. in 10 000 microseconds, is now processed in an average of 9 975 microseconds, i.e. an overall 0.25% performance improvement. This is such a small change that it would be lost in the noise. 
 
 The part that has been optimised does not matter since it is not the bottleneck.  Ironically, the ASP.NET team could super-optimise everything that's in their purview to optimise, and it wouldn't make a difference. 
 
