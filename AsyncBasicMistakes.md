@@ -47,7 +47,6 @@ class Program
 {
 	static void Main(string[] args)
 	{
-
 		var task = AsyncMain();
 		task.Wait();
 		Console.ReadLine();
