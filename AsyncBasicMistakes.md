@@ -39,7 +39,7 @@ Calling `.Result` forces the code to wait at that point, losing the main advanta
 I heard Kathleen Dollard compare the async call stack to a [Light tube](https://en.wikipedia.org/wiki/Light_tube): Any blockage between the basement and roof will prevent light getting through. And with async, any blocking code will prevent the task from getting through.
 
 ### Exceptions to that rule
- 
+
  The most common exception is for commandline apps, where since `Main` cannot be async, you have to do [something like this](http://stackoverflow.com/questions/9208921/cant-specify-the-async-modifier-on-the-main-method-of-a-console-app):
  
 ```csharp
