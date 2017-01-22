@@ -15,11 +15,13 @@ It has been improved over time, but there are limitations to the technique of im
 
 ### Lists
 
-Consider an everyday `List<Order>`. This inherits from  `IList<Order>, ICollection<Order>, IEnumerable<Order>, IReadOnlyList<Order>, IReadOnlyCollection<Order>`, and the non-generic versions: `IList, ICollection, IEnumerable`.
+Consider an everyday `List<Order>`. This inherits from  `IList<Order>, ICollection<Order>, IReadOnlyList<Order>, IReadOnlyCollection<Order>`, IEnumerable<Order>, and the non-generic versions: `IList, ICollection, IEnumerable`.
 
-Another option is an array of `Order`, which inherits from `System.Array` and from the generic and non-generic `IList, ICollection, IEnumerable`. And has [odd covariance rules](http://stackoverflow.com/q/4317459/5599).
+Another option is an array of `Order`, which is similar but not identical. That it inherits from `System.Array` and from the generic and non-generic `IList, ICollection, IEnumerable`. And has [odd covariance rules](http://stackoverflow.com/q/4317459/5599).
 
-If there were no legacy concerns, we would eliminate the non-generic versions of these types and interfaces: in the rare case that you want a list of objects, you can still type `List<object>`. Then remove a few of the other interfaces. And get rid of arrays, or if they are still needed for interop with system code, move them to a P/Invoke ghetto an not use them for anything else.
+If there were no legacy concerns, we would eliminate unnecessary duplication: the non-generic versions of these types and interfaces can go. In the rare case that you want a list of objects, you can still type `List<object>`. 
+
+I would also get rid of arrays, or if they are still needed for interop with system code, move them to a P/Invoke ghetto and not allow them to be used for anything else.
 
 ## funcs and delegates
 
@@ -29,7 +31,14 @@ Because they're the same, only not. If one was designing the "delegates" system 
 
 ## Tuples and tuples
 
-There are 3 kinds of tuples. There is `var value = new Tuple<int, string>(1, "hello");`, there is `var value = new { Count = 1, Message = "hello" };` and there are [new C#7 value tuples](https://www.kenneth-truyers.net/2016/01/20/new-features-in-c-sharp-7/). They are all different, all have uses, all filled a need at the time. But three kinds of tuple is *at least* one too many.
+There are 3 kinds of tuples. There is `var value = new Tuple<int, string>(1, "hello");`, there is `var value = new { Count = 1, Message = "hello" };` and there are [new C#7 value tuples](https://www.kenneth-truyers.net/2016/01/20/new-features-in-c-sharp-7/). 
+
+They are all different, all have uses, all filled a need at the time they were designed. But three kinds of tuple is *at least* one too many.
+
+## conditional keywords
+
+One of the main uses of the `async` keyword is to signal that in the code that follows, `await` cannot be a variable name, it must be a keyword. If `await` cannot be a variable name, then the compiler could largely infer that it should be there from the presence of an `await` and a returned `Task`. So much method annotation is needed instead.
+
 
 ## New thinking
 
@@ -37,8 +46,8 @@ For a new language in 2017 as opposed to 2002, I would expect more emphasis to b
 
 I would also keep an eye on Rust for new thinking about eliminating data races in parallel code by entirely avoiding shared mutable state.
 
-C# has gained some small-scale functional features, but it is not a "functional-first" language. And that's fine. But along those lines, there is a convenience in F# and in java that is lacking in C#: the type `Func<TIn, TOut>` could be trivially convertible to or from a matching interface `interface IDoSomething { TOut TheMethod(TIn input); }`.
+C# has gained some small-scale functional features, but it is not a "functional-first" language. And that's fine. But along those lines, there is a convenience in F# and in java that is lacking in C#: the type `Func<TIn, TOut>` could be trivially convertible to or from a matching interface such as `interface IDoSomething { TOut TheMethod(TIn input); }`.
 
-One of the main uses of the `async` keyword is to signal that in the code that follows, `await` cannot be a variable name, it must be a keyword. If `await` cannot be a variable name, then the compiler could largely infer that it should be there from the presence of an `await` and a returned `Task`. So much method annotation is needed.
+Sum types with pattern matching would be good too.
 
 C# did a better than reasonable job in the initial design, and a better than reasonable job in managing the evolution, but time has passed and thinking has moved on. Best practice isn't what it was.
