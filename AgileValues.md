@@ -1,4 +1,4 @@
-I got a lot out of [Nathan Gloyn](https://twitter.com/NathanGloyn)'s talk at [DDDEA](http://www.dddeastanglia.com/) on "Agile: I do not think it means what you think it means".
+I got a lot out of [Nathan Gloyn](https://twitter.com/NathanGloyn)'s talk at [DDDEA](http://www.dddeastanglia.com/) 2015 on "Agile: I do not think it means what you think it means".
 
 [The slides of the talk are here](http://www.slideshare.net/Nathangl/you-keep-using-the-word-agile-i-do-not-think-it-means-what-you-think-it-means).
 
@@ -12,7 +12,7 @@ So it took me a while to work though this contradiction - when *must* you follow
 
 It's about following the principles. *Why* is that change to the process in place? Try following the statement with "so that.." and you might get "we do scrum, but the standup takes an hour so that we don't upset the head manager who is overseeing the meeting and wants to know everything". 
 
-And "we do scrum, but we release as soon as the feature is ready instead of at the end of the iteration, so that we can deliver valuable working software sooner". Spot the difference? It's in the values. 
+And "we do scrum, but we release as soon as the feature is ready instead of at the end of the iteration, so that we can deliver valuable working software sooner". Spot the difference? It's in the values. You can refer back to [the agile manifesto](http://agilemanifesto.org/).
 
 Agile that's working has a feel to it which you can sense after a while. Something involving the confidence of growing software with regular releases, while being on top of the errors and working at a sustainable pace. 
 
