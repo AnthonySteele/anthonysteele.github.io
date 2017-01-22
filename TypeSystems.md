@@ -6,7 +6,7 @@ The C# type system is good but not perfect. I'd like to dsicuss some of the ways
 
 The design of the C# type system, compiler and class library is a product of the best thinking and tradeoffs of a point in time, but times move on.
 
-C#'s pradigm is of a primarily object-oriented, garbage collected language with extensive runtime metadata and a portable bytecode.
+C#'s paradigm is of a primarily object-oriented, garbage collected language with extensive runtime metadata and a portable bytecode.
 Even without changing this basic paradigm things could be different. 
 
 The system has been improved over time, but there are limitations to the technique of improving a system by adding to it but not removing. All programming languages accumulate cruft. IMHO the evolution of C# has been relatively well-managed, but this just makes the process slower.
@@ -15,11 +15,16 @@ The system has been improved over time, but there are limitations to the techniq
 
 ### Lists
 
-Too many interfaces. Arrays can be elimintated or moved to the p/invoke ghetto.
+Consider an everyday `List<Order>`. This inherits from  `IList<Order>, ICollection<Order>, IEnumerable<Order>, IReadOnlyList<Order>, IReadOnlyCollection<Order>`, and the non-generic versions: `IList, ICollection, IEnumerable`.
+
+You can use this or an array of `Order`, which inherits from `System.Array` and from the generic and non-generic `IList, ICollection, IEnumerable`.
+
+If there were no legacy concerns, we would eliminate the non-generic versions of these interfaces: in the rare case that you want a list of objects, you can still type `List<object>`, the remove a few of the other interfaces, and get rid of arrays, or if they are still needed for interop with system code, move them to a P/Invoke ghetto.
 
 Func recapitulate delegates.
+Try doing `var x = y => y + 1;`. The error is "Cannot assign lambda expression to an implicitly-typed variable". The compiler doesn't know if you want the type of `x` to be a delegate or a `Func<int, int>`. Because they're the same, only not.
 
-There are 3 kinds of tuples.
+There are 3 kinds of tuples. There is `var value = new Tuple<int, string>(1, "hello");1, there is `var value = new { Count = 1, Message = "hello" };` and there are [new C#7 value tuples](https://www.kenneth-truyers.net/2016/01/20/new-features-in-c-sharp-7/). They are all different, all have uses, all filled a need at the time. But three kinds of tuple is *at least* one too many.
 
 ## New thinking
 
