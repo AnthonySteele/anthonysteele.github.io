@@ -12,6 +12,6 @@ Pull requests do not scale - you can wait for one PR to be merged before the nex
 
 > Continuous integration (CI) is the practice, in software engineering, of merging all developer working copies to a shared mainline several times a day. https://en.wikipedia.org/wiki/Continuous_integration 
 
-Pull requests encourage you to forget that the "Integration" in "[Continuous Integration](https://en.wikipedia.org/wiki/Continuous_integration)" literally means "Merge to master". A branch or PR is by definition not integrated.  You can test a PR, but [you can't Continuously integrate it without closing it](https://www.infoq.com/news/2015/10/branching-continuous-integration).
+Pull requests encourage you to forget that the "Integration" in "[Continuous Integration](https://en.wikipedia.org/wiki/Continuous_integration)" literally means "Merge to master". A branch or PR is by definition not integrated.  You can test a PR, but [you can't continuously integrate without closing it](https://www.infoq.com/news/2015/10/branching-continuous-integration).
 
 If I was starting from scratch with setting up a process, I would work hard to avoid mandatory Pull Requests and encourage [Trunk-based development](https://dzone.com/articles/organisation-pattern-trunk-based-development). It might be that the lack of PRs would force you to do other things: good, those other things are things worth having. 
