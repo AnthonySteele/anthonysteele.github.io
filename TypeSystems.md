@@ -2,12 +2,12 @@
 
 > "I think Java and C# have done a reasonable job at hovering near the balance point. ... So, a little type safety, like a little salt, is a good thing. Too much, on the other hand, can have unfortunate consequences." http://blog.cleancoder.com/uncle-bob/2017/01/13/TypesAndTests.html
 
-The C# type system is good but not perfect. I'd like to dsicuss some of the ways that I feel it is lacking.
+The C# type system is good but not perfect. I'd like to discuss some of the ways that I feel it coes up short.
 
-The design of the C# type system, compiler and class library is a product of the best thinking and tradeoffs of a point in time, but times move on.
+C#'s paradigm is of a primarily object-oriented, garbage collected language with extensive runtime metadata and a portable bytecode.  Even without changing this basic paradigm things could be different. 
 
-C#'s paradigm is of a primarily object-oriented, garbage collected language with extensive runtime metadata and a portable bytecode.
-Even without changing this basic paradigm things could be different. 
+The design of the C# type system, compiler and class library is a product of the best thinking and tradeoffs of a point in time, but times move on. C# 1.0 caome out in January 2002, and things got interesting with C# 2.0 and generics in November 2005.
+
 
 The system has been improved over time, but there are limitations to the technique of improving a system by adding to it but not removing. All programming languages accumulate cruft. IMHO the evolution of C# has been relatively well-managed, but this just makes the process slower.
 
@@ -17,9 +17,9 @@ The system has been improved over time, but there are limitations to the techniq
 
 Consider an everyday `List<Order>`. This inherits from  `IList<Order>, ICollection<Order>, IEnumerable<Order>, IReadOnlyList<Order>, IReadOnlyCollection<Order>`, and the non-generic versions: `IList, ICollection, IEnumerable`.
 
-You can use this or an array of `Order`, which inherits from `System.Array` and from the generic and non-generic `IList, ICollection, IEnumerable`.
+Another option is an array of `Order`, which inherits from `System.Array` and from the generic and non-generic `IList, ICollection, IEnumerable`. And has [odd covariance rules](http://stackoverflow.com/q/4317459/5599).
 
-If there were no legacy concerns, we would eliminate the non-generic versions of these interfaces: in the rare case that you want a list of objects, you can still type `List<object>`, the remove a few of the other interfaces, and get rid of arrays, or if they are still needed for interop with system code, move them to a P/Invoke ghetto.
+If there were no legacy concerns, we would eliminate the non-generic versions of these types and interfaces: in the rare case that you want a list of objects, you can still type `List<object>`. Then remove a few of the other interfaces. aAd get rid of arrays, or if they are still needed for interop with system code, move them to a P/Invoke ghetto an not use them for anything else.
 
 Func recapitulate delegates.
 Try doing `var x = y => y + 1;`. The error is "Cannot assign lambda expression to an implicitly-typed variable". The compiler doesn't know if you want the type of `x` to be a delegate or a `Func<int, int>`. Because they're the same, only not.
