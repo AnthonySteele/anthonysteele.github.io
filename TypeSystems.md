@@ -45,13 +45,13 @@ One of the main uses of the `async` keyword is to signal that in the code that f
 
 ## New thinking
 
-For a new language in 2017 as opposed to 2002, I would expect more emphasis to be placed on values being **Immutable by default** and **Not null by default**. Allowing changes or nulls can be something that is only alowed when opted into explicitly. [F#](http://fsharp.org/) works this way. So does [Swift](https://swift.org/) and so does [Rust](https://www.rust-lang.org).
+For a new language in 2017 as opposed to 2002, I would expect more emphasis to be placed on values being **Immutable by default** and **Not null by default**. Allowing changes or nulls can be something that is only allowed when opted into explicitly. [F#](http://fsharp.org/) works this way. So does [Swift](https://swift.org/) and so does [Rust](https://www.rust-lang.org).
 
 I would also keep an eye on Rust for new thinking about eliminating data races in parallel code by entirely avoiding shared mutable state.
 
 C# has gained some small-scale functional features, but it is not a "functional-first" language. And that's fine. But along those lines, there is a convenience in F# and in java that is lacking in C#: the type `Func<TIn, TOut>` could be trivially convertible to or from a matching interface such as `interface IDoSomething { TOut TheMethod(TIn input); }`.
 
-Sum types with pattern matching would be good too.
+Sum types with pattern matching like in F#, Swift or Rust would be good too.
 
 C# did a better than reasonable job in the initial design, and a better than reasonable job in managing the evolution, but time has passed and thinking has moved on. Best practice isn't what it was.
 
