@@ -1,7 +1,7 @@
 ## Type systems
 
 > "I think Java and C# have done a reasonable job at hovering near the balance point. ... So, a little type safety, like a little salt, is a good thing. Too much, on the other hand, can have unfortunate consequences."
-- [Robert C Martin](http://blog.cleancoder.com/uncle-bob/2017/01/13/TypesAndTests.html)
+- Robert C Martin, [Types and Tests, January 2017](http://blog.cleancoder.com/uncle-bob/2017/01/13/TypesAndTests.html)
 
 As far as type safety goes, I'd like to lean as far in that direction as the expressiveness of the type system allows. I'd prefer more expressiveness over less safety.
 
