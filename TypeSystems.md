@@ -17,7 +17,7 @@ One of the things that newcomers to .Net say these days is that there is extra e
 
 ### Lists
 
-Consider an everyday `List<Order>`. This inherits from  `IList<Order>, ICollection<Order>, IReadOnlyList<Order>, IReadOnlyCollection<Order>`, IEnumerable<Order>, and the non-generic versions: `IList, ICollection, IEnumerable`.
+Consider an everyday `List<Order>`. This inherits from  `IList<Order>, ICollection<Order>, IReadOnlyList<Order>, IReadOnlyCollection<Order>, IEnumerable<Order>`, and the non-generic versions: `IList, ICollection, IEnumerable`.
 
 Another option is an array of `Order`, which is similar but not identical. That it inherits from `System.Array` and from the generic and non-generic `IList, ICollection, IEnumerable`. And has [odd covariance rules](http://stackoverflow.com/q/4317459/5599).
 
@@ -27,13 +27,19 @@ I would also get rid of arrays, or if they are still needed for interop with sys
 
 ## funcs and delegates
 
+Delegates were the way to attach handlers to button click events since C# 1.0, before generics. 
+
 Try doing `var x = y => y + 1;`. The error is "*Cannot assign lambda expression to an implicitly-typed variable*". The compiler doesn't know if you want the type of `x` to be a delegate or a `Func<int, int>`. 
 
 Because they're the same, only not. If one was designing the "delegates" system today, it would be based upon `Func`, not separate to it. 
 
 ## Tuples and tuples
 
-There are 3 kinds of tuples. There is `var value = new Tuple<int, string>(1, "hello");`, there is `var value = new { Count = 1, Message = "hello" };` and there are [new C#7 value tuples](https://www.kenneth-truyers.net/2016/01/20/new-features-in-c-sharp-7/). 
+There are 3 kinds of tuples. 
+
+ * There is `var value = new Tuple<int, string>(1, "hello");`.
+ * There is `var value = new { Count = 1, Message = "hello" };`. 
+ * And there are new C#7 value tuples, e.g. `public (double lat, double lng) GetLatLong()`. 
 
 They are all different, all have uses, all filled a need at the time they were designed. But three kinds of tuple is *at least* one too many.
 
