@@ -9,7 +9,9 @@ C#'s paradigm is of a primarily object-oriented, garbage collected language with
 
 The design of the C# type system, compiler and class library is a product of the best thinking and tradeoffs of a point in time, but times move on. C# 1.0 caome out in January 2002, and things got interesting with C# 2.0 and generics in November 2005.
 
-It has been improved over time, but there are limitations to the technique of improving a system by adding to it but not removing. All programming languages accumulate cruft. IMHO the evolution of C# has been relatively well-managed, but this just makes the process slower.
+It has been improved over time, but there are limitations to the technique of improving a system by adding to it but not removing. All programming languages accumulate [cruft](https://en.wikipedia.org/wiki/Cruft). IMHO the evolution of C# has been relatively well-managed, but this just makes the process slower.
+
+One of the things that newcomers to .Net say these days is that there is extra effort to uncover which features they should use, and which they should not. They hear experienced team-members say "no, don't use that, it's obsolete, use this instead" all the time. In this sense, cruft is [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load) and it is worth avoiding it.
 
 ## Cruft
 
