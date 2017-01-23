@@ -4,7 +4,7 @@ C#'s paradigm is of a primarily object-oriented, garbage collected language with
 
 The design of the C# type system, compiler and class library is a product of the best thinking and tradeoffs of a point in time, but times move on. C# 1.0 came out in January 2002, and things got interesting with C# 2.0 and generics in November 2005.
 
-It has been improved over time, but there are limitations to the technique of improving a system by adding to it but not removing. All programming languages accumulate [cruft](https://en.wikipedia.org/wiki/Cruft). IMHO the evolution of C# has been relatively well-managed, but this just makes the process slower.
+It has been improved over time, but there are limitations to the technique of improving a system by adding to it but not removing. All programming languages accumulate [cruft](https://en.wikipedia.org/wiki/Cruft). IMHO the evolution of C# has been relatively well-managed, but this can only slow the decay.
 
 One of the things that newcomers to .Net say these days is that there is extra effort to uncover which features they should use, and which they should not. They hear experienced team-members say "no, don't use that, it's obsolete, use this instead" all the time. In this sense, cruft is [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load) and it is worth avoiding it.
 
@@ -20,13 +20,13 @@ If there were no legacy concerns, we would eliminate unnecessary duplication: th
 
 I would also get rid of arrays, or if they are still needed for interop with system code, move them to a P/Invoke ghetto and not allow them to be used for anything else.
 
-## funcs and delegates
+## Funcs and delegates
 
-Delegates were the way to attach handlers to button click events since C# 1.0, before generics. 
+Delegates were the way to attach handlers to button click events since C# 1.0, before generics. And now there are lambda functions as well.
 
-Try doing `var x = y => y + 1;`. The error is "*Cannot assign lambda expression to an implicitly-typed variable*". The compiler doesn't know if you want the type of `x` to be a delegate or a `Func<int, int>`. 
+Try the code `var x = y => y + 1;`. The error is "*Cannot assign lambda expression to an implicitly-typed variable*". The compiler doesn't know if you want the type of `x` to be a delegate or a `Func<int, int>`. 
 
-Because they're the same, only not. If one was designing the "delegates" system today, it would be based upon `Func`, not separate to it. 
+Because these two types are the same, only not. If one was designing the "delegates" system today, it would be based upon `Func`, not separate to it. 
 
 ## Tuples and tuples
 
