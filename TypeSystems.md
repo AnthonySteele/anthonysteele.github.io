@@ -1,5 +1,8 @@
 ## Type systems
 
+> The question is: Whose job is it to manage the nulls. The language? Or the programmer?
+- Robert C Martin, [The Dark Path, January 2017](http://blog.cleancoder.com/uncle-bob/2017/01/11/TheDarkPath.html)
+
 > "I think Java and C# have done a reasonable job at hovering near the balance point. ... So, a little type safety, like a little salt, is a good thing. Too much, on the other hand, can have unfortunate consequences."
 - Robert C Martin, [Types and Tests, January 2017](http://blog.cleancoder.com/uncle-bob/2017/01/13/TypesAndTests.html)
 
