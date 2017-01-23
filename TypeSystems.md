@@ -3,11 +3,12 @@
 > "I think Java and C# have done a reasonable job at hovering near the balance point. ... So, a little type safety, like a little salt, is a good thing. Too much, on the other hand, can have unfortunate consequences."
 - [Robert C Martin](http://blog.cleancoder.com/uncle-bob/2017/01/13/TypesAndTests.html)
 
-The C# type system is good but not perfect. I'd like to discuss some of the ways that I feel it comes up short.
+As far as type safety goes, I'd like to lean as far in that direction as the expressiveness of the type system allows. I'd prefer more expressiveness over less safety.
 
-C#'s paradigm is of a primarily object-oriented, garbage collected language with extensive runtime metadata and a portable bytecode. I'm not going to venture out of that today, as even without changing this basic paradigm things could be different. 
+C#'s paradigm is of a primarily object-oriented, garbage collected language with extensive runtime metadata and a portable bytecode. I'm not going to venture out of that today, as even without changing this basic paradigm things could be tweaked. I'd like to discuss some of the ways that this is noticeable in regular use.
 
-The design of the C# type system, compiler and class library is a product of the best thinking and tradeoffs of a point in time, but times move on. C# 1.0 caome out in January 2002, and things got interesting with C# 2.0 and generics in November 2005.
+
+The design of the C# type system, compiler and class library is a product of the best thinking and tradeoffs of a point in time, but times move on. C# 1.0 came out in January 2002, and things got interesting with C# 2.0 and generics in November 2005.
 
 It has been improved over time, but there are limitations to the technique of improving a system by adding to it but not removing. All programming languages accumulate [cruft](https://en.wikipedia.org/wiki/Cruft). IMHO the evolution of C# has been relatively well-managed, but this just makes the process slower.
 
