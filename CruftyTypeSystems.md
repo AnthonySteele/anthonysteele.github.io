@@ -6,7 +6,7 @@ The design of the C# type system, compiler and class library is a product of the
 
 It has been improved over time, but there are limitations to the technique of improving a system by adding to it but not removing. All programming languages accumulate [cruft](https://en.wikipedia.org/wiki/Cruft). IMHO the evolution of C# has been relatively well-managed, but this can only slow the decay.
 
-One of the things that newcomers to .Net say these days is that there is extra effort to uncover which features they should use, and which they should not. They hear experienced team-members say "no, don't use that, it's obsolete, use this instead" all the time. This applies to language features, library classes and whole subsystems, e.g. [ASP.Net Web Forms](https://www.asp.net/web-forms).
+One of the things that newcomers to .Net say these days is that there is extra effort to uncover which features they should use, and which they should not. They hear experienced team-members say "no, don't use that, it's obsolete, use this instead" all the time. This applies to language features, classes in the library, and whole subsystems, e.g. [ASP.Net Web Forms](https://www.asp.net/web-forms).
 
 In this sense, cruft is [accidental complexity](https://en.wikipedia.org/wiki/No_Silver_Bullet) is avoidable [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load) and it is worth avoiding it.
 
