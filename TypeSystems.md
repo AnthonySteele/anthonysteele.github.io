@@ -6,7 +6,7 @@ The design of the C# type system, compiler and class library is a product of the
 
 It has been improved over time, but there are limitations to the technique of improving a system by adding to it but not removing. All programming languages accumulate [cruft](https://en.wikipedia.org/wiki/Cruft). IMHO the evolution of C# has been relatively well-managed, but this can only slow the decay.
 
-One of the things that newcomers to .Net say these days is that there is extra effort to uncover which features they should use, and which they should not. They hear experienced team-members say "no, don't use that, it's obsolete, use this instead" all the time. In this sense, cruft is [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load) and it is worth avoiding it.
+One of the things that newcomers to .Net say these days is that there is extra effort to uncover which features they should use, and which they should not. They hear experienced team-members say "no, don't use that, it's obsolete, use this instead" all the time. In this sense, cruft is [accidental complexity](https://en.wikipedia.org/wiki/No_Silver_Bullet) is avoidable [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load) and it is worth avoiding it.
 
 ## Cruft
 
@@ -40,7 +40,7 @@ They are all different, all have uses, all filled a need at the time they were d
 
 ## conditional keywords
 
-One of the main uses of the `async` keyword is to signal that in the code that follows, `await` cannot be a variable name, it must be a keyword. If `await` cannot be a variable name, then the compiler could largely infer that it should be there from the presence of an `await` and a returned `Task`. So much method annotation is needed instead.
+One of the main uses of the `async` keyword is to signal that in the code that follows, `await` cannot be a variable name, it must be a keyword. If `await` cannot be a variable name, then the compiler could largely infer that `async` should be there from the presence of an `await` and a returned `Task`. But instead much method annotation is needed.
 
 
 ## New thinking
@@ -64,6 +64,7 @@ C# did a better than reasonable job in the initial design, and a better than rea
 > "I think Java and C# have done a reasonable job at hovering near the balance point. ... So, a little type safety, like a little salt, is a good thing. Too much, on the other hand, can have unfortunate consequences."
 - Robert C Martin, [Types and Tests, January 2017](http://blog.cleancoder.com/uncle-bob/2017/01/13/TypesAndTests.html)
 
-I can't really agree with Uncle Bob this time. As far as type safety goes, I'd like to lean as far in that direction as the expressiveness of the type system allows. To add value, I'd prefer more type expressiveness over less type safety. Yes, types and tests are different tools towards reliability and I'd like both.
+I can't really agree with Uncle Bob this time. As far as type safety goes, I'd like to lean as far in that direction as the expressiveness of the type system allows. To add value, I'd prefer more type expressiveness over less type safety. Yes, types and tests are different tools towards reliability, and I'd like both. 
 
+The point that adding to the type system is added complexity is of course valid; I've been talking about complexity at length above. But we deal with large and complex class libraries already, that's the price of entry. Shifting some of that complexity onto the complier is not necessarily bad: it might be bad, if it's done badly, or it might be great if done well. 
 
