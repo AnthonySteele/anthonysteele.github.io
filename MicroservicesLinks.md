@@ -4,6 +4,7 @@
 * [You need to be this tall to use micro services](https://news.ycombinator.com/item?id=12508655)
 * [Microservice Prerequisites](http://martinfowler.com/bliki/MicroservicePrerequisites.html)
 * [10 Modern Software Over-Engineering Mistakes](https://medium.com/@rdsubhas/10-modern-software-engineering-mistakes-bc67fbef4fc8)
+* [The Hidden Dividends of Microservices](http://queue.acm.org/detail.cfm?id=2956643)
 
 Microservices have a dual nature: On the one hand, they give independence of code, testing, deploy times, versions, tools, techniques, etc. The ability for a team to work on and deploy an isolated unit of functionality when ready is great. It really is an architectural style for the agile and Continuous Deployment era.
 
