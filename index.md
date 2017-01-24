@@ -1,5 +1,6 @@
 ### Various writings
 
+ * [Crufty type systems](./CruftyTypeSystems) Jan, 2017
  * [Avoiding basic mistakes in async await](./AsyncBasicMistakes) Nov, 2016
  * [The Pull-Request Workflow](./PullRequestWorkflow) May, 2016
  * [Microservices Links](./MicroservicesLinks) May, 2016
