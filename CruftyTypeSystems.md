@@ -32,10 +32,10 @@ Because these two types are the same, only not. If one was designing the "delega
 
 ## Tuples and tuples
 
-There are 3 kinds of tuples. 
+There are 3 kinds of tuples or similar types. 
 
  * There is `var value = new Tuple<int, string>(1, "hello");`.
- * There is `var value = new { Count = 1, Message = "hello" };`. 
+ * There is an anonymous object: `var value = new { Count = 1, Message = "hello" };`. 
  * And there are new C#7 value tuples, e.g. `public (double lat, double lng) GetLatLong()`. 
 
 They are all different, all have uses, all filled a need at the time they were designed. But three kinds of tuple is *at least* one too many.
@@ -68,6 +68,6 @@ C# did a better than reasonable job in the initial design, and a better than rea
 
 I can't really agree with Uncle Bob this time. As far as type safety goes, I'd like to lean as far in the direction of type safety as the expressiveness of the type system allows. To add value, I'd prefer more type expressiveness over less type safety. Yes, types and tests are different tools towards reliability, and I'd like both. 
 
-The point that "adding to the type system means added language complexity" is of course valid; and I've been talking about complexity at length above - all other thing being equal, less complexity is better. But we deal with large and complex class libraries already, that's the price of entry. Shifting some of that complexity onto the compiler is not necessarily bad: it might be bad, if it's done badly, or it might be great if done well. 
+The point that "adding to the type system means added language complexity" is of course valid; and I've been talking about complexity at length above - all other thing being equal, less complexity is better. But we deal with large and complex class libraries already, that's the price of entry. Shifting some of that complexity onto the compiler is not necessarily bad: it might be bad if it's done badly, or it might be great if done well. 
 
 
