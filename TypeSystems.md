@@ -1,4 +1,4 @@
-## Type systems
+## Crufty Type systems
 
 C#'s paradigm is of a primarily object-oriented, garbage collected language with extensive runtime metadata and a portable bytecode. I'm not going to venture out of that today, as even without changing this basic paradigm things could be tweaked. I'd like to discuss some of the ways that this is noticeable in regular use.
 
@@ -14,7 +14,7 @@ One of the things that newcomers to .Net say these days is that there is extra e
 
 Consider an everyday `List<Order>`. This inherits from  `IList<Order>, ICollection<Order>, IReadOnlyList<Order>, IReadOnlyCollection<Order>, IEnumerable<Order>`, and the non-generic versions: `IList, ICollection, IEnumerable`.
 
-Another option is an array of `Order`, which is similar but not identical. That it inherits from `System.Array` and from the generic and non-generic `IList, ICollection, IEnumerable`. And has [odd covariance rules](http://stackoverflow.com/q/4317459/5599).
+Another option is an array of `Order[]`, which is similar but not identical to a list. It inherits from `System.Array` and from the generic and non-generic `IList, ICollection, IEnumerable`. And has [odd covariance rules](http://stackoverflow.com/q/4317459/5599).
 
 If there were no legacy concerns, we would eliminate unnecessary duplication: the non-generic versions of these types and interfaces can go. In the rare case that you want a list of objects, you can still type `List<object>`. 
 
