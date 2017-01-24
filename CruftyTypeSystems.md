@@ -6,7 +6,9 @@ The design of the C# type system, compiler and class library is a product of the
 
 It has been improved over time, but there are limitations to the technique of improving a system by adding to it but not removing. All programming languages accumulate [cruft](https://en.wikipedia.org/wiki/Cruft). IMHO the evolution of C# has been relatively well-managed, but this can only slow the decay.
 
-One of the things that newcomers to .Net say these days is that there is extra effort to uncover which features they should use, and which they should not. They hear experienced team-members say "no, don't use that, it's obsolete, use this instead" all the time. In this sense, cruft is [accidental complexity](https://en.wikipedia.org/wiki/No_Silver_Bullet) is avoidable [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load) and it is worth avoiding it.
+One of the things that newcomers to .Net say these days is that there is extra effort to uncover which features they should use, and which they should not. They hear experienced team-members say "no, don't use that, it's obsolete, use this instead" all the time. This applies to language features, library classes and whole subsystems, e.g. [ASP.Net Web Forms](https://www.asp.net/web-forms).
+
+In this sense, cruft is [accidental complexity](https://en.wikipedia.org/wiki/No_Silver_Bullet) is avoidable [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load) and it is worth avoiding it.
 
 ## Cruft
 
@@ -64,7 +66,8 @@ C# did a better than reasonable job in the initial design, and a better than rea
 > "I think Java and C# have done a reasonable job at hovering near the balance point. ... So, a little type safety, like a little salt, is a good thing. Too much, on the other hand, can have unfortunate consequences."
 - Robert C Martin, [Types and Tests, January 2017](http://blog.cleancoder.com/uncle-bob/2017/01/13/TypesAndTests.html)
 
-I can't really agree with Uncle Bob this time. As far as type safety goes, I'd like to lean as far in that direction as the expressiveness of the type system allows. To add value, I'd prefer more type expressiveness over less type safety. Yes, types and tests are different tools towards reliability, and I'd like both. 
+I can't really agree with Uncle Bob this time. As far as type safety goes, I'd like to lean as far in the direction of type safety as the expressiveness of the type system allows. To add value, I'd prefer more type expressiveness over less type safety. Yes, types and tests are different tools towards reliability, and I'd like both. 
 
-The point that adding to the type system is added complexity is of course valid; I've been talking about complexity at length above. But we deal with large and complex class libraries already, that's the price of entry. Shifting some of that complexity onto the complier is not necessarily bad: it might be bad, if it's done badly, or it might be great if done well. 
+The point that "adding to the type system means added language complexity" is of course valid; and I've been talking about complexity at length above - all other thing being equal, less complexity is better. But we deal with large and complex class libraries already, that's the price of entry. Shifting some of that complexity onto the compiler is not necessarily bad: it might be bad, if it's done badly, or it might be great if done well. 
+
 
