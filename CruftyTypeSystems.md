@@ -8,7 +8,7 @@ It has been improved over time, but there are limitations to the technique of im
 
 One of the things that newcomers to .Net say these days is that there is extra effort to uncover which features they should use, and which they should not. They hear experienced team-members say "no, don't use that, it's obsolete, use this instead" all the time. This applies to language features, classes in the library, and whole subsystems, e.g. [ASP.Net Web Forms](https://www.asp.net/web-forms).
 
-In this sense, cruft is [accidental complexity](https://en.wikipedia.org/wiki/No_Silver_Bullet) is avoidable [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load) and it is worth avoiding it.
+In this sense, cruft is [accidental complexity](https://en.wikipedia.org/wiki/No_Silver_Bullet) is avoidable [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load) and it hinders us.
 
 ## Cruft
 
@@ -44,7 +44,7 @@ They are all different, all have uses, all filled a need at the time they were d
 
 One of the main uses of the `async` keyword is to signal that in the code that follows, `await` cannot be a variable name, it must be a keyword. If `await` cannot be a variable name, then the compiler could largely infer that `async` should be there from the presence of an `await` and a returned `Task`. But instead much method annotation is needed.
 
-Similarly, C# 7 has new pattern matching, but this is constrained by being added to the `switch` statement rather than adding a new keyword. This has consequences. Some features were not included - since it's a statement and not an expression, a switch will not occur to the right of a `var result =`. Nevertheless, the two variants of the syntax are almost certain to add to the learning curve of next year's crop of junior c# coders. 
+Similarly, C# 7 has new pattern matching, but this is constrained by being added to the `switch` statement rather than adding a new keyword. This has consequences. Some features were not included - since it's a statement and not an expression, a switch will not occur to the right of a `var result =`. Nevertheless, the two variants of the `switch` syntax are going to add to the learning curve of next year's crop of junior c# coders. 
 
 ## New thinking
 
@@ -73,7 +73,8 @@ Javascript has the same issue - how do you remove `var` from the language now th
 > "I think Java and C# have done a reasonable job at hovering near the balance point. ... So, a little type safety, like a little salt, is a good thing. Too much, on the other hand, can have unfortunate consequences."
 - Robert C Martin, [Types and Tests, January 2017](http://blog.cleancoder.com/uncle-bob/2017/01/13/TypesAndTests.html)
 
-I can't really agree with Uncle Bob this time. As far as type safety goes, I'd like to lean as far in the direction of type safety as the expressiveness of the type system allows. To add value, I'd prefer more type expressiveness over less type safety. Yes, types and tests are different tools towards reliability, and I'd like both. 
+I can't really agree with Uncle Bob this time. As far as type safety goes, I'd like to lean as far in the direction of type safety as the expressiveness of the type system allows. I'd like to take on board proven best practices from research and from functional languages.
+To add value, I'd prefer more type expressiveness over less type safety. Yes, types and tests are different tools towards reliability, and I'd like both. 
 
 The point that "adding to the type system means added language complexity" is of course valid; and I've been talking about complexity at length above - all other thing being equal, less complexity is better. But we deal with large and complex class libraries already, that's the price of entry. Shifting some of that complexity onto the compiler is not necessarily bad: it might be bad if it's done badly, or it might be great if done well. 
 
