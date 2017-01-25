@@ -44,7 +44,7 @@ They are all different, all have uses, all filled a need at the time they were d
 
 One of the main uses of the `async` keyword is to signal that in the code that follows, `await` cannot be a variable name, it must be a keyword. If `await` cannot be a variable name, then the compiler could largely infer that `async` should be there from the presence of an `await` and a returned `Task`. But instead much method annotation is needed.
 
-Similarly, C# 7 has new pattern matching, but this is constrained by being added to the `switch` statement rather than adding a new keyword.
+Similarly, C# 7 has new pattern matching, but this is constrained by being added to the `switch` statement rather than adding a new keyword. This has consequences. Some features were not included - since it's a statement and not an expression, a switch will not occur to the right of a `var result =`. Nevertheless, the two variants of the syntax are almost certain to add to the learning curve of next year's crop of junior c# coders. 
 
 ## New thinking
 
@@ -58,9 +58,7 @@ Sum types with pattern matching like in F#, Swift or Rust would be good too.
 
 In C# generics, many people have run up against the constraint that they can't accept "any type that knows how to use the `+` operator". This is called a [Type Class](https://en.wikipedia.org/wiki/Type_class).
 
-
 C# did a better than reasonable job in the initial design, and a better than reasonable job in managing the evolution, but time has passed and thinking has moved on. Best practice isn't what it was.
-
 
 ## Objections
 
@@ -69,7 +67,7 @@ C# did a better than reasonable job in the initial design, and a better than rea
 
 Have a look at the [Proposal for C# Non-Nullable Reference Types](https://gist.github.com/olmobrutall/31d2abafe0b21b017d56). This shows that the c# team are pretty careful at managing addition to the language, and it happens only after much debate, thought to backward compatibility and weighing of pros and cons. But there's only so much that you can do with a mature language that has "zillions of lines  ... assuming reference types are nullable by nature".
 
-Javascript has the same issue - how do you remove `var` from the language now that there's `let` and `const` , as there's zillions of lines of JS that use `var`? Should you? Can you prevent it in new code only?
+Javascript has the same issue - how do you remove `var` from the language now that there's `let` and `const` , as there's zillions of lines of Javascript that use `var`? Should you? Can you prevent `var` in new code only?
 
 
 > "I think Java and C# have done a reasonable job at hovering near the balance point. ... So, a little type safety, like a little salt, is a good thing. Too much, on the other hand, can have unfortunate consequences."
