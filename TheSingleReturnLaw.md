@@ -136,16 +136,18 @@ This example with the fallback is interesting: if you re-write it with a single 
 
 ## Links
 
-&amp;bull;  There's questions on this topic <a href="http://stackoverflow.com/questions/36707/should-a-function-have-only-one-return-statement">on Stackoverflow</a> and on <a href="http://programmers.stackexchange.com/questions/118703/where-did-the-notion-of-one-return-only-come-from">programmers.Stackoverflow</a>.
- &amp;bull;  See also <a href="http://c2.com/cgi/wiki?SingleFunctionExitPoint">Ward Cunningham's wiki on Single Function Exit point</a>.
-&amp;bull;  <a href="http://www.codinghorror.com/blog/2008/07/spartan-programming.html">Codinghorror talked</a> about "<a href="http://ssdl-wiki.cs.technion.ac.il/wiki/index.php/Spartan_programming">Spartan programming</a>", and mentioned "frugal use of control structures, with early return whenever possible."
-&amp;bull;  One of the few links on the topic that I could find was <a href="http://www.leepoint.net/JavaBasics/methods/method-commentary/methcom-30-multiple-return.html">Return statements and the single exit fantasy</a>
-&amp;bull;  See this discussion on <a href="http://discuss.techinterview.org/default.asp?joel.3.325456.34">Single exit point from function</a> from Joel on Software
-&amp;bull;  Take a look at some of the comments on this post <a href="http://thedailywtf.com/Articles/Refactoring_to_the_Max.aspx">"Refactoring to the Max" on the Daily WTF</a> where this issue is raised, particularly this comment:
+*  There's questions on this topic [on Stackoverflow](http://stackoverflow.com/questions/36707/should-a-function-have-only-one-return-statement) and on [programmers.Stackoverflow](http://programmers.stackexchange.com/questions/118703/where-did-the-notion-of-one-return-only-come-from").
+* See also [Ward Cunningham's wiki on Single Function Exit point](http://c2.com/cgi/wiki?SingleFunctionExitPoint).
+* [Codinghorror talked](http://www.codinghorror.com/blog/2008/07/spartan-programming.html) about [Spartan programming](http://ssdl-wiki.cs.technion.ac.il/wiki/index.php/Spartan_programming), and mentioned "frugal use of control structures, with early return whenever possible."
+*  One of the few links on the topic that I could find was [Return statements and the single exit fantasy](http://www.leepoint.net/JavaBasics/methods/method-commentary/methcom-30-multiple-return.html)
+*  See this discussion on [Single exit point from function](http://discuss.techinterview.org/default.asp?joel.3.325456.34) from Joel on Software
+*  Take a look at some of the comments on this post [Refactoring to the Max](http://thedailywtf.com/Articles/Refactoring_to_the_Max.aspx) on the Daily WTF</a> where this issue is raised, particularly this comment:
  
-<em>Re: Refactoring to the Max
-2006-04-05 02:25 &amp;bull; by John Hensley
+```
+Re: Refactoring to the Max
+2006-04-05 02:25 * by John Hensley
             
 The main reason for the single return "law" in C is to make sure you clean up memory, locks, handles, etc. before you leave a function. 
-This, on the other hand, is Java code.</em>
+This, on the other hand, is Java code.
+```
 
