@@ -144,8 +144,10 @@ This example with the fallback is interesting: if you re-write it with a single 
 Re: Refactoring to the Max
 2006-04-05 02:25 * by John Hensley
             
-The main reason for the single return "law" in C is to make sure you clean up 
-memory, locks, handles, etc. before you leave a function. 
+The main reason for the single return "law" in C is to make 
+sure you clean up memory, locks, handles, etc. before you 
+leave a function. 
+
 This, on the other hand, is Java code.
 ```
 
