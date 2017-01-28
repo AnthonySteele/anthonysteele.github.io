@@ -6,7 +6,7 @@
  * [Microservices Links](./MicroservicesLinks) May, 2016
  * [Optimization and Metrics in ASP Kestrel Benchmarks](./OptimizationAndMetrics) Jan, 2016
  * [Agile Values](./AgileValues) Sept, 2015
- * [The Single Return Law](./TheSingleReturnLaw.md) 2012ish
+ * [The Single Return Law](./TheSingleReturnLaw) 2012ish
  
 ### Identity integration
  
