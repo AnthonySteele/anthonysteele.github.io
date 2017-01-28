@@ -8,6 +8,10 @@ I wrote this a few years ago (before 2012), about the idea that a method or func
 
 * The arguments in favour of the single-return style originated in the C programming language for reasons of manual resource management. They are irrelevant to Java, C#, JavaScript, Ruby, Python etc. Do not blindly follow cargo-cult rules.
 
+## Objections
+
+At the time the blog post attracted some comments. So this style must be an "important" issue to coders, like [tabs vs. spaces](https://www.youtube.com/watch?v=SsoOG6ZeyUI).
+
 * Most of the outraged, dogmatic replies that I have received are along the lines of "but in _this_ case a single return is better." No doubt, but that is no contradiction to what I am saying: Both styles have uses, so learn to apply both, and choose which best fits your case. If there _is_ resource de-allocation or logging at the end of the method that cannot be handled by a block structure of the language then you might prefer a single exit point _in that case_.
 
 * Examples of long, confusing methods are not an argument either way. You can write them in either style, and the cure is the same: refactor to extract methods. 
