@@ -2,11 +2,13 @@
 
 I wrote this a few years ago (before 2012), about the idea that a method or function should have only one "exit point", i.e at most one return statement. It is now hosted here for reference.  Fortunately, this "law" seems to becoming less common. The article is still generally my opinion. To sum up:
 
-* There is a high bar to clear to call something a "law" and the idea that "a method should have at most one return statement" does not meet it. There is no formal study that shows that this rule leads to safer, more readable or otherwise better code in modern languages. It is therefor just a style. 
+* Do you code in C or similar old-school, low-level language? If so, stop reading now because the rest of this article does not apply to your practices. The arguments in favour of the single-return style originated in the C programming language for reasons of manual resource management. They are irrelevant to Java, C#, JavaScript, Ruby, Python etc. 
+
+* There is a high bar to clear to call something a "law" and the idea that "a method should have at most one return statement" does not meet it for modern languages. There is no formal study that shows that this rule leads to safer, more readable or otherwise better code in these languages. It is therefor just a style. 
 
 * It is not a useful style when applied uniformly to all code. There are cases where a single return is more readable or simpler, and cases where it isn't.  If you learn when and how to use multiple returns, you can write more expressive code. 
 
-* The arguments in favour of the single-return style originated in the C programming language for reasons of manual resource management. They are irrelevant to Java, C#, JavaScript, Ruby, Python etc. Do not blindly follow cargo-cult rules.
+* Do not blindly follow cargo-cult rules. 
 
 ## Objections
 
@@ -18,13 +20,13 @@ At the time the blog post attracted some comments. So this style must be an "imp
 
 * If you somehow still think that the single-return rule is applicable across all languages, please read about [match expressions in F#](https://docs.microsoft.com/en-us/dotnet/articles/fsharp/language-reference/match-expressions), [Erlang's case expressions](http://erlang.org/doc/reference_manual/expressions.html#id80767) or [Haskell's pattern matching](https://en.wikibooks.org/wiki/Haskell/Pattern_matching) and get back to me. In those constructs, you cannot avoid using multiple return values. A [Rust `match` expression](https://doc.rust-lang.org/book/match.html) works similarly too.
 
-## Original text
+## Original blog post
 
 It is sometimes said that a method should have only one return statement (i.e. one exit point) and that to code using more than one return per method is bad practice. It is claimed to be a risk to readability or a source of error. Sometimes this is even given the title of the "single exit point law".  Actually, if you want to call something a law, I'd expect some evidence for it. I do not know of any formal study that back this "law" up, or of any study of the multiple-return pattern at all. This makes it a "preference" not a "law". And it's a preference that I do not hold for c# code. Or java, ruby or python code either.
 
 This coding rule dates back to [Dijkstra's structured programming](http://en.wikipedia.org/wiki/Structured_programming). However it is outdated, if it ever ever was a "law" or "principle". The single return rule originates in the era of C, FORTRAN or assembler, where it was common to allocate resources (most frequently memory, file handles or locks) at the start of the procedure, and to de-allocate them at the end of it. An early return can lead the programmer  to either forget to do the cleanup code and cause a memory leak or locked file, or to maintain cleanup code in two places. So it makes some sense to stick to just one return right at the end of the method.
 
-But in the modern world, this is no longer so. Firstly, garbage collected languages make explicit deallocation unnecessary in most cases - memory is reclaimed automatically. Secondly, try...finally blocks and using statements allow release of other resources to happen with greater certainly at the end of any block of code when it is needed.
+But in the modern world, this is no longer so. Firstly, garbage collected languages make explicit deallocation unnecessary in most cases - memory is reclaimed automatically. Secondly, `try...finally` blocks and `using` statements allow release of other resources to happen with greater certainly at the end of any block of code when it is needed.
 
 In any event, a function with multiple exit points is a far lesser issue than [a goto](http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html). In some cases it is the simplest way to code now that we have control structures to deal with it.  If your method is long, complex and has multiple returns, consider splitting it up into smaller, well-named methods with a single-responsibly each. Also consider doing that if it's long, complex and has only one return.
 
