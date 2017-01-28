@@ -12,26 +12,23 @@ I wrote this a few years ago (before 2012), about the idea that a method or func
 
 ## Original text
 
-
 It is sometimes said that a method should have only one return statement (i.e. one exit point) and that to code using more than one return per method is bad practice. It is claimed to be a risk to readability or a source of error. Sometimes this is even given the title of the "single exit point law".  Actually, if you want to call something a law, I'd expect some evidence for it. I do not know of any formal study that back this "law" up, or of any study of the multiple-return pattern at all. This makes it a "preference" not a "law". And it's a preference that I do not hold for c# code. Or java, ruby or python code either.
-
 
 This coding rule dates back to [Dijkstra's structured programming](http://en.wikipedia.org/wiki/Structured_programming). However it is outdated, if it ever ever was a "law" or "principle". The single return rule originates in the era of C, FORTRAN or assembler, where it was common to allocate resources (most frequently memory, file handles or locks) at the start of the procedure, and to de-allocate them at the end of it. An early return can lead the programmer  to either forget to do the cleanup code and cause a memory leak or locked file, or to maintain cleanup code in two places. So it makes some sense to stick to just one return right at the end of the method.
 
-
 But in the modern world, this is no longer so. Firstly, garbage collected languages make explicit deallocation unnecessary in most cases - memory is reclaimed automatically. Secondly, try...finally blocks and using statements allow release of other resources to happen with greater certainly at the end of any block of code when it is needed.
 
-
-In any event, a function with multiple exit points is a far lesser issue than <a href="http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html">a goto</a>.  In some cases it is the simplest way to code now that we have control structures to deal with it.  If your method is long, complex and has multiple returns, consider splitting it up into smaller, well-named methods with a single-responsibly each. Also consider doing that if it's long, complex and has only one return.
+In any event, a function with multiple exit points is a far lesser issue than [a goto](http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html). In some cases it is the simplest way to code now that we have control structures to deal with it.  If your method is long, complex and has multiple returns, consider splitting it up into smaller, well-named methods with a single-responsibly each. Also consider doing that if it's long, complex and has only one return.
 
 
 My summary of the matter is:
 
 
 * There are cases where a single return is more readable, and cases where it isn't. See if it reduces the number of lines of code, makes the logic clearer or reduces the number of braces and indents or temporary variables.
- &amp;bull;   More than one return style may be a bad habit in C code, where resources have to be explicitly de-allocated, but in languages that have automatic garbage collection and `try...finally` blocks and `using` </strong>blocks, this argument does not apply - in these languages, it is very uncommon to even need centralised manual resource deallocation.
+
+* More than one return style may be a bad habit in C code, where resources have to be explicitly de-allocated, but in languages that have automatic garbage collection and `try...finally` blocks and `using` blocks, this argument does not apply - in these languages, it is very uncommon to even need centralised manual resource deallocation.
  
- *  There is no law requiring only one exit point for a method, and no evidence for it as a rule of thumb. Some people have an unsubstantiated belief in the superiority of this style.
+* There is no law requiring only one exit point for a method, and no evidence for it as a rule of thumb. Some people have an unsubstantiated belief in the superiority of this style.
 
 Therefore, use as many returns as suits your artistic sensibilities, because it is a layout and readability issue, not a technical one.
 
@@ -136,9 +133,9 @@ This example with the fallback is interesting: if you re-write it with a single 
 
 ## Links
 
-*  There's questions on this topic [on Stackoverflow](http://stackoverflow.com/questions/36707/should-a-function-have-only-one-return-statement) and on [programmers.Stackoverflow](http://programmers.stackexchange.com/questions/118703/where-did-the-notion-of-one-return-only-come-from").
+*  There's questions on this topic [on Stackoverflow](http://stackoverflow.com/questions/36707/should-a-function-have-only-one-return-statement) and on [Software Engineering StackExchange](http://softwareengineering.stackexchange.com/questions/118703/where-did-the-notion-of-one-return-only-come-from).
 * See also [Ward Cunningham's wiki on Single Function Exit point](http://c2.com/cgi/wiki?SingleFunctionExitPoint).
-* [Codinghorror talked](http://www.codinghorror.com/blog/2008/07/spartan-programming.html) about [Spartan programming](http://ssdl-wiki.cs.technion.ac.il/wiki/index.php/Spartan_programming), and mentioned "frugal use of control structures, with early return whenever possible."
+* [Codinghorror talked about Spartan programming](http://www.codinghorror.com/blog/2008/07/spartan-programming.html), and mentioned "frugal use of control structures, with early return whenever possible."
 *  One of the few links on the topic that I could find was [Return statements and the single exit fantasy](http://www.leepoint.net/JavaBasics/methods/method-commentary/methcom-30-multiple-return.html)
 *  See this discussion on [Single exit point from function](http://discuss.techinterview.org/default.asp?joel.3.325456.34) from Joel on Software
 *  Take a look at some of the comments on this post [Refactoring to the Max](http://thedailywtf.com/Articles/Refactoring_to_the_Max.aspx) on the Daily WTF</a> where this issue is raised, particularly this comment:
@@ -147,7 +144,8 @@ This example with the fallback is interesting: if you re-write it with a single 
 Re: Refactoring to the Max
 2006-04-05 02:25 * by John Hensley
             
-The main reason for the single return "law" in C is to make sure you clean up memory, locks, handles, etc. before you leave a function. 
+The main reason for the single return "law" in C is to make sure you clean up 
+memory, locks, handles, etc. before you leave a function. 
 This, on the other hand, is Java code.
 ```
 
