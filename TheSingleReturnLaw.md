@@ -10,7 +10,7 @@ I wrote this a few years ago (before 2012), about the idea that a method or func
 
 * Most of the outraged, dogmatic replies that I have received are along the lines of "but in _this_ case a single return is better." No doubt, but that is no contradiction to what I am saying: Both styles have uses, so learn to apply both, and choose which best fits your case. 
 
-* If you somehow still think that the single-return rule is applicable across all languages, please read about match expressions in F#, Erlang's case expressions or Haskell's pattern matching and get back to me. In those constructs, you cannot avoid using multiple return values.
+* If you somehow still think that the single-return rule is applicable across all languages, please read about [match expressions in F#](https://docs.microsoft.com/en-us/dotnet/articles/fsharp/language-reference/match-expressions), [Erlang's case expressions](http://erlang.org/doc/reference_manual/expressions.html#id80767) or [Haskell's pattern matching](https://en.wikibooks.org/wiki/Haskell/Pattern_matching) and get back to me. In those constructs, you cannot avoid using multiple return values. A [Rust `match` expression](https://doc.rust-lang.org/book/match.html) works similarly too.
 
 ## Original text
 
@@ -139,17 +139,4 @@ This example with the fallback is interesting: if you re-write it with a single 
 * See also [Ward Cunningham's wiki on Single Function Exit point](http://c2.com/cgi/wiki?SingleFunctionExitPoint).
 * [Codinghorror talked about Spartan programming](http://www.codinghorror.com/blog/2008/07/spartan-programming.html), and mentioned "frugal use of control structures, with early return whenever possible."
 *  One of the few links on the topic that I could find was [Return statements and the single exit fantasy](http://www.leepoint.net/JavaBasics/methods/method-commentary/methcom-30-multiple-return.html)
-*  See this discussion on [Single exit point from function](http://discuss.techinterview.org/default.asp?joel.3.325456.34) from Joel on Software
-*  Take a look at some of the comments on this post [Refactoring to the Max](http://thedailywtf.com/Articles/Refactoring_to_the_Max.aspx) on the Daily WTF</a> where this issue is raised, particularly this comment:
- 
-```
-Re: Refactoring to the Max
-2006-04-05 02:25 * by John Hensley
-            
-The main reason for the single return "law" in C is to make 
-sure you clean up memory, locks, handles, etc. before you 
-leave a function. 
-
-This, on the other hand, is Java code.
-```
 
