@@ -1,4 +1,4 @@
-##The Single Return Law.
+# The Single Return Law
 
 I wrote this a few years ago (before 2012), about the idea that a method or function should have only one "exit point", i.e at most one return statement. It is now hosted here for reference.  Fortunately, this "law" seems to becoming less common. The article is still generally my opinion. To sum up:
 
