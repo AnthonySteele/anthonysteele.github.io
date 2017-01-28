@@ -2,9 +2,11 @@
 
 I wrote this a few years ago (before 2012), about the idea that a method or function should have only one "exit point", i.e at most one return statement. It is now hosted here for reference.  Fortunately, this "law" seems to becoming less common. The article is still generally my opinion. To sum up:
 
-* There is a high bar to clear to call something a "law" and the idea that "a method should have at most one return statement" does not meet it. It is just a style, and one that works well in some cases and less well in others. If you learn when to use multiple returns, you can write more expressive code. 
+* There is a high bar to clear to call something a "law" and the idea that "a method should have at most one return statement" does not meet it. There is no formal study that shows that this rule leads to safer, more readable or otherwise better code in modern languages. It is therefor just a style. 
 
-* The arguments in favour of the single-return style originated in the C programming language for reasons of manual resource management. They are irrelevant to Java, C#, JavaScript, ruby, python etc. Do not blindly follow cargo-cult rules.
+* It is not a useful style when applied uniformly to all code. There are cases where a single return is more readable or simpler, and cases where it isn't.  If you learn when and how to use multiple returns, you can write more expressive code. 
+
+* The arguments in favour of the single-return style originated in the C programming language for reasons of manual resource management. They are irrelevant to Java, C#, JavaScript, Ruby, Python etc. Do not blindly follow cargo-cult rules.
 
 * Most of the outraged, dogmatic replies that I have received are along the lines of "but in _this_ case a single return is better." No doubt, but that is no contradiction to what I am saying: Both styles have uses, so learn to apply both, and choose which best fits your case. 
 
