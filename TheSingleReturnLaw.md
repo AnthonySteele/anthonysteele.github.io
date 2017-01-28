@@ -8,7 +8,9 @@ I wrote this a few years ago (before 2012), about the idea that a method or func
 
 * The arguments in favour of the single-return style originated in the C programming language for reasons of manual resource management. They are irrelevant to Java, C#, JavaScript, Ruby, Python etc. Do not blindly follow cargo-cult rules.
 
-* Most of the outraged, dogmatic replies that I have received are along the lines of "but in _this_ case a single return is better." No doubt, but that is no contradiction to what I am saying: Both styles have uses, so learn to apply both, and choose which best fits your case. If there _is_ resource de-allocation or logging at the end of the method that cannot be handled by a block structure of the language then you might prefer a single exit point in that case.
+* Most of the outraged, dogmatic replies that I have received are along the lines of "but in _this_ case a single return is better." No doubt, but that is no contradiction to what I am saying: Both styles have uses, so learn to apply both, and choose which best fits your case. If there _is_ resource de-allocation or logging at the end of the method that cannot be handled by a block structure of the language then you might prefer a single exit point _in that case_.
+
+* Examples of long, confusing methods are not an argument either way. You can write them in either style, and the cure is the same: refactor to extract methods. 
 
 * If you somehow still think that the single-return rule is applicable across all languages, please read about [match expressions in F#](https://docs.microsoft.com/en-us/dotnet/articles/fsharp/language-reference/match-expressions), [Erlang's case expressions](http://erlang.org/doc/reference_manual/expressions.html#id80767) or [Haskell's pattern matching](https://en.wikibooks.org/wiki/Haskell/Pattern_matching) and get back to me. In those constructs, you cannot avoid using multiple return values. A [Rust `match` expression](https://doc.rust-lang.org/book/match.html) works similarly too.
 
