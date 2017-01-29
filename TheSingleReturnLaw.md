@@ -153,7 +153,7 @@ The Joel on Software Discussion Group](http://discuss.joelonsoftware.com/default
 
 ## Second blog post
 
-My blog post on multiple returns and why they are actually quite useful</a> has a small but enduring popularity (some of it negative) among those who [obsess over minutia](http://en.wikipedia.org/wiki/Parkinson's_Law_of_Triviality). Yes, that includes me sometimes.
+My blog post on multiple returns and why they are actually quite useful has a small but enduring popularity (some of it negative) among those who [obsess over minutia](http://en.wikipedia.org/wiki/Parkinson's_Law_of_Triviality). Yes, that includes me sometimes.
 
 
 For instance [this blog post](http://npclaudiu.blogspot.co.uk/2012/04/my-two-cents-on-one-return-only-policy.html) which argues for single returns, with an example where a single return is better.
@@ -191,12 +191,12 @@ public Seniority GetSeniority(int yearsOfExperience)
 
   return Seniority.Junior;
 }
-```csharp
+```
 
 You could argue that the single return version is more extensible (as it supports the addition of logging). But [YAGNI](http://www.codinghorror.com/blog/2004/10/kiss-and-yagni.html).  Don't add in extra lines of code to support some requirement that you might have at some time. You can add that when you do need it, it's not hard to do so.
 
 
-If you do get the requirement for logging, going to the version with logging and one exit point is good code, in my opinion. It does what it should do, with little fuss. I'd let it stand with minor simplifcation.
+If you do get the requirement for logging, going to the version with logging and one exit point is good code, in my opinion. It does what it should do, with little fuss. I'd let it stand with minor simplification.
 
 ```csharp
 // one-return verson with logging
@@ -223,7 +223,6 @@ public Seniority GetSeniority(int yearsOfExperience)
 ```
 
 But there is another way. This method does two things - it calculates the value, and as a side-effect, logs it at the end. Which got me thinking of the trade-offs. Multiple returns is best done when the method is a function with no side-effects and minimal state. Encouraging methods like that is a good thing. I find it easy to read the multiple returns because what is returned is all you need to know about the method; it doesn't do anything else.
-
 
 But side-effects are necessary, so where they occur, it may be a reason to avoid multiple returns in that code. This leads me to another way to do it:
 
