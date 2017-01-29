@@ -88,7 +88,7 @@ public Customer FindLuckyCustomer(IEnumerable<Customer> customers)
 }
 ```
 
-Note how `FindLuckyCustomer` does not requre a result local variable, just the customerItem for the loop. The local variable would be "mutable state" for the method. If you have looked at all at functional programming, you can appreciate how eliminating unnecessary mutable state can be a good thing. Here's the code that uses the same loop but avoid multiple returns:
+Note how `FindLuckyCustomer` does not require a result local variable, just the `customerItem` for the loop. The local variable would be "mutable state" for the method. If you have looked at all at functional programming, you can appreciate how eliminating unnecessary mutable state can be a good thing. Here's the code that uses the same loop but avoid multiple returns:
 
 ```csharp
 public Customer FindLuckyCustomer(IEnumerable<Customer> customers)
@@ -139,7 +139,7 @@ public Customer GetCustomer(int customerId)
 }
 ```
 
-This example with the fallback is interesting: if you re-write it with a single exit point you must introduce a temporary variable to hold the result. I think that you *cannot* do this code without using one of two things: a temporary variable to hold the value to return at your single exit point, or multiple exit points. The single return increases the amount of temporary mutable state and thus the complexity.
+This example with the fallback is interesting: if you re-write it with a single exit point you must introduce a temporary variable to hold the result. I think that you *cannot* do this code without using one of two things: a temporary variable to hold the value to return at your single exit point, or multiple exit points. The single return increases the amount of temporary mutable state and thus the complexity. It's a trade-off.
 
 ## Links
 
