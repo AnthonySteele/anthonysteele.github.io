@@ -69,7 +69,7 @@ It is fine, even in C code to use early return as a first check on the parameter
 
 The pattern is [well explained here on Ward Cunningham's wiki](http://www.c2.com/cgi/wiki?GuardClause). The discussion there diverges into a more general on on "early return vs single return", with the interesting point that single return requires mutable state in the form of a temporary "result" variable, thus early return, not requiring this piece of mutable state, seems "cleaner" to a functional programming perspective.
 
-###Found item in loop
+### Found item in loop
 
 Finding an item in a loop using returns was common in C#, but is often now giving way to the more concise LINQ version.  However, beware of returns in the middle of highly nested code or in methods that are more than just a loop (if posible, factor out the loop into a seperate method).  All other things being equal, avoid them, since they are less readable and predictable. However, the following is a valid use of multiple returns:
 
@@ -120,7 +120,7 @@ public Customer FindLuckyCustomerWithLinq(IEnumerable<Customer> customers)
 }
 ```
 
-###Fallback
+### Fallback
 
 This pattern has more variation, but the principle is to try and find a result from a first source, falling back to a second or futher sources. The best example of this is data from either cache or database. Early return if a item is found an a cache fits into this pattern.
 
