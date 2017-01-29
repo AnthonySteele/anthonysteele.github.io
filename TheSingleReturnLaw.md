@@ -150,3 +150,110 @@ This example with the fallback is interesting: if you re-write it with a single 
 * [Single exit point from function, on 
 The Joel on Software Discussion Group](http://discuss.joelonsoftware.com/default.asp?joel.3.325456.34)
 
+
+## Second blog post
+
+My blog post on multiple returns and why they are actually quite useful</a> has a small but enduring popularity (some of it negative) among those who [obsess over minutia](http://en.wikipedia.org/wiki/Parkinson's_Law_of_Triviality). Yes, that includes me sometimes.
+
+
+For instance [this blog post](http://npclaudiu.blogspot.co.uk/2012/04/my-two-cents-on-one-return-only-policy.html) which argues for single returns, with an example where a single return is better.
+
+
+What's interesting about the example is that it introduces a step that is taken at the exit point. This is the main reason for having a single exit point - to better control what happens there. Given that Java, C# et al seldom need cleanup on exit (and have constructs for this - `try ... finally` and `using`) the author of that piece has found another case where something happens on exit - logging.
+
+
+I'm sure there are cleverer ways to do the logging on exit - maybe something based on attributes and/or [postsharp](http://www.sharpcrafters.com/) to inject the right code. But if you don't already have those in place, the code given is a reasonable way to do a reasonable requirement without over engineering it.
+
+
+The assertions that the single return is "more readable" in all cases though, are something that I disagree with. So often, what a person finds more readable is just a matter of what they are used to reading. If it's not backed up by concrete measurements (e.g. lines of code or [cyclomatic complexity](http://en.wikipedia.org/wiki/Cyclomatic_complexity)) or statistically significant studies on third parties who start out without a preference, then it's very susceptible to bias in favour of what's familiar to the reader. I think this is one of those times.
+
+One return is more readable than two in the sense that one statement is easier to read than two, but I'm in favour of multiple returns in cases where it does away with other complexity and reduces the overall line count. Keeping track of multiple returns is harder than keeping track of one at the end (especially if you're not used to it), but keeping track of local variables also has a cost.  You trade one for the other based on what you prefer.
+
+
+How would I do this code?
+
+
+Suppose the code at first does not have the requirement for logging. Three ways of coding it are given. I don't like big nested `? :` blocks - my personal opinion is that they are too terse for readability. So I'd start with #2 , but removing some superfluous else keywords:
+
+```csharp
+// simple verson without logging
+public Seniority GetSeniority(int yearsOfExperience)
+{
+  if (yearsOfExperience>= minSeniorYears)
+  {
+    return Seniority.Senior;
+  }
+            
+  if (yearsOfExperience>= minMiddleYears)
+  {
+    return Seniority.Middle;
+  }
+
+  return Seniority.Junior;
+}
+```csharp
+
+You could argue that the single return version is more extensible (as it supports the addition of logging). But [YAGNI](http://www.codinghorror.com/blog/2004/10/kiss-and-yagni.html).  Don't add in extra lines of code to support some requirement that you might have at some time. You can add that when you do need it, it's not hard to do so.
+
+
+If you do get the requirement for logging, going to the version with logging and one exit point is good code, in my opinion. It does what it should do, with little fuss. I'd let it stand with minor simplifcation.
+
+```csharp
+// one-return verson with logging
+public Seniority GetSeniority(int yearsOfExperience)
+{
+   Seniority result;
+             
+   if (yearsOfExperience >= minSeniorYears)
+   {
+     result = Seniority.Senior;
+   }
+   else if (yearsOfExperience >= minMiddleYears)
+   {
+     result = Seniority.Middle;
+   }
+   else
+   {
+     result = Seniority.Junior;
+   }
+             
+    Log("GetSeniority", yearsOfExperience, result);         
+    return result;
+}
+```
+
+But there is another way. This method does two things - it calculates the value, and as a side-effect, logs it at the end. Which got me thinking of the trade-offs. Multiple returns is best done when the method is a function with no side-effects and minimal state. Encouraging methods like that is a good thing. I find it easy to read the multiple returns because what is returned is all you need to know about the method; it doesn't do anything else.
+
+
+But side-effects are necessary, so where they occur, it may be a reason to avoid multiple returns in that code. This leads me to another way to do it:
+
+```
+// separating the concerns of calculation and logging
+private Seniority CalcSeniority(int yearsOfExperience )
+{
+  if (yearsOfExperience >= minSeniorYears)
+  {
+    return Seniority.Senior;
+  }
+     
+  if (yearsOfExperience >= minMiddleYears)
+  {
+    return Seniority.Middle;
+  }
+     
+  return Seniority.Junior;
+}
+     
+public Seniority GetSeniority(int yearsOfExperience)
+{
+  Seniority result = CalcSeniority(yearsOfExperience);
+  Log("GetSeniority", yearsOfExperience, result);
+  return result;
+}
+```
+
+So the part of the code that can be just a function is that, and where there has to be state and a side-effect, this state is kept for only three lines of code with only one return. Also good. It's one line longer so no improvement there. But we do get to name something that we didn't get to before.
+
+Does this really matter? In the code given, no. It's just a simple example. But picking single return or multiple returns as need be is a tool for keeping unnecessary complexity down in longer code.
+
+
