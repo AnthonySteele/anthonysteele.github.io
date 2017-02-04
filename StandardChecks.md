@@ -4,20 +4,19 @@ These are standard checks, low-hanging fruit that I perform when picking up a .N
 
 ### Is there anyone in there?
 
-See if it builds. See if the test pass. See if it runs. 
+See if it builds. See if the test pass. See if it runs. You will need these to validate futher changes.
 
 ### Do not check in binary packages
 
-Remove binary nuget packages from the repository. If there are any folders in the repo under `\packages\`, delete them. On the git command line this is `git rm -r --cached ./packages/*/**`
+Remove binary nuget packages from the repository. 
 
-Commit this change. Verify that in your upstream repository, none of these packages are present.
+If there are any folders in the repo under `\packages\`, delete them. On the git command line this is `git rm -r --cached ./packages/*/**`. Commit this change. Verify that in your upstream repository, none of these packages are present.
 
-In the `.gitignore` file, Add a line for: `**/packages/*/**`. 
+In the `.gitignore` file, add a line to ignore these files: `**/packages/*/**`. 
 
 Storing the binaries was useful in the case that the nuget.org server isn't working. But this is increasingly rare - we can now rely on the nuget.org servers. Source code repositories don't work well with large binary files. These files are immutable anyway (e.g. `Newtonsoft.Json.9.0.2` always has the same contents across all package sources), so restoring them upon build always has the same results. 
 
 What invariably happens when packages are stored is that one or more packages are updated in the project config, but the files stored in git under `\packages\` are not updated. The "packages that I keep" and "packages that I need" become increasingly disjoint sets over time. Then you have the worst of both worlds: large binaries in git, and reliance on on the nuget.org server for packages. Simplify by deleting them.
-
 
 ### Remove the nuget binary
 
@@ -26,7 +25,7 @@ Remove the `\.nuget` folder, the binaries in it, and remove references to them f
 If you use custom package sources and want this metadata to live with the project, then you need the `nuget.config` file here. But that's the only file. 
 
 
-### editorconfig
+### EditorConfig
 
 Add a standard `.EditorConfig` file in the root folder. [EditorConfig](http://editorconfig.org/) means that some annoying formatting variations across checkins just don't happen any more.
 

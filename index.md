@@ -1,5 +1,6 @@
 ### Various writings
 
+ * [Standard checks and updates on C# projects](./StandardChecks) Feb 2017
  * [Dates: ISO8601 or pain](./iso8601) Feb 2017
  * [Crufty type systems](./CruftyTypeSystems) Jan, 2017
  * [Avoiding basic mistakes in async await](./AsyncBasicMistakes) Nov, 2016
