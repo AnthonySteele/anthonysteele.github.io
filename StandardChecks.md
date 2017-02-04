@@ -2,13 +2,17 @@
 
 These are standard checks, low-hanging fruit that I perform when picking up a .Net project that hasn't been maintained in a while. They are roughly ordered from simple and easy to more complex, far-reaching and tricky.
 
-### Is there anyone in there
+### Is there anyone in there?
 
 See if it builds. See if the test pass. See if it runs. 
 
 ### Do not check in binary packages
 
-Remove binary nuget packages from the repository. If there are any folders in the repo under `\packages\`, delete them. In the `.gitignore` file, Add a line for: `**/packages/*/**`. Commit it. 
+Remove binary nuget packages from the repository. If there are any folders in the repo under `\packages\`, delete them. On the git command line this is `git rm -r --cached ./packages/*/**`
+
+Commit this change. Verify that in your upstream repository, none of these packages are present.
+
+In the `.gitignore` file, Add a line for: `**/packages/*/**`. 
 
 Storing the binaries was useful in the case that the nuget.org server isn't working. But this is increasingly rare - we can now rely on the nuget.org servers. Source code repositories don't work well with large binary files. These files are immutable anyway (e.g. `Newtonsoft.Json.9.0.2` always has the same contents across all package sources), so restoring them upon build always has the same results. 
 
@@ -56,7 +60,9 @@ At minimum, use the same version of a given nuget package throughout the solutio
 
 There is lots to do  here, each package is unique. Ease of doing it depends on the package, and understanding them comes with experience. [In general, minor version increments are safe, but major versions may make breaking changes](http://semver.org/). 
 
-If there are many, don't try to update all the packages at once, but do it in stages. Be prepared to revert combinations that don't work, and learn what they are for future reference.
+If there are many packages to update, don't try to update all the packages at once, but do it in stages. Look for groups (e.g. all parts of the [AWS SDK](https://www.nuget.org/packages/AWSSDK.Core/) can and should be updated together)
+
+Be prepared to revert combinations that don't work, and learn what they are for future reference.
 
 Many packages have to be updated together. 
 We currently use `Newtonsoft.Json.9.0.1` throughout, so updating packages that depend upon Newtonsoft.Json means updating it as well. 
