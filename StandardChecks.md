@@ -2,9 +2,13 @@
 
 These are standard checks, low-hanging fruit that I perform when picking up a .Net project that hasn't been maintained in a while. They are roughly ordered from simple and easy to more complex, far-reaching and tricky.
 
+### Is there anyone in there
+
+See if it builds. See if the test pass. See if it runs. 
+
 ### Do not check in binary packages
 
-Remove binary nuget packages from the repository. If there are any folders in the repo under `\packages\`, delete them. In the `.gitignore` file, Add a line for: `**/packages/*/**`.
+Remove binary nuget packages from the repository. If there are any folders in the repo under `\packages\`, delete them. In the `.gitignore` file, Add a line for: `**/packages/*/**`. Commit it. 
 
 Storing the binaries was useful in the case that the nuget.org server isn't working. But this is increasingly rare - we can now rely on the nuget.org servers. Source code repositories don't work well with large binary files. These files are immutable anyway (e.g. `Newtonsoft.Json.9.0.2` always has the same contents across all package sources), so restoring them upon build always has the same results. 
 
@@ -17,11 +21,14 @@ Remove the `\.nuget` folder, the binaries in it, and remove references to them f
 
 If you use custom package sources and want this metadata to live with the project, then you need the `nuget.config` file here. But that's the only file. 
 
-## General
 
 ### editorconfig
 
-add a standard `.editorconfig` file in the root folder. For Visual Studio 2015, ensure that the Visual Studio add-in that reads this is installed. You don't need the addin for Visual Studio 2017.
+Add a standard `.EditorConfig` file in the root folder. [EditorConfig](http://editorconfig.org/) means that some annoying formatting variations across checkins just don't happen any more.
+
+For Visual Studio 2015, ensure that the Visual Studio add-in that reads this is installed. The good news is that you don't need the addin for Visual Studio 2017.
+
+It might be necessary to do one last formatting-only commit, where every file standardised. Otherwise this will happen as you work, interwoven with code changes.
 
 ### Warnings as errors
 
