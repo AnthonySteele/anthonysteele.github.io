@@ -49,27 +49,26 @@ At minimum, use the same version of a given nuget package throughout the solutio
 
 There is lots to do  here, each package is unique. Ease of doing it depends on the package, and understanding them comes with experience. [In general, minor version increments are safe, but major versions may make breaking changes](http://semver.org/). 
 
+If there are many, don't try to update all the packages at once, but do it in stages. Be prepared to revert combinations that don't work, and learn what they are for future reference.
+
 Many packages have to be updated together. 
-We currently use `Newtonsoft.Json.9.0.2` throughout. 
+We currently use `Newtonsoft.Json.9.0.1` throughout, so updating packages that depend upon Newtonsoft.Json means updating it as well. 
 
 Remember that when there are updates to Assembly Binding Redirects in the `.config` files, these need to go in the config templates as well.
 
 
-### reuse the HttpClient instance
+### Do async well
+
+See here for more details on this topic: [avoiding async basic mistakes](./AsyncBasicMistakes).
+
+
+### Reuse the HttpClient instance
 
  See [here](http://codereview.stackexchange.com/a/69954) and links from there. 
  
 For a given endpoint you pre-configure  a `HttpClient` with request headers, base address and so on, then re-use it."it will help reuse TCP connections where possible which will in general lead to better performance." thought his may only show up under high load.
 
-### Structured Logging 
+###  Logging and metrics
 
-According to [the best practices in that repo](https://github.com/justeat/NLog.StructuredLogging.Json).
-
-### Statsd
-
-Stats should be logged, with timers around all major operations. Always include the tenant name in the stat name.
-
-### Do async well
-
-See here - [avoiding async basic mistakes](./AsyncBasicMistakes).
+Look at the logging and stating to ensure that errors are being recorded in a suitable structured format, and that important operations have metrics and timers.
 
