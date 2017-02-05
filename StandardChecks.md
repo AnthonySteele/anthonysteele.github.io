@@ -61,7 +61,11 @@ At minimum, use the same version of a given nuget package throughout the solutio
 
 ### Nuget package updates
 
-There is lots to do  here, each package is unique. Ease of doing it depends on the package, and understanding them comes with experience. [In general, minor version increments are safe, but major versions may make breaking changes](http://semver.org/). 
+There is lots to do  here, each package is unique.
+
+Managing packages dependencies and updates is an often underrated skill - it's not coding and it doesn't get taught but it is important. After all, what's the point of writing code and packaging it the new code never gets used? It's sometime hard to get right, and the commits are not very easy to read - some version numbers change, others do not. 
+
+Ease of doing it depends on the package, and understanding them comes with experience. [In general, minor version increments are safe, but major versions may make breaking changes](http://semver.org/). 
 
 If there are many packages to update, don't try to update all the packages at once, but do it in stages. Look for groups (e.g. all parts of the [AWS SDK](https://www.nuget.org/packages/AWSSDK.Core/) can and should be updated together)
 
@@ -72,6 +76,11 @@ We currently use `Newtonsoft.Json.9.0.1` throughout, so updating packages that d
 
 Remember that when there are updates to Assembly Binding Redirects in the `.config` files, these need to go in the config templates as well.
 
+### remove extra packages
+
+I tend to the view that each package is a dependency, and so comes with a cost of using and updating it. If it's trivial to use your own code instead, then do that.
+
+Also look for packages that do the same thing.  Everyone has [a favourite mocking framework](https://www.nuget.org/packages/Moq/), [Ioc container](https://www.nuget.org/packages/structuremap/) or [unit testing library](https://www.nuget.org/packages/NUnit/) but the only hard and fast rule that I have is that two of them is one too many. For instance, if there is [Moq](https://www.nuget.org/packages/Moq/) and [NSubstitute](https://www.nuget.org/packages/NSubstitute/) then remove one of them.
 
 ### Do async well
 
