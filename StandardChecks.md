@@ -91,7 +91,7 @@ See here for more details on this topic: [avoiding async basic mistakes](./Async
 
  See [here](http://codereview.stackexchange.com/a/69954) and links from there. 
  
-For a given endpoint you pre-configure  a `HttpClient` with request headers, base address and so on, then re-use it."it will help reuse TCP connections where possible which will in general lead to better performance." thought his may only show up under high load.
+For a given endpoint you pre-configure  a `HttpClient` with request headers, base address and so on, then re-use it. "it will help reuse TCP connections where possible which will in general lead to better performance", thought his may only show up under high load.
 
 ###  Logging and metrics
 
