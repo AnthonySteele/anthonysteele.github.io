@@ -1,6 +1,6 @@
-##
+# Anthony Steele's writings
 
-This is the repo for some tech wrirings hosted at [AnthonySteele.Co.uk(http://www.anthonysteele.co.uk/)
+This is the repo for some tech writings hosted at [AnthonySteele.Co.uk](http://www.anthonysteele.co.uk/)
 
 ## Welcome to GitHub Pages
 
