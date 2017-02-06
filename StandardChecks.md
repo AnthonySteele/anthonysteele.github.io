@@ -4,13 +4,13 @@ These are standard checks, low-hanging fruit that I perform when picking up a .N
 
 ### Is there anyone in there?
 
-See if it builds. See if the test pass. See if it runs. You will need these to validate futher changes.
+See if it builds. See if the test pass. See if it runs. You will need these to validate further changes.
 
 ### Do not check in binary packages
 
 Remove binary nuget packages from the repository. 
 
-If there are any folders in the repo under `\packages\`, delete them. I don;'t really mind if you keep the file `\packages\repositories.config` or not - it's small and doesn't change frequently.
+If there are any folders in the repo under `\packages\`, delete them. I don't really mind if you keep the file `\packages\repositories.config` or not - it's small and doesn't change frequently.
 
 On the git command line this is `git rm -r --cached ./packages/*`. 
 
@@ -63,7 +63,7 @@ At minimum, use the same version of a given nuget package throughout the solutio
 
 There is lots to do  here, each package is unique.
 
-Managing packages dependencies and updates is an often underrated skill - it's not coding and it doesn't get taught but it is important. After all, what's the point of writing code and packaging it the new code never gets used? It's sometime hard to get right, and the commits are not very easy to read - all that the commit shows is that some version numbers change, and others do not. 
+Managing packages dependencies and updates is an often underrated skill - it's not coding and it doesn't get taught but it is important. After all, what's the point of writing code and packaging it the new code never gets used? It's sometimes hard to get right, and the commits are not very easy to read - all that the commit shows is that some version numbers change, and others do not. 
 
 Ease of doing it depends on the package, and understanding them comes with experience. [In general, minor version increments are safe, but major versions may make breaking changes](http://semver.org/). 
 
