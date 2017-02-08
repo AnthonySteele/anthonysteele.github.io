@@ -1,22 +1,24 @@
 # More patterns for web services in Nancy
 
-I wrote this in March 2014. It is hosted here again for reference.
+I wrote this in March 2014. It is hosted here again for reference, with some edits to remove ideas that I have later decided are bad, lest the reader be lead astray.
 
-## Original text
+You are of course still welcome to to cut, paste and use it "as is" or to alter it; or just take the idea and implement something similar to meet your own requirements.
 
-To carry on from Part one about patterns of web services in Nancy, we have a functional approach, but I'll start with an easy refactoring about modules:
+## Original text of part 2
+
+To carry on from [Part One](./NancyWebServicePatterns) about patterns of web services in Nancy, we have a functional approach, but I'll start with an easy refactoring about modules:
 
 ## Refactor Number Three: Modules
 
-You can have as many Nancy modules as you like in the project. If the module defines two or three endpoints that's fine by me, but if you have six or seven in the same module then they had better be very closely related. When to split the module a judgement call based on if they have a natural division and how much code they have in common, but a large Nancy module with lots of endpoints is a "code smell". The same applies to a ServiceStack Service or a ASP MVC Controller.
+You can have as many [Nancy modules](https://github.com/NancyFx/Nancy/wiki/Exploring-the-nancy-module) as you like in the project. If the module defines two or three endpoints that's fine by me, but if you have six or seven in the same module then they had better be very closely related. When to split the module a judgement call based on if they have a natural division and how much code they have in common, but a large Nancy module with lots of endpoints is a "[code smell](https://blog.codinghorror.com/code-smells/)". The same applies to a ServiceStack Service or a ASP MVC Controller.
 
-The modules don't need to all live in the same folder. Take advantage of this to make "Feature folders" containing the Nancy module, DTOs, validators and other files that make up a feature.
+The modules don't need to all live in the same folder. Take advantage of this to make "[Feature folders](http://www.slideshare.net/Anthony_Steele_/feature-folders)" containing the Nancy module, DTOs, validators and other files that make up a feature.
 
 ## The Boilerplate Problem
 
-In the previous blog post I showed the code used to validate input and return a `400 Bad Request` if it fails. In the cakeshop example, this works if I request the url `/cake/0` which fails validation in the fluent validator due to the `RuleFor(cr => cr.Id).GreaterThan(0);` rule. But if I request `/cake/chocolate` then I sadly get a ModelBindingException in a `500 Internal Server Error` since "chocolate" can't be turned into an int at all.
+In [the previous blog post]((./NancyWebServicePatterns)) I showed the code used to validate input and return a `400 Bad Request` if it fails. In the cakeshop example, this works if I request the url `/cake/0` which fails validation in the fluent validator due to the `RuleFor(cr => cr.Id).GreaterThan(0);` rule. But if I request `/cake/chocolate` then I sadly get a `ModelBindingException` in a `500 Internal Server Error` since "chocolate" can't be turned into an `int` at all. This should also be a `400` response.
 
-So the boilerplate becomes:
+So to fix this, the boilerplate becomes:
 
 ```csharp
 CakeRequest model;
@@ -35,7 +37,7 @@ catch (ModelBindingException)
 return GetCake(model);
 ```
 
-I also may want to do things like have an exception class so somewhere deeper in the code I can do throw `HttpException.BadRequest();` and have this result in that response code. Nancy's Pipeline handlers are supposed to be the right way to deal with exceptions and other cross-curring concerns, but I didn't find a way to do `module.Negotiate.With...` in a Pipeline handler, or any simple equivalent. And I _always_ want to do content negotiation.
+I also may want to do things like have an exception class so somewhere deeper in the code I can do throw `HttpException.BadRequest();` and have this result in that response code. Nancy's Pipeline handlers are supposed to be the right way to deal with exceptions and other cross-cutting concerns, but I didn't find a way to do `module.Negotiate.With...` in a Pipeline handler, or any simple equivalent. And I _always_ want to do content negotiation.
 
 With each additional thing, the code in the handler becomes even more complex. At this point I felt that the boilerplate that I was copying around was getting out of hand and I wanted to extract the pattern. And it's a well-defined pattern - the only things that differ are the type of the input model ( call it `TIn`), the response type (`TOut`) and the response generation function such as `GetCake` which can be typed as `Func<TIn, TOut>`. Then there's a variation when there are no request parameters and thus no request model, and the response generation is just `Func<TOut>`.
 
@@ -43,9 +45,9 @@ With each additional thing, the code in the handler becomes even more complex. A
 
 So I found another way, with a little generic functional code. It's a function that we pass the response generation function into, and which runs it with the boilerplate around it. A Nancy handler is actually a `Func<dynamic, dynamic>`, so any function that meets this type signature can be used. Often we write little adapters to other types without thinking about it, e.g. `Get["/cakes"] = _ => GetCakes();` contains an function `_ => GetCakes()` which adapts this `Func<dynamic, dynamic>` to `Func<CakeResponse>`.
 
-The input dynamic object is the "dynamic dictionary". We don't actually use it directly at all when we get the params via `module.BindAndValidate`.
+The input dynamic object is the "[dynamic dictionaryhttps://github.com/NancyFx/Nancy/wiki/Taking-a-look-at-the-DynamicDictionary]()". We don't actually use it directly at all when we get the params via `module.BindAndValidate`.
 
-I came up with a generic functional "shim" to use in all cases. 
+I came up with a generic functional "[shim](http://www.merriam-webster.com/dictionary/shim)" or wrapper to use in all cases. 
 
 ```csharp
 public static object RunHandler<TIn, TOut>(this NancyModule module, Func<TIn, TOut> handler)
@@ -111,7 +113,7 @@ public async Task<object> GetCakeAsync(CakeRequest request)
 }
 ```
 
-We can do an async version using Nancy's way of defining async handlers:
+We can do an async version using [Nancy's way of defining async handlers](https://github.com/NancyFx/Nancy/wiki/Async):
 `Get["/cakes", true] = async (_, ct) => await this.RunHandlerAsync(AllCakesAsync);`
 
 You can also wrap up the handler creation with another extension method, e.g:
@@ -139,27 +141,27 @@ this.GetHandlerAsync<CakeRequest, object>("/cake/{id}", GetCakeAsync);
 
 The code is about as long, but to my eye far less noisy to read.
 
-A full copy of the code for the "GetHandler" and "RunHandler" extensions is here. You are welcome to use it "as is" or to cut, paste and alter it; or just take the idea and implement something similar to meet your own requirements.
+A full copy of the code for the "GetHandler" and "RunHandler" extensions is at the bottom of this page. You are welcome to to cut, paste and use it "as is" or to alter it; or just take the idea and implement something similar to meet your own requirements.
 
-I have updated this approach in part three: Nancy handler functions revisited.
+I have updated this approach in part three below
 
 
-### revisit
+### Part Three: Nancy handler functions revisited
 
 
 I have an update on our experience with using Nancy for web APIs. Since I last wrote in part two we have made a couple of changes which make the code simpler.
 
 Firstly we removed the `HttpException` class. It turned out to be an antipattern.
 
-Recall that in part one I mentioned the Single Responsibility Principle dictates that the Nancy module handles the conversion from HTTP to c# code and back, and only that responsibility. The corollary is that _nothing else does this_. Using the `HttpException` class is against this rule - it allows you to push knowledge of Http status codes down into layers that are better off knowing nothing about them, or which may even be engineered for a more general usage, not just on a website. It was mostly used in Nancy modules anyway, where there are simpler ways to return http statuses. So we removed the class. 
+Recall that in [Part One](./NancyWebServicePatterns) I mentioned the Single Responsibility Principle dictates that the Nancy module handles the conversion from HTTP to c# code and back, and only that responsibility. The corollary is that _nothing else does this_. Using the `HttpException` class is against this rule - it allows you to push knowledge of HTTP status codes down into layers that are better off knowing nothing about them, or which may even be engineered for a more general usage, not just on a website. It was mostly used in Nancy modules anyway, where there are simpler ways to return http statuses. So we removed the class. 
 
-The consequences give rise to a simplification - the Nancy module's handler method must now be able to return different things - the “happy path” result DTO, an error object or a HTTP response code. Therefore these methods now always return `object`. This removed the generic type `TOut` leaving just `TIn`. Nancy casts the response as dynamic anyway so there's no additional overhead to this pattern.
+The consequences give rise to a simplification - the Nancy module's handler method must now be able to return different things - the "happy path" result DTO, an error object or a HTTP response code. Therefore these methods now always return `object`. This removed the generic type `TOut` leaving just `TIn`. Nancy casts the response as dynamic anyway so there's no additional overhead to this pattern.
 
 Instead of throwing http exceptions, domain services can return null when the object is not found (or you could design a suitable result to return that indicated "not found"). It is up to the handler method in the Nancy module to translate this into HTTP 's language, e.g. convert a null to a `404` response code. Also, an expected failure, for instance when the item id supplied in the request doesn't refer to an existent record, are best handled by conventional flow control not exceptions.
 
-There are no changes to what I said earlier about model binding. We still think that "Async all the network operations" is the way forward. We arrange the code into feature folders.
+There are no changes to what I said earlier about model binding. We still think that "[Async](https://github.com/NancyFx/Nancy/wiki/Async) all the network operations" is the way forward. We [arrange the code into feature folders](http://www.slideshare.net/Anthony_Steele_/feature-folders).
 
-We use base classes for Nancy modules as well, for checking user permissions on Api endpoints. Having handler functions as extension methods not base class makes them a simple opt-in, avoids having multiple base classes, and sidesteps the decisions of how to arrange the type hierarchy of unrelated concerns.
+We use base classes for Nancy modules as well, for checking user permissions on API endpoints. Having handler functions as extension methods not base class makes them a simple opt-in, avoids having multiple base classes, and sidesteps the decisions of how to arrange the type hierarchy of unrelated concerns.
 
 A sample module, with async and async methods, with and without input request objects, looks like this:
 
@@ -192,75 +194,140 @@ public class CakeModule : NancyModule
 }
 ```
 
-the updated code for the extensions looks like this:
+the final code for the extensions looks like this:
 
 ```csharp
-public static void GetHandler(this NancyModule module, string path, Func<object> handler)
-{
-	module.Get[path] = _ => RunHandler(module, handler);
-}
 
-public static void GetHandler<TIn>(this NancyModule module, string path, Func<TIn, object> handler)
-{
-	module.Get[path] = _ => RunHandler(module, handler);
-}
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-public static void GetHandlerAsync<TIn>(this NancyModule module, string path, Func<TIn, Task<object>> handler)
-{
-	module.Get[path, true] = async (x, ctx) => await RunHandlerAsync(module, handler);
-}
-
-public static void GetHandlerAsync(this NancyModule module, string path, Func<Task<object>> handler)
-{
-	module.Get[path, true] = async (x, ctx) => await RunHandlerAsync(module, handler);
-}
+using Nancy;
+using Nancy.ModelBinding;
+using Nancy.Responses.Negotiation;
+using Nancy.Validation;
 
 
-public static object RunHandler(this NancyModule module, Func<object> handler)
+public static class ModuleExtensions
 {
-	return handler();
-}
-
-public static async Task<object> RunHandlerAsync(this NancyModule module, Func<Task<object>> handler)
-{
-	return await handler();
-}
-
-public static object RunHandler<TIn>(this NancyModule module, Func<TIn, object> handler)
-{
-	TIn model;
-	try
+	public static void GetHandler(this NancyModule module, string path, Func<object> handler)
 	{
-		model = module.BindAndValidate<TIn>();
-		if (!module.ModelValidationResult.IsValid)
+		module.Get[path] = _ => RunHandler(module, handler);
+	}
+
+	public static void GetHandler<TIn>(this NancyModule module, string path, Func<TIn, object> handler)
+	{
+		module.Get[path] = _ => RunHandler(module, handler);
+	}
+
+	public static void GetHandlerAsync<TIn>(this NancyModule module, string path, Func<TIn, Task<object>> handler)
+	{
+		module.Get[path, true] = async (x, ctx) => await RunHandlerAsync(module, handler);
+	}
+
+	public static void GetHandlerAsync(this NancyModule module, string path, Func<Task<object>> handler)
+	{
+		module.Get[path, true] = async (x, ctx) => await RunHandlerAsync(module, handler);
+	}
+
+
+	public static object RunHandler(this NancyModule module, Func<object> handler)
+	{
+		return handler();
+	}
+
+	public static async Task<object> RunHandlerAsync(this NancyModule module, Func<Task<object>> handler)
+	{
+		return await handler();
+	}
+
+	public static object RunHandler<TIn>(this NancyModule module, Func<TIn, object> handler)
+	{
+		TIn model;
+		try
 		{
-			return module.Negotiate.RespondWithValidationFailure(module.ModelValidationResult);
+			model = module.BindAndValidate<TIn>();
+			if (!module.ModelValidationResult.IsValid)
+			{
+				return module.Negotiate.RespondWithValidationFailure(module.ModelValidationResult);
+			}
+		}
+		catch (ModelBindingException)
+		{
+			return module.Negotiate.RespondWithValidationFailure("Model binding failed");
+		}
+
+		return handler(model);
+	}
+
+	public static async Task<object> RunHandlerAsync<TIn>(this NancyModule module, Func<TIn, Task<object>> handler)
+	{
+		TIn model;
+		try
+		{
+			model = module.BindAndValidate<TIn>();
+			if (!module.ModelValidationResult.IsValid)
+			{
+				return module.Negotiate.RespondWithValidationFailure(module.ModelValidationResult);
+			}
+		}
+		catch (ModelBindingException)
+		{
+			return module.Negotiate.RespondWithValidationFailure("Model binding failed");
+		}
+
+		return await handler(model);
+	}
+	
+	public static Negotiator RespondWithValidationFailure(this Negotiator negotiate, ModelValidationResult validationResult)
+	{
+		var model = new ValidationFailedResponse(validationResult);
+
+		return negotiate
+			.WithModel(model)
+			.WithStatusCode(HttpStatusCode.BadRequest);
+	}
+
+	public static object RespondWithValidationFailure(this Negotiator negotiate, string message)
+	{
+		var model = new ValidationFailedResponse(message);
+
+		return negotiate
+			.WithModel(model)
+			.WithStatusCode(HttpStatusCode.BadRequest);
+	}
+}
+
+public class ValidationFailedResponse
+{
+	public List<string> Messages { get; set; }
+		
+	public ValidationFailedResponse()
+	{}
+
+	public ValidationFailedResponse(ModelValidationResult validationResult)
+	{
+		Messages = new List<string>();
+		ErrorsToStrings(validationResult);
+	}
+
+	public ValidationFailedResponse(string message)
+	{
+		Messages = new List<string>
+			{
+				message
+			};
+	}
+
+	private void ErrorsToStrings(ModelValidationResult validationResult)
+	{
+		foreach (var errorGroup in validationResult.Errors)
+		{
+			foreach (var error in errorGroup.Value)
+			{
+				Messages.Add(error.ErrorMessage);
+			}
 		}
 	}
-	catch (ModelBindingException)
-	{
-		return module.Negotiate.RespondWithValidationFailure("Model binding failed");
-	}
-
-	return handler(model);
-}
-
-public static async Task<object> RunHandlerAsync<TIn>(this NancyModule module, Func<TIn, Task<object>> handler)
-{
-	TIn model;
-	try
-	{
-		model = module.BindAndValidate<TIn>();
-		if (!module.ModelValidationResult.IsValid)
-		{
-			return module.Negotiate.RespondWithValidationFailure(module.ModelValidationResult);
-		}
-	}
-	catch (ModelBindingException)
-	{
-		return module.Negotiate.RespondWithValidationFailure("Model binding failed");
-	}
-
-	return await handler(model);
 }
 ```
