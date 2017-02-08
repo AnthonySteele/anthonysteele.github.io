@@ -197,7 +197,6 @@ public class CakeModule : NancyModule
 the final code for the extensions looks like this:
 
 ```csharp
-
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -297,7 +296,11 @@ public static class ModuleExtensions
 			.WithStatusCode(HttpStatusCode.BadRequest);
 	}
 }
+```
 
+And the response DTO
+
+```csharp
 public class ValidationFailedResponse
 {
 	public List<string> Messages { get; set; }
