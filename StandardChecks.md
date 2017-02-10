@@ -46,6 +46,8 @@ If possible, turn on warnings as errors. If there are warning that prevent this,
 Update to a current and consistent framework version.
 Currently 4.6.2 for deployable projects and tests, and 4.5.0 for libs that are expected to be used from mono.
 
+Before you do this, you might have to verify that the suitable pieces are installed on production servers, test servers and build machines. 
+
 ### Unused assembly references
 
 look for unused references to assemblies in projects. The default reference to `System.Xml.Linq` is seldom used, the default reference to `System.Data.DataSetExtensions` is almost always unused and is a good marker that these references have never been uncluttered. If the project does not do any data access either directly or indirectly, you can remove `System.Data`. 

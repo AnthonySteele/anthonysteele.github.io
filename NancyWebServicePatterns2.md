@@ -10,13 +10,13 @@ To carry on from [Part One](./NancyWebServicePatterns) about patterns of web ser
 
 ## Refactor Number Three: Modules
 
-You can have as many [Nancy modules](https://github.com/NancyFx/Nancy/wiki/Exploring-the-nancy-module) as you like in the project. If the module defines two or three endpoints that's fine by me, but if you have six or seven in the same module then they had better be very closely related. When to split the module a judgement call based on if they have a natural division and how much code they have in common, but a large Nancy module with lots of endpoints is a "[code smell](https://blog.codinghorror.com/code-smells/)". The same applies to a ServiceStack Service or a ASP MVC Controller.
+You can have as many [Nancy modules](https://github.com/NancyFx/Nancy/wiki/Exploring-the-nancy-module) as you like in the project. If the module defines two or three endpoints that's fine by me, but if you have six or seven in the same module then they had better be very closely related. When to split the module a judgement call based on if they have a natural division and how much code they have in common, but a large Nancy module with lots of endpoints is a "[code smell](https://blog.codinghorror.com/code-smells/)". The same applies to a [ServiceStack](https://servicestack.net/) Service or a [ASP MVC](https://www.asp.net/mvc) Controller.
 
 The modules don't need to all live in the same folder. Take advantage of this to make "[Feature folders](http://www.slideshare.net/Anthony_Steele_/feature-folders)" containing the Nancy module, DTOs, validators and other files that make up a feature.
 
 ## The Boilerplate Problem
 
-In [the previous blog post]((./NancyWebServicePatterns)) I showed the code used to validate input and return a `400 Bad Request` if it fails. In the cakeshop example, this works if I request the url `/cake/0` which fails validation in the fluent validator due to the `RuleFor(cr => cr.Id).GreaterThan(0);` rule. But if I request `/cake/chocolate` then I sadly get a `ModelBindingException` in a `500 Internal Server Error` since "chocolate" can't be turned into an `int` at all. This should also be a `400` response.
+In [the previous blog post]((./NancyWebServicePatterns)) I showed the code used to validate input and return a `400 Bad Request` if it fails. In the cakeshop example, this works if I request the url `/cake/0` which fails validation in the [fluent validator](https://github.com/JeremySkinner/FluentValidation) due to the `RuleFor(cr => cr.Id).GreaterThan(0);` rule. But if I request `/cake/chocolate` then I sadly get a `ModelBindingException` in a `500 Internal Server Error` since "chocolate" can't be turned into an `int` at all. This should also be a `400` response.
 
 So to fix this, the boilerplate becomes:
 
@@ -37,7 +37,9 @@ catch (ModelBindingException)
 return GetCake(model);
 ```
 
-I also may want to do things like have an exception class so somewhere deeper in the code I can do throw `HttpException.BadRequest();` and have this result in that response code. Nancy's Pipeline handlers are supposed to be the right way to deal with exceptions and other cross-cutting concerns, but I didn't find a way to do `module.Negotiate.With...` in a Pipeline handler, or any simple equivalent. And I _always_ want to do content negotiation.
+I initially thought that I would want to have an exception class so somewhere deeper in the code I can do throw `HttpException.BadRequest();` and have this result in that response code.  But we decided that this was a bad idea - it is [flow control by exception](http://softwareengineering.stackexchange.com/questions/189222/are-exceptions-as-control-flow-considered-a-serious-antipattern-if-so-why), and classes deep inside the app taking decisions about Http responses was not in line with the [Single Responsibily Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle) - this decision should be taken by the module which is concerned with http.
+
+Nancy's Pipeline handlers are supposed to be the right way to deal with exceptions and other cross-cutting concerns, but I didn't find a way to do `module.Negotiate.With...` in a Pipeline handler, or any simple equivalent. And I _always_ want to do content negotiation.
 
 With each additional thing, the code in the handler becomes even more complex. At this point I felt that the boilerplate that I was copying around was getting out of hand and I wanted to extract the pattern. And it's a well-defined pattern - the only things that differ are the type of the input model ( call it `TIn`), the response type (`TOut`) and the response generation function such as `GetCake` which can be typed as `Func<TIn, TOut>`. Then there's a variation when there are no request parameters and thus no request model, and the response generation is just `Func<TOut>`.
 
@@ -153,7 +155,7 @@ I have an update on our experience with using Nancy for web APIs. Since I last w
 
 Firstly we removed the `HttpException` class. It turned out to be an antipattern.
 
-Recall that in [Part One](./NancyWebServicePatterns) I mentioned the Single Responsibility Principle dictates that the Nancy module handles the conversion from HTTP to c# code and back, and only that responsibility. The corollary is that _nothing else does this_. Using the `HttpException` class is against this rule - it allows you to push knowledge of HTTP status codes down into layers that are better off knowing nothing about them, or which may even be engineered for a more general usage, not just on a website. It was mostly used in Nancy modules anyway, where there are simpler ways to return http statuses. So we removed the class. 
+Recall that in [Part One](./NancyWebServicePatterns) I mentioned the [Single Responsibily Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle) dictates that the Nancy module handles the conversion from HTTP to c# code and back, and only that responsibility. The corollary is that _nothing else does this_. Using the `HttpException` class is against this rule - it allows you to push knowledge of HTTP status codes down into layers that are better off knowing nothing about them, or which may even be engineered for a more general usage, not just on a website. It's a form of the [Flow control via exception anti-pattern](http://softwareengineering.stackexchange.com/questions/189222/are-exceptions-as-control-flow-considered-a-serious-antipattern-if-so-why). It was mostly used in Nancy modules anyway, where there are simpler ways to return http statuses. So we removed the class. 
 
 The consequences give rise to a simplification - the Nancy module's handler method must now be able to return different things - the "happy path" result DTO, an error object or a HTTP response code. Therefore these methods now always return `object`. This removed the generic type `TOut` leaving just `TIn`. Nancy casts the response as dynamic anyway so there's no additional overhead to this pattern.
 
