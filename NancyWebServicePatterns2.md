@@ -37,47 +37,40 @@ catch (ModelBindingException)
 return GetCake(model);
 ```
 
-I initially thought that I would want to have an exception class so somewhere deeper in the code I can do throw `HttpException.BadRequest();` and have this result in that response code.  But we decided that this was a bad idea - it is [flow control by exception](http://softwareengineering.stackexchange.com/questions/189222/are-exceptions-as-control-flow-considered-a-serious-antipattern-if-so-why), and classes deep inside the app taking decisions about Http responses was not in line with the [Single Responsibily Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle) - this decision should be taken by the module which is concerned with http.
+I initially thought that I would want to have an exception class so somewhere deeper in the code I can do throw `HttpException.BadRequest();` and have this result in that response code.  But we decided that this was a bad idea - it is [flow control by exception](http://softwareengineering.stackexchange.com/questions/189222/are-exceptions-as-control-flow-considered-a-serious-antipattern-if-so-why), and classes deep inside the applicaion taking decisions about Http responses was not in line with the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle) -  there are more details under "Nancy handler functions revisited" below.
 
 Nancy's Pipeline handlers are supposed to be the right way to deal with exceptions and other cross-cutting concerns, but I didn't find a way to do `module.Negotiate.With...` in a Pipeline handler, or any simple equivalent. And I _always_ want to do content negotiation.
 
 With each additional thing, the code in the handler becomes even more complex. At this point I felt that the boilerplate that I was copying around was getting out of hand and I wanted to extract the pattern. And it's a well-defined pattern - the only things that differ are the type of the input model ( call it `TIn`), the response type (`TOut`) and the response generation function such as `GetCake` which can be typed as `Func<TIn, TOut>`. Then there's a variation when there are no request parameters and thus no request model, and the response generation is just `Func<TOut>`.
 
-But the result can also be a HTTP status code, e.g. `return HttpStatusCode.BadRequest;` so in fact `TOut` can always be `object`.
+But the result can be a DTO or also HTTP status response, e.g. `return HttpStatusCode.BadRequest;` so to cover these two cases `TOut` must always be `object`.
 
 ## Refactor Number Four: Shimming Nancy with functions.
 
 So I found another way, with a little generic functional code. It's a function that we pass the response generation function into, and which runs it with the boilerplate around it. A Nancy handler is actually a `Func<dynamic, dynamic>`, so any function that meets this type signature can be used. Often we write little adapters to other types without thinking about it, e.g. `Get["/cakes"] = _ => GetCakes();` contains an function `_ => GetCakes()` which adapts this `Func<dynamic, dynamic>` to `Func<CakeResponse>`.
 
-The input dynamic object is the "[dynamic dictionaryhttps://github.com/NancyFx/Nancy/wiki/Taking-a-look-at-the-DynamicDictionary]()". We don't actually use it directly at all when we get the params via `module.BindAndValidate`.
+The input dynamic object is the "[dynamic dictionary](https://github.com/NancyFx/Nancy/wiki/Taking-a-look-at-the-DynamicDictionary)". We don't actually use it directly at all when we get the params via `module.BindAndValidate`.
 
 I came up with a generic functional "[shim](http://www.merriam-webster.com/dictionary/shim)" or wrapper to use in all cases. 
 
 ```csharp
 public static object RunHandler<TIn>(this NancyModule module, Func<TIn, object> handler)
 {
+	TIn model;
 	try
 	{
-		TIn model;
-		try
+		model = module.BindAndValidate<TIn>();
+		if (!module.ModelValidationResult.IsValid)
 		{
-			model = module.BindAndValidate<TIn>();
-			if (!module.ModelValidationResult.IsValid)
-			{
-				return module.Negotiate.RespondWithValidationFailure(module.ModelValidationResult);
-			}
+			return module.Negotiate.RespondWithValidationFailure(module.ModelValidationResult);
 		}
-		catch (ModelBindingException)
-		{
-			return module.Negotiate.RespondWithValidationFailure("Model binding failed");
-		}
-
-		return handler(model);
 	}
-	catch (HttpException hEx)
+	catch (ModelBindingException)
 	{
-		return module.Negotiate.WithStatusCode(hEx.StatusCode).WithModel(hEx.Content);
+		return module.Negotiate.RespondWithValidationFailure("Model binding failed");
 	}
+
+	return handler(model);
 }
 ```
 
@@ -143,11 +136,9 @@ this.GetHandlerAsync("/cakes", AllCakesAsync);
 this.GetHandlerAsync<CakeRequest>("/cake/{id}", GetCakeAsync);
 ```
 
-The code is about as long, but to my eye far less noisy to read.
+The code is far less noisy to read.
 
-A full copy of the code for the "GetHandler" and "RunHandler" extensions is at the bottom of this page. You are welcome to to cut, paste and use it "as is" or to alter it; or just take the idea and implement something similar to meet your own requirements.
-
-I have updated this approach in part three below
+A full copy of the code for the `GetHandler` and `RunHandler` extensions is at the bottom of this page. 
 
 
 ### Part Three: Nancy handler functions revisited
