@@ -83,9 +83,9 @@ Get["/cake/details/{cakeId}"] = _ => this.RunHandler<CakeRequest>(GetCakeDetails
 And with another generic helper because attaching a handler for `Get` on a route is very common:
 
 ```csharp
-public static void GetHandler(this NancyModule module, string path, Func<object> handler)
+public static void GetHandler<TIn>(this NancyModule module, string path, Func<TIn, object> handler)
 {
-	module.Get[path] = _ => RunHandler(module, handler);
+  module.Get[path] = _ => RunHandler(module, handler);
 }
 ```
 
@@ -94,7 +94,6 @@ Is becomes even simpler:
 ```csharp
 this.GetHandler("/cake/details/{cakeId}", GetCakeDetails);
 ```
-
 
 I made four variations on the same theme, for requests with and without a request DTO, and for synchronous and asynchronous handlers.
 
