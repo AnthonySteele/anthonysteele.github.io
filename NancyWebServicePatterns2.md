@@ -80,6 +80,22 @@ Use it like this:
 Get["/cake/details/{cakeId}"] = _ => this.RunHandler<CakeRequest>(GetCakeDetails);
 ```
 
+And with another generic helper because attaching a handler for `Get` on a route is very common:
+
+```csharp
+public static void GetHandler(this NancyModule module, string path, Func<object> handler)
+{
+	module.Get[path] = _ => RunHandler(module, handler);
+}
+```
+
+Is becomes even simpler:
+
+```csharp
+this.GetHandler("/cake/details/{cakeId}", GetCakeDetails);
+```
+
+
 I made four variations on the same theme, for requests with and without a request DTO, and for synchronous and asynchronous handlers.
 
 A different approach to the same code would be to have a method on a module base class descended from `NancyModule`. But I find this more versatile and less ceremony. You opt into these handlers on each endpoint that you want to work that way, regardless of base class, but they are one-liners so there's minimal extra code to do so.
