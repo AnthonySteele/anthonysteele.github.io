@@ -37,17 +37,18 @@ catch (ModelBindingException)
 return GetCake(model);
 ```
 
-I initially thought that I would want to have an exception class so somewhere deeper in the code I can do throw `HttpException.BadRequest();` and have this result in that response code.  But we decided that this was a bad idea - it is [flow control by exception](http://softwareengineering.stackexchange.com/questions/189222/are-exceptions-as-control-flow-considered-a-serious-antipattern-if-so-why), and classes deep inside the applicaion taking decisions about Http responses was not in line with the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle) -  there are more details under "Nancy handler functions revisited" below.
+I initially put in code so that I could have an exception class, and somewhere deeper in the code I could do `throw HttpException.BadRequest();` and have this result in that response code.  Nancy's Pipeline handlers are supposed to be the right way to deal with exceptions and other cross-cutting concerns, but I didn't find a way to do `module.Negotiate.With...` in a Pipeline handler, or any simple equivalent. And I _always_ want to do content negotiation.
 
-Nancy's Pipeline handlers are supposed to be the right way to deal with exceptions and other cross-cutting concerns, but I didn't find a way to do `module.Negotiate.With...` in a Pipeline handler, or any simple equivalent. And I _always_ want to do content negotiation.
+
+But we decided that this was a bad idea - it is [flow control by exception](http://softwareengineering.stackexchange.com/questions/189222/are-exceptions-as-control-flow-considered-a-serious-antipattern-if-so-why), and was not in line with the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle) -  there are more details about this change under "Nancy handler functions revisited" below.
 
 With each additional thing, the code in the handler becomes even more complex. At this point I felt that the boilerplate that I was copying around was getting out of hand and I wanted to extract the pattern. And it's a well-defined pattern - the only things that differ are the type of the input model ( call it `TIn`), the response type (`TOut`) and the response generation function such as `GetCake` which can be typed as `Func<TIn, TOut>`. Then there's a variation when there are no request parameters and thus no request model, and the response generation is just `Func<TOut>`.
 
-But the result can be a DTO or also HTTP status response, e.g. `return HttpStatusCode.BadRequest;` so to cover these two cases `TOut` must always be `object`.
+But the result can be a DTO or also HTTP status response, e.g. `return HttpStatusCode.BadRequest;` so to cover these two cases `TOut` must always be `object` - there are more details about this change under "Nancy handler functions revisited" below.
 
 ## Refactor Number Four: Shimming Nancy with functions.
 
-So I found another way, with a little generic functional code. It's a function that we pass the response generation function into, and which runs it with the boilerplate around it. A Nancy handler is actually a `Func<dynamic, dynamic>`, so any function that meets this type signature can be used. Often we write little adapters to other types without thinking about it, e.g. `Get["/cakes"] = _ => GetCakes();` contains an function `_ => GetCakes()` which adapts this `Func<dynamic, dynamic>` to `Func<CakeResponse>`.
+So I found a way with a little generic functional code. It's a function that we pass the response generation function into, and which runs it with the boilerplate around it. A Nancy handler is actually a `Func<dynamic, dynamic>`, so any function that meets this type signature can be used. Often we write little adapters to other types without thinking about it, e.g. `Get["/cakes"] = _ => GetCakes();` contains an function `_ => GetCakes()` which adapts this `Func<dynamic, dynamic>` to `Func<CakeResponse>`.
 
 The input dynamic object is the "[dynamic dictionary](https://github.com/NancyFx/Nancy/wiki/Taking-a-look-at-the-DynamicDictionary)". We don't actually use it directly at all when we get the params via `module.BindAndValidate`.
 
@@ -80,7 +81,7 @@ Use it like this:
 Get["/cake/details/{cakeId}"] = _ => this.RunHandler<CakeRequest>(GetCakeDetails);
 ```
 
-And with another generic helper because attaching a handler for `Get` on a route is very common:
+And with another generic helper because attaching a handler for HTTP `Get` on a route is very common:
 
 ```csharp
 public static void GetHandler<TIn>(this NancyModule module, string path, Func<TIn, object> handler)
@@ -95,9 +96,10 @@ Is becomes even simpler:
 this.GetHandler("/cake/details/{cakeId}", GetCakeDetails);
 ```
 
-I made four variations on the same theme, for requests with and without a request DTO, and for synchronous and asynchronous handlers.
-
 A different approach to the same code would be to have a method on a module base class descended from `NancyModule`. But I find this more versatile and less ceremony. You opt into these handlers on each endpoint that you want to work that way, regardless of base class, but they are one-liners so there's minimal extra code to do so.
+
+I made variations on the same theme, for requests with and without a request DTO, and for synchronous and asynchronous handlers.
+
 
 ## Extending to async
 
