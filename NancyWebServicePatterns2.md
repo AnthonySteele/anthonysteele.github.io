@@ -43,6 +43,8 @@ Nancy's Pipeline handlers are supposed to be the right way to deal with exceptio
 
 With each additional thing, the code in the handler becomes even more complex. At this point I felt that the boilerplate that I was copying around was getting out of hand and I wanted to extract the pattern. And it's a well-defined pattern - the only things that differ are the type of the input model ( call it `TIn`), the response type (`TOut`) and the response generation function such as `GetCake` which can be typed as `Func<TIn, TOut>`. Then there's a variation when there are no request parameters and thus no request model, and the response generation is just `Func<TOut>`.
 
+But the result can also be a HTTP status code, e.g. `return HttpStatusCode.BadRequest;` so in fact `TOut` can always be `object`.
+
 ## Refactor Number Four: Shimming Nancy with functions.
 
 So I found another way, with a little generic functional code. It's a function that we pass the response generation function into, and which runs it with the boilerplate around it. A Nancy handler is actually a `Func<dynamic, dynamic>`, so any function that meets this type signature can be used. Often we write little adapters to other types without thinking about it, e.g. `Get["/cakes"] = _ => GetCakes();` contains an function `_ => GetCakes()` which adapts this `Func<dynamic, dynamic>` to `Func<CakeResponse>`.
@@ -52,7 +54,7 @@ The input dynamic object is the "[dynamic dictionaryhttps://github.com/NancyFx/N
 I came up with a generic functional "[shim](http://www.merriam-webster.com/dictionary/shim)" or wrapper to use in all cases. 
 
 ```csharp
-public static object RunHandler<TIn, TOut>(this NancyModule module, Func<TIn, TOut> handler)
+public static object RunHandler<TIn>(this NancyModule module, Func<TIn, object> handler)
 {
 	try
 	{
@@ -82,7 +84,7 @@ public static object RunHandler<TIn, TOut>(this NancyModule module, Func<TIn, TO
 Use it like this:
 
 ```csharp
-Get["/cake/details/{cakeId}"] = _ => this.RunHandler<CakeRequest, CakeDetailsResponse>(GetCakeDetails);
+Get["/cake/details/{cakeId}"] = _ => this.RunHandler<CakeRequest>(GetCakeDetails);
 ```
 
 I made four variations on the same theme, for requests with and without a request DTO, and for synchronous and asynchronous handlers.
@@ -121,7 +123,7 @@ We can do an async version using [Nancy's way of defining async handlers](https:
 You can also wrap up the handler creation with another extension method, e.g:
 
 ```csharp
-public static void GetHandlerAsync<TIn, TOut>(this NancyModule module, string path, Func<TIn, Task<TOut>> handler)
+public static void GetHandlerAsync<TIn>(this NancyModule module, string path, Func<TIn, Task<object>> handler)
 {
 	module.Get[path, true] = async (x, ctx) => await RunHandlerAsync(module, handler);
 }
@@ -130,15 +132,15 @@ public static void GetHandlerAsync<TIn, TOut>(this NancyModule module, string pa
 Which is actually pretty simple. The hardest part was getting the type signature right! So using that, instead of this code:
 
 ```csharp
-Get["/cakes", true] = async (_, ct) => await this.RunHandlerAsync<CakesResponse>(AllCakesAsync);
-Get["/cake/{id}", true] = async (_, ct) => await this.RunHandlerAsync<CakeRequest, object>(GetCakeAsync);
+Get["/cakes", true] = async (_, ct) => await this.RunHandlerAsync(AllCakesAsync);
+Get["/cake/{id}", true] = async (_, ct) => await this.RunHandlerAsync<CakeRequest>(GetCakeAsync);
 ```
 
 We have:
 
 ```csharp
-this.GetHandlerAsync<CakesResponse>("/cakes", AllCakesAsync);
-this.GetHandlerAsync<CakeRequest, object>("/cake/{id}", GetCakeAsync);
+this.GetHandlerAsync("/cakes", AllCakesAsync);
+this.GetHandlerAsync<CakeRequest>("/cake/{id}", GetCakeAsync);
 ```
 
 The code is about as long, but to my eye far less noisy to read.
