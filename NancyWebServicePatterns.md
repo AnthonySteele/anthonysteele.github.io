@@ -223,4 +223,4 @@ if (! ModelValidationResult.IsValid)
 return GetCake(request);
 ```
 
-But this becomes verbose boilerplate if you do it on every request path that has any parameters. And it hasn't covered that we want to return content-negotiated DTO populated with data from `ModelValidationResult.Errors` along with the status code in all cases. This is continued in part two.
+But this becomes verbose boilerplate if you do it on every request path that has any parameters. And it hasn't covered that we want to return content-negotiated DTO populated with data from `ModelValidationResult.Errors` along with the status code in all cases. [This is continued in part two](.\NancyWebServicePatterns2).
