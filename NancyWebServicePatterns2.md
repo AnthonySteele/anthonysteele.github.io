@@ -8,7 +8,7 @@ You are of course still welcome to to cut, paste and use it "as is" or to alter 
 
 ## The Boilerplate Problem
 
-In [the previous blog post]((./NancyWebServicePatterns)) I showed the code used to validate input and return a `400 Bad Request` if it fails. In the cakeshop example, this works if I request the url `/cake/0` which fails validation in the [fluent validator](https://github.com/JeremySkinner/FluentValidation) due to the `RuleFor(cr => cr.Id).GreaterThan(0);` rule. But if I request `/cake/chocolate` then I sadly get a `ModelBindingException` in a `500 Internal Server Error` since "chocolate" can't be turned into an `int` at all. This should also be a `400` response.
+In [the previous blog post](./NancyWebServicePatterns) I showed the code used to validate input and return a `400 Bad Request` if it fails. In the cakeshop example, this works if I request the url `/cake/0` which fails validation in the [fluent validator](https://github.com/JeremySkinner/FluentValidation) due to the `RuleFor(cr => cr.Id).GreaterThan(0);` rule. But if I request `/cake/chocolate` then I sadly get a `ModelBindingException` in a `500 Internal Server Error` since "chocolate" can't be turned into an `int` at all. This should also be a `400` response.
 
 So to fix this, the boilerplate becomes:
 
