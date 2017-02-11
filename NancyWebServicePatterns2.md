@@ -6,14 +6,6 @@ You are of course still welcome to to cut, paste and use it "as is" or to alter 
 
 ## Original text of part 2
 
-To carry on from [Part One](./NancyWebServicePatterns) about patterns of web services in Nancy, we have a functional approach, but I'll start with an easy refactoring about modules:
-
-## Refactor Number Three: Modules
-
-You can have as many [Nancy modules](https://github.com/NancyFx/Nancy/wiki/Exploring-the-nancy-module) as you like in the project. If the module defines two or three endpoints that's fine by me, but if you have six or seven in the same module then they had better be very closely related. When to split the module a judgement call based on if they have a natural division and how much code they have in common, but a large Nancy module with lots of endpoints is a "[code smell](https://blog.codinghorror.com/code-smells/)". The same applies to a [ServiceStack](https://servicestack.net/) Service or a [ASP MVC](https://www.asp.net/mvc) Controller.
-
-The modules don't need to all live in the same folder. Take advantage of this to make "[Feature folders](http://www.slideshare.net/Anthony_Steele_/feature-folders)" containing the Nancy module, DTOs, validators and other files that make up a feature.
-
 ## The Boilerplate Problem
 
 In [the previous blog post]((./NancyWebServicePatterns)) I showed the code used to validate input and return a `400 Bad Request` if it fails. In the cakeshop example, this works if I request the url `/cake/0` which fails validation in the [fluent validator](https://github.com/JeremySkinner/FluentValidation) due to the `RuleFor(cr => cr.Id).GreaterThan(0);` rule. But if I request `/cake/chocolate` then I sadly get a `ModelBindingException` in a `500 Internal Server Error` since "chocolate" can't be turned into an `int` at all. This should also be a `400` response.
@@ -210,7 +202,6 @@ the final code for the extensions looks like this:
 
 ```csharp
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Nancy;
@@ -218,131 +209,131 @@ using Nancy.ModelBinding;
 using Nancy.Responses.Negotiation;
 using Nancy.Validation;
 
-
 public static class ModuleExtensions
 {
-	public static void GetHandler(this NancyModule module, string path, Func<object> handler)
-	{
-		module.Get[path] = _ => RunHandler(module, handler);
-	}
+    public static void GetHandler(this NancyModule module, string path, Func<object> handler)
+    {
+        module.Get[path] = _ => RunHandler(module, handler);
+    }
 
-	public static void GetHandler<TIn>(this NancyModule module, string path, Func<TIn, object> handler)
-	{
-		module.Get[path] = _ => RunHandler(module, handler);
-	}
+    public static void GetHandler<TIn>(this NancyModule module, string path, Func<TIn, object> handler)
+    {
+        module.Get[path] = _ => RunHandler(module, handler);
+    }
 
-	public static void GetHandlerAsync<TIn>(this NancyModule module, string path, Func<TIn, Task<object>> handler)
-	{
-		module.Get[path, true] = async (x, ctx) => await RunHandlerAsync(module, handler);
-	}
+    public static void GetHandlerAsync<TIn>(this NancyModule module, string path, Func<TIn, Task<object>> handler)
+    {
+        module.Get[path, true] = async (x, ctx) => await RunHandlerAsync(module, handler);
+    }
 
-	public static void GetHandlerAsync(this NancyModule module, string path, Func<Task<object>> handler)
-	{
-		module.Get[path, true] = async (x, ctx) => await RunHandlerAsync(module, handler);
-	}
+    public static void GetHandlerAsync(this NancyModule module, string path, Func<Task<object>> handler)
+    {
+        module.Get[path, true] = async (x, ctx) => await RunHandlerAsync(module, handler);
+    }
 
+    public static object RunHandler(this NancyModule module, Func<object> handler)
+    {
+        return handler();
+    }
 
-	public static object RunHandler(this NancyModule module, Func<object> handler)
-	{
-		return handler();
-	}
+    public static async Task<object> RunHandlerAsync(this NancyModule module, Func<Task<object>> handler)
+    {
+        return await handler();
+    }
 
-	public static async Task<object> RunHandlerAsync(this NancyModule module, Func<Task<object>> handler)
-	{
-		return await handler();
-	}
+    public static object RunHandler<TIn>(this NancyModule module, Func<TIn, object> handler)
+    {
+        TIn model;
+        try
+        {
+            model = module.BindAndValidate<TIn>();
+            if (!module.ModelValidationResult.IsValid)
+            {
+                return module.Negotiate.RespondWithValidationFailure(module.ModelValidationResult);
+            }
+        }
+        catch (ModelBindingException)
+        {
+            return module.Negotiate.RespondWithValidationFailure("Model binding failed");
+        }
 
-	public static object RunHandler<TIn>(this NancyModule module, Func<TIn, object> handler)
-	{
-		TIn model;
-		try
-		{
-			model = module.BindAndValidate<TIn>();
-			if (!module.ModelValidationResult.IsValid)
-			{
-				return module.Negotiate.RespondWithValidationFailure(module.ModelValidationResult);
-			}
-		}
-		catch (ModelBindingException)
-		{
-			return module.Negotiate.RespondWithValidationFailure("Model binding failed");
-		}
+        return handler(model);
+    }
 
-		return handler(model);
-	}
+    public static async Task<object> RunHandlerAsync<TIn>(this NancyModule module, Func<TIn, Task<object>> handler)
+    {
+        TIn model;
+        try
+        {
+            model = module.BindAndValidate<TIn>();
+            if (!module.ModelValidationResult.IsValid)
+            {
+                return module.Negotiate.RespondWithValidationFailure(module.ModelValidationResult);
+            }
+        }
+        catch (ModelBindingException)
+        {
+            return module.Negotiate.RespondWithValidationFailure("Model binding failed");
+        }
 
-	public static async Task<object> RunHandlerAsync<TIn>(this NancyModule module, Func<TIn, Task<object>> handler)
-	{
-		TIn model;
-		try
-		{
-			model = module.BindAndValidate<TIn>();
-			if (!module.ModelValidationResult.IsValid)
-			{
-				return module.Negotiate.RespondWithValidationFailure(module.ModelValidationResult);
-			}
-		}
-		catch (ModelBindingException)
-		{
-			return module.Negotiate.RespondWithValidationFailure("Model binding failed");
-		}
+        return await handler(model);
+    }
 
-		return await handler(model);
-	}
-	
-	public static Negotiator RespondWithValidationFailure(this Negotiator negotiate, ModelValidationResult validationResult)
-	{
-		var model = new ValidationFailedResponse(validationResult);
+    public static Negotiator RespondWithValidationFailure(this Negotiator negotiate, ModelValidationResult validationResult)
+    {
+        var model = new ValidationFailedResponse(validationResult);
 
-		return negotiate
-			.WithModel(model)
-			.WithStatusCode(HttpStatusCode.BadRequest);
-	}
+        return negotiate
+            .WithModel(model)
+            .WithStatusCode(HttpStatusCode.BadRequest);
+    }
 
-	public static object RespondWithValidationFailure(this Negotiator negotiate, string message)
-	{
-		var model = new ValidationFailedResponse(message);
+    public static object RespondWithValidationFailure(this Negotiator negotiate, string message)
+    {
+        var model = new ValidationFailedResponse(message);
 
-		return negotiate
-			.WithModel(model)
-			.WithStatusCode(HttpStatusCode.BadRequest);
-	}
-}
-```
+        return negotiate
+            .WithModel(model)
+            .WithStatusCode(HttpStatusCode.BadRequest);
+    }
+}```
 
-And the response DTO
+And the failure response DTO
 
 ```csharp
+using System.Collections.Generic;
+using Nancy.Validation;
+
 public class ValidationFailedResponse
 {
-	public List<string> Messages { get; set; }
-		
-	public ValidationFailedResponse()
-	{}
+    public List<string> Messages { get; set; }
 
-	public ValidationFailedResponse(ModelValidationResult validationResult)
-	{
-		Messages = new List<string>();
-		ErrorsToStrings(validationResult);
-	}
+    public ValidationFailedResponse()
+    { }
 
-	public ValidationFailedResponse(string message)
-	{
-		Messages = new List<string>
-			{
-				message
-			};
-	}
+    public ValidationFailedResponse(ModelValidationResult validationResult)
+    {
+        Messages = new List<string>();
+        ErrorsToStrings(validationResult);
+    }
 
-	private void ErrorsToStrings(ModelValidationResult validationResult)
-	{
-		foreach (var errorGroup in validationResult.Errors)
-		{
-			foreach (var error in errorGroup.Value)
-			{
-				Messages.Add(error.ErrorMessage);
-			}
-		}
-	}
+    public ValidationFailedResponse(string message)
+    {
+        Messages = new List<string>
+            {
+                message
+            };
+    }
+
+    private void ErrorsToStrings(ModelValidationResult validationResult)
+    {
+        foreach (var errorGroup in validationResult.Errors)
+        {
+            foreach (var error in errorGroup.Value)
+            {
+                Messages.Add(error.ErrorMessage);
+            }
+        }
+    }
 }
 ```

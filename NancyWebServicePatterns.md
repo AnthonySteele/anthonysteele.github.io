@@ -203,6 +203,13 @@ public void Should_return_404_when_cake_is_not_found()
 	Assert.That(response, Is.EqualTo(HttpStatusCode.NotFound));
 }
 ```
+## Refactor Number Three: Modules
+
+You can have as many [Nancy modules](https://github.com/NancyFx/Nancy/wiki/Exploring-the-nancy-module) as you like in the project. If the module defines two or three endpoints that's fine by me, but if you have six or seven in the same module then they had better be very closely related. When to split the module a judgement call based on if they have a natural division and how much code they have in common, but a large Nancy module with lots of endpoints is a "[code smell](https://blog.codinghorror.com/code-smells/)". The same applies to a [ServiceStack](https://servicestack.net/) Service or a [ASP MVC](https://www.asp.net/mvc) Controller.
+
+The modules don't need to all live in the same folder. Take advantage of this to make "[Feature folders](http://www.slideshare.net/Anthony_Steele_/feature-folders)" containing the Nancy module, DTOs, validators and other files that make up a feature.
+
+## Next time
 
 And that's it. I have a least one more pattern in mind, but that will have to wait for another blog post. For now, it's worth noting that instead of `BindAndValidate`, you will want to do this:
 
