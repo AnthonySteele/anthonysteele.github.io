@@ -1,6 +1,6 @@
-# Patterns for web services in Nancy
+# Simple patterns for web services in Nancy
 
-I wrote this in February 2014. It is hosted here again for reference.
+I wrote this in February 2014. It is hosted here again for reference. This is part one, [part two, "Shimming Nancy with functions" is here](./NancyWebServicePatterns2).
 
 ## Original text
  
