@@ -9,7 +9,7 @@
  * [Optimization and Metrics in ASP Kestrel Benchmarks](./OptimizationAndMetrics) Jan, 2016
  * [Agile Values](./AgileValues) Sept, 2015
  * [Patterns for web services in Nancy part 2: Shimming Nancy with functions](./NancyWebServicePatterns2) June 2012
- * [Patterns for web services in Nancy](./NancyWebServicePatterns) March 2012
+ * [Simple patterns for web services in Nancy](./NancyWebServicePatterns) March 2012
  * [The Single Return Law](./TheSingleReturnLaw) 2012ish
  
 ### Identity integration
