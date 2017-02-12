@@ -4,7 +4,7 @@ I wrote this in March 2014. It is hosted here again for reference, with some edi
 
 You are of course still welcome to to cut, paste and use it "as is" or to alter it; or just take the idea and implement something similar to meet your own requirements.
 
-This is part two, [part one, "Simple Nancy patterns for web services" is here](./NancyWebServicePatterns).
+This is part two, [part one, "Simple patterns for web services in Nancy" is here](./NancyWebServicePatterns).
 
 ## Original text of part 2
 
