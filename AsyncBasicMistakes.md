@@ -9,6 +9,7 @@ I see a lot of code lately that makes some simple mistakes using the `async ... 
  * Avoid `.Result` as much as possible. Let the async flow.
  * Avoid `Task.Run`. You don't need it.
  * Avoid `async void` methods.
+ * In async code, you should await wherever possible.
  
 Async can't make your code wait faster, but it can free up threads for greater throughput. However some common antipatterns prevent that from happening.
  
@@ -70,6 +71,15 @@ You really don't need this in most cases (unless you're writing a scheduling eng
 The type `async void` is only there for compatibility reasons. When you can, use e.g. `public async Task Foo()` instead of `public async void Foo()`.
 
 There are patterns for converting code to async. e.g. `private bool SomeTest()` becomes `private async Task<bool> SomeTest()`. `bool` becomes `Task<bool>` and `void` becomes `Task` - and where there is no return value we still need a task so that the caller can know when the async code has completed without a return value. You only drop the `Task` when it is necessary for a calling framework that specifically needs a `void` return.
+
+## In async code, you should await wherever possible
+
+I asked the stupid question so that you don't have to: [In server code, if you use one `await` for a slow operation, should you use a second `await` for a fast operation?](http://stackoverflow.com/questions/38118051/should-i-make-a-fast-operation-async-if-the-method-is-already-async). 
+And the answer is "yes". If you have one `await` in your code, then you might as well use as many as you can to chop the operation up into small parts so that operations can flow through better. 
+So if your code *can* trivially  `await` an async method instead of a calling the sync version, then you should do so. There is no additional performance penalty to this.
+
+[In UI code, there is a guideline that "operations that could take over 50ms should be async" so as to not lock the UI thread](http://blog.stephencleary.com/2013/04/ui-guidelines-for-async.html). But it's clear that this does not apply to web server code where it's all thread pool threads already. 
+Even quicker operations should also be awaited in order to break code into smaller chunks and so increase throughput. 
 
 ## Further reading
 
