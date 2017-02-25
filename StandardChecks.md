@@ -95,11 +95,11 @@ See here for more details on this topic: [avoiding async basic mistakes](./Async
  
 For a given endpoint you pre-configure  a `HttpClient` with request headers, base address and so on, then re-use it. "it will help reuse TCP connections where possible which will in general lead to better performance", thought his may only show up under high load.
 
-### Prefer DateTimeOffset to DateTimeOffset
+### Prefer DateTimeOffset to DateTime
 
 The docs say ["DateTimeOffset should be considered the default date and time type for application development"](https://msdn.microsoft.com/en-us/library/bb384267.aspx). 
-If there is any possibility of your code processing values from multiple time zones or experiencing daylight saving time changes, be explicit about the time zone of each value with a `DateTimeOffset` not a `DateTime`. 
-(./iso8601)[It's good to be explicit].
+If there is any possibility of your code processing values from multiple time zones or experiencing daylight saving time changes - and that's almost all code -  be explicit about the time zone of each value with a `DateTimeOffset` not a `DateTime`. 
+[./iso8601](It's good to be explicit about timezones).
 
 ###  Logging and metrics
 
