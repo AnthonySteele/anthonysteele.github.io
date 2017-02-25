@@ -99,7 +99,7 @@ For a given endpoint you pre-configure  a `HttpClient` with request headers, bas
 
 The docs say ["DateTimeOffset should be considered the default date and time type for application development"](https://msdn.microsoft.com/en-us/library/bb384267.aspx). 
 If there is any possibility of your code processing values from multiple time zones or experiencing daylight saving time changes - and that's almost all code -  be explicit about the time zone of each value with a `DateTimeOffset` not a `DateTime`. 
-[./iso8601](It's good to be explicit about timezones).
+[It's good to be explicit about timezones](./iso8601).
 
 ###  Logging and metrics
 
