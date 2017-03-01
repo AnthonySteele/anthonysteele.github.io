@@ -18,9 +18,11 @@ Commit this change. Verify that in your upstream repository, none of these packa
 
 To prevent packages being added in future, ignore them: in the `.gitignore` file, add a line: `**/packages/*/**`. 
 
-Why do this? Storing the binaries was useful in the case that the nuget.org server isn't working. But this is now rare - we can now rely on the nuget.org servers. Source code repositories don't work well with large binary files. These files are immutable anyway (e.g. `Newtonsoft.Json.9.0.1` always has the same contents across all package sources), so restoring them upon build always has the same results. 
+Why do this? Storing the binaries was useful in the case that the [nuget.org](https://www.nuget.org/) server isn't working. But this is now rare - we can now rely on the nuget servers. Source code repositories don't work well with large binary files. These files are immutable anyway (e.g. `Newtonsoft.Json.9.0.1` always has the same contents across all package sources), so restoring them upon build always has the same results. 
 
-What invariably happens when packages are stored is that one or more packages are updated in the project config, but the files stored in git under `\packages\` are not updated. The "packages that I keep" and "packages that I need" become increasingly disjoint sets over time. Then you have the worst of both worlds: large binaries in git, and reliance on on the nuget.org server for packages. Simplify by deleting them.
+Storing the packages makes updates harder. What invariably happens when packages are stored is that one or more packages are updated in the project config, but the files stored in git under `\packages\` are not updated. 
+The "packages that I keep" and "packages that I need" become increasingly disjoint sets over time. 
+Then you have the worst of both worlds: large binaries in git, and reliance on on the nuget.org server for packages. Simplify by deleting them.
 
 ### Remove the nuget binary
 
