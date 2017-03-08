@@ -2,12 +2,11 @@ The git [Pull Request](https://help.github.com/articles/using-pull-requests/) is
 
 Pull requests have a powerful legitimate use. Consider a team that owns on a codebase and works on it regularly. 
 Pull requests give outsiders a powerful thing that they did not have before: controlled access to apply changes that they need, with review by the owners.
- Someone can come along and say "I'm not a member of your team, but I need as an outsider to get some code into your project, so have a look at my code offering"
+ Someone can come along and say "I'm not a member of your team, but I need as an outsider to get some code into your project, so have a look at my offering."
 
-However pull-requests is not a good process to apply across the board to those same owners as a matter of course. 
-Put it this way: Pull requests give everyone controlled access: they allow anyone to knock on the door of the room and say "Hey, I have some code for you, please have a look?" But if you work in the room, why would you do that?
+However pull-requests is not a good process to apply across the board to those same owners as a matter of course. Pull requests give everyone controlled access: they allow anyone to knock on the door of the room and say "Can I come in?" But if you work in the room, why would you do that?
 
-I also think of it as like a gate in an ancient walled city: A stranger can come in, if they pass inspection at the gate.  Without the gate, they would be reduced to standing outside and shouting over the wall "We need this feature! And you need to update some urls!" and hope that it happens soon. 
+I also think of it as like a gate in an ancient walled city: A stranger can come in, if they pass inspection at the gate.  Without the gate, they would be reduced to standing outside and shouting over the wall "We need this feature!" and hope that it happens soon. 
 Possibly an ambasador will come out to negotiate terms and times. So the gate instead allows them to come in and get business done, while respecting the local customs. 
 But would you put that checkpoint inside the city and apply it to every citizen?
 
