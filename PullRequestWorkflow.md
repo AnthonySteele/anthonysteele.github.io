@@ -15,7 +15,8 @@ But would you put that checkpoint inside the city and apply it to every citizen?
 Pull request give review. There are other ways to do review. Human review is inconsistent, time-consuming, not scalable or repeatable and invariably has a political aspect. 
 Review helps as a bug-finding process, but it is not a good substitute for e.g. simple test coverage. Review helps as a style and architecture process, but is no substitute for pairing.
 
-Pull requests do not scale - A tailback of unmerged PRs is always a bad sign, and not just because of having to rebase or fix merge conflicts.An unmerged and undeployed PR is work in progress. Your cycle time from writing code to deploying code when joining the back of that queue is much greater, and the risks are greater too.
+Pull requests do not scale - A tailback of unmerged PRs is always a bad sign, and not just because of having to rebase or fix merge conflicts.
+An unmerged and undeployed PR is [work in progress](http://kanbantool.com/kanban-wip-limits). Your cycle time from writing code to deploying code when joining the back of that queue is much greater, and the risks are greater too. In extreme cases there can be forgotten PRs that are weeks or months old, no-one remembers exactly what their intent was, and are neither easy to safe to merge any more. This is just wasted work.
 
 > Continuous integration (CI) is the practice, in software engineering, of merging all developer working copies to a shared mainline several times a day. https://en.wikipedia.org/wiki/Continuous_integration 
 
