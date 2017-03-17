@@ -62,8 +62,12 @@ class Program
  
 ## Avoid Task.Run
  
-You really don't need this in most cases (unless you're writing a scheduling engine like the one in [JustSaying](https://github.com/justeat/JustSaying)). 
-[The task returned by an async method will be "hot"](http://stackoverflow.com/a/11707546/5599). i.e. already started and the very heavyweight `Task.Run` construct ties up threads and adds nothing of value.
+Some people have the idea that `Task.Run` is necessary for using `async` and `await`. It is not.
+ 
+You do not need `Task.Run` to start a task since
+[The task returned by an async method will be "hot"](http://stackoverflow.com/a/11707546/5599). i.e. already started. The very heavyweight `Task.Run` construct ties up threads and adds nothing of value.
+
+I have seen cases where the calling code was not async, and using `.Result` to exit the async code caused a deadlock. Then `Task.Run` was used and worked. But don't mistake this for the right thing - it is an ugly hack with a large performance penalty, and you should far rather look at propagating the `Task` up the call stack to where the framework can handle it. The fact that you get a deadlock probably means that you have other problems lurking.
 
 
 ##  Avoid async void methods
