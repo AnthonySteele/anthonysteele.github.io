@@ -64,6 +64,8 @@ class Program
  
 Some people have the idea that `Task.Run` is necessary or even good for using `async` and `await`. It is not.
  
+[You should not block on async code](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html). There are times when it can deadlock, and times when it won't. There's a very short list of times that you need to do it. Avoid it whenever possible.
+ 
 In async code, you do not need `Task.Run` to start a task since
 [The task returned by an async method will be "hot"](http://stackoverflow.com/a/11707546/5599). i.e. already started. The very heavyweight `Task.Run` construct ties up threads and adds nothing of value.
 
