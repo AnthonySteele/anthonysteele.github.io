@@ -74,7 +74,7 @@ class Program
 	static void Main(string[] args)
 	{
 		var task = AsyncMain();
-		task.Wait();
+		task.GetAwaiter().GetResult();
 		Console.ReadLine();
 	}
 
