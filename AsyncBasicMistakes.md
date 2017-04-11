@@ -107,6 +107,7 @@ Even quicker operations should also be awaited in order to break code into small
 * [Async Await Best Practices Cheat Sheet](https://jonlabelle.com/snippets/view/markdown/async-await-best-practices-cheat-sheet)
 * [There is no thread](http://blog.stephencleary.com/2013/11/there-is-no-thread.html).
 * [What is the promise pattern](https://www.quora.com/What-is-the-promise-pattern)
+* [Async code in ASP.NET Core](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html)
 
 ## The catastrophe
 
