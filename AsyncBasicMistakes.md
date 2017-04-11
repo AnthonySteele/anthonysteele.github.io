@@ -7,11 +7,14 @@ I see a lot of code lately that makes some simple mistakes using the `async ... 
  * A Task is a [promise](https://en.wikipedia.org/wiki/Futures_and_promises) of a value.
  * Most of the time the wait is for network I/O, and [there is no thread waiting](http://blog.stephencleary.com/2013/11/there-is-no-thread.html).
  * Avoid `.Result` as much as possible. Let the async flow.
- * Avoid `Task.Run`. You don't need it.
+ * Avoid `Task.Run`. You almost always don't need it.
+ * Know when you do need to re-sync.
  * Avoid `async void` methods.
  * In async code, you should await wherever possible.
  
 Async can't make your code wait faster, but it can free up threads for greater throughput. However some common antipatterns prevent that from happening.
+
+More and more libraries are going to support async, and in some cases support _only_ async. So we need to get used to doing async, and get used to doing it competently.
  
 ## A task is a promise
  
@@ -31,17 +34,39 @@ A Task - the promise of a value later - is a general construct which says nothin
  
  Most of the time you should not need to use `.Result`. Let the async flow. This means that lots of methods have to be sprinkled with `async`, `Task` and `await`: the caller, the caller's caller and so on up the chain. This is just the cost of it, so get used to it. The model is not so much an "some async methods" in an app as "an async app". 
 
- 
- If you have to use `.Result`, use it as few times as high up the call stack as possible. I generally do this while refactoring out `.Result` calls as it's a step towards the goal.
- 
- Ideally, you hand the async Task off to your framework. You can do this in ASP MVC and WebApi as they allow [async methods on controllers](http://stackoverflow.com/questions/31185072/how-to-effectively-use-async-await-on-asp-net-web-api), you do this [in NUnit as tests can be async](http://stackoverflow.com/a/21617400/5599), [in NancyFx](https://github.com/NancyFx/Nancy/wiki/Async), etc. 
-Calling `.Result` forces the code to wait at that point, losing the main advantage that you can hand off whole blocks of code to be executed later when results are available.
+ Calling `.Result` forces the code to wait at that point, losing the main advantage that you can hand off whole blocks of code to be executed later when results are available.
 
 I heard Kathleen Dollard compare the async call stack to a [Light tube](https://en.wikipedia.org/wiki/Light_tube): Any blockage between the basement and roof will prevent light getting through. And with async, any blocking code will prevent the task from getting through.
 
-### Exceptions to that rule
+ Liberal use of `.Result` is red flag. Try moving the `.Result` up to the calling method. I generally do this while refactoring out `.Result` calls as it's a step towards the goal. It will eventually become apparent if your whole operation can be async or not.
+ 
+ Ideally, you hand the async Task off to your framework. You can do this in ASP MVC and WebApi as they allow [async methods on controllers](http://stackoverflow.com/questions/31185072/how-to-effectively-use-async-await-on-asp-net-web-api), you do this [in NUnit as tests can be async](http://stackoverflow.com/a/21617400/5599), [in NancyFx](https://github.com/NancyFx/Nancy/wiki/Async), OpenRasta, etc. 
 
- The most common exception is for commandline apps, where since `Main` cannot be async, you have to do [something like this](http://stackoverflow.com/questions/9208921/cant-specify-the-async-modifier-on-the-main-method-of-a-console-app):
+ 
+## Avoid Task.Run
+ 
+Some people have the idea that `Task.Run` is necessary or even generally good for using `async` and `await`. It is not.
+  
+In async code, you do not need `Task.Run` to start a task since
+[The task returned by an async method will be "hot"](http://stackoverflow.com/a/11707546/5599). i.e. already started. The very heavyweight `Task.Run` construct ties up threads and adds nothing of value.
+
+There are times when it can deadlock, and times when it won't. I have seen cases where the calling code was not async, and using `.Result` to exit the async code caused a deadlock. Then `Task.Run` was used and worked. 
+
+But don't mistake this for the right thing - it is an ugly hack with a large performance penalty, and you should far rather look at propagating the `Task` up the call stack to where the framework can handle it.  
+
+
+If you get a deadlock in code that does follow the correct async patterns, it probably means that you have other problems lurking. Code that is never async or code that is always async tends to not have these problems. Code that tries to be both in different places often does.
+
+
+## Know when you do need to re-sync
+
+In general async code contains one or more `await` statements, but also lots of synchronous statements that are not awaited. Doing synchronous things in async code is generally safe. Doing asynchronous things in synchronous code is generally dangerous, and should be avoided. 
+
+There is a short list of times when re-syncing is not avoidable.
+
+- ASP.Net filters and child actions must be synchronous. However, [in ASP.NET Core, the entire pipeline is fully asynchronous](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html). There are no synchronous child actions, so it is best to find another construct to use.
+
+- The `Main` entry point of a console application must be synchronous. You have to do [something like this](http://stackoverflow.com/questions/9208921/cant-specify-the-async-modifier-on-the-main-method-of-a-console-app):
  
 ```csharp
 class Program
@@ -59,21 +84,6 @@ class Program
 	}
  }  
 ```
- 
-## Avoid Task.Run
- 
-Some people have the idea that `Task.Run` is necessary or even good for using `async` and `await`. It is not.
- 
-[You should not block on async code](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html). There are times when it can deadlock, and times when it won't. There's a very short list of times that you need to do it. Avoid it whenever possible.
- 
-In async code, you do not need `Task.Run` to start a task since
-[The task returned by an async method will be "hot"](http://stackoverflow.com/a/11707546/5599). i.e. already started. The very heavyweight `Task.Run` construct ties up threads and adds nothing of value.
-
-I have seen cases where the calling code was not async, and using `.Result` to exit the async code caused a deadlock. Then `Task.Run` was used and worked. 
-But don't mistake this for the right thing - it is an ugly hack with a large performance penalty, and you should far rather look at propagating the `Task` up the call stack to where the framework can handle it.  
-
-if you get a deadlock in code that follows the async patterns, it probably means that you have other problems lurking. 
-Code that is never async or code that is always async tends to not have these problems. Code that tries to be both in different places often does.
 
 
 ##  Avoid async void methods
