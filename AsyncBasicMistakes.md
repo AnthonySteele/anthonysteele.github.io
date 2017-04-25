@@ -44,14 +44,14 @@ I heard Kathleen Dollard compare the async call stack to a [Light tube](https://
  
 ## Avoid Task.Run
 
-`Task.Run` Can be used to re-synchronise code when needed. it's not the best way though. It is a blunt instrument, performance will be worse than if the code was not async at all, since you effectively launch an additional thread from the theadpool, and wait for it. Two threads are kept busy for the duration.
-
-And there are problems with other people reading the code. One possibility is that it will be removed by experienced engineers as obviously bad code.  Another is that engineers will come to think that `Task.Run` is necessary to make async work, and scatter it liberally where it really isn't needed. I've seen this. This of course makes removing them like Russian Roulette. Most are harmless, some are deadly.
-  
 In async code, you do not need `Task.Run` to start a task since
-[The task returned by an async method will be "hot"](http://stackoverflow.com/a/11707546/5599). i.e. already started. The very heavyweight `Task.Run` construct ties up threads and adds nothing of value.
+[The task returned by an async method will be "hot"](http://stackoverflow.com/a/11707546/5599). i.e. already started. 
 
-If you actually have a deadlock, see here.
+`Task.Run` Can be used to re-synchronise code when needed. But you may not need to resynchronise; and if you do, it's not the best way. It is a blunt instrument. Performance will be worse than if the code was not async at all, since you effectively launch an additional thread from the thead pool, and wait for it. Two threads are kept busy for the duration.
+
+And there are problems with other people reading the code. One possibility is that it will be removed by experienced engineers as obviously bad code.  Another is that engineers will misapprehend that `Task.Run` is necessary to make async work, and scatter it liberally where it isn't needed. I've seen this. This of course makes removing them like Russian Roulette: most are harmless, but a few are deadly.
+  
+[If you actually have a deadlock, see here](./AsyncAdvancedMistakes).
 
 ##  Avoid async void methods
 
@@ -74,5 +74,4 @@ Even quicker operations should also be awaited in order to break code into small
 * [Async Await Best Practices Cheat Sheet](https://jonlabelle.com/snippets/view/markdown/async-await-best-practices-cheat-sheet)
 * [There is no thread](http://blog.stephencleary.com/2013/11/there-is-no-thread.html).
 * [What is the promise pattern](https://www.quora.com/What-is-the-promise-pattern)
-* [Async code in ASP.NET Core](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html)
 

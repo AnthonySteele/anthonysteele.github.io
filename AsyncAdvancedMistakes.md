@@ -3,7 +3,7 @@
 After writing "Avoiding simple mistakes in async await" and revising it many times, 
 it becomes inescapable that some of the uses and abuses of async code are not simple.
 
-If you are confused, read that first. This part will cover getting out of async, i.e. re-synchronising. The first option is *don't resynchonise*. Avoid doing it, stay async.
+[If you are confused, read this first](./AsyncBasicMistakes). This part will cover getting out of async, i.e. re-synchronising. The first option is always *don't resynchronise*. Avoid it, don't throw away the benefits of async.
 
 ## Know when you do need to re-sync, and how to do it.
 
@@ -46,10 +46,8 @@ Elsewhere, you need `Task.Run` or setting the current `SynchronizationContext`.
 
 How does this avoid deadlocks? `Task.Run` executes on the threadpool, which can change the `SynchronizationContext`, at the heavy cost of a second thread.
 
-[Discussing the two ways](http://stackoverflow.com/questions/42223162/task-run-vs-null-synchronizationcontext/) and [here](http://stackoverflow.com/questions/25095243/set-synchronizationcontext-to-null-instead-of-using-configureawaitfalse/).
+* [About ways of re-syncing](http://stackoverflow.com/questions/42223162/task-run-vs-null-synchronizationcontext/) and [here](http://stackoverflow.com/questions/25095243/set-synchronizationcontext-to-null-instead-of-using-configureawaitfalse/).
 
-[understanding what `SynchronizationContext` does](http://stackoverflow.com/questions/18097471/what-does-synchronizationcontext-do).
-
-
+* [Understanding what `SynchronizationContext` does](http://stackoverflow.com/questions/18097471/what-does-synchronizationcontext-do).
 
 * [Async code in ASP.NET Core and the lack of synchronisation context](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html)
