@@ -20,6 +20,8 @@ There is a short list of times when re-syncing is not avoidable.
 
 - The `Main` entry point of a console application must be synchronous. 
 
+- [A windows service will also have a synchronous entry point](http://stackoverflow.com/questions/39656932/how-to-handle-async-start-errors-in-topshelf).
+
 ### How to re-sync
 
 For a console entry point, you have to do [something like this](http://stackoverflow.com/questions/9208921/cant-specify-the-async-modifier-on-the-main-method-of-a-console-app):
