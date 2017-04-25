@@ -24,7 +24,40 @@ There is a short list of times when re-syncing is not avoidable.
 
 ### How to re-sync
 
-For a console entry point, you have to do [something like this](http://stackoverflow.com/questions/9208921/cant-specify-the-async-modifier-on-the-main-method-of-a-console-app):
+* Just Wait
+* Task.Run
+* Denial of context
+
+## Just Wait.
+
+This is group of methods calls like `DoSomethingAsync().Result`, `.GetAwaiter().GetResult()` and `Wait`. It is approprate in simple cases.
+
+## Run a task
+
+How does this avoid deadlocks? `Task.Run` executes on the threadpool, which can change the `SynchronizationContext`, at the heavy cost of a second thread.
+
+## Denial of context
+
+Set the current `SynchronizationContext` to null, so the code that you call is denied access to it.
+
+```csharp
+var context = SynchronizationContext.Current;
+SynchronizationContext.SetSynchronizationContext(null);
+
+try
+{
+	// do something
+}
+finally
+{
+	SynchronizationContext.SetSynchronizationContext(context);
+}
+```
+
+
+## Console app
+
+For a console entry point, you can just wait, [something like this](http://stackoverflow.com/questions/9208921/cant-specify-the-async-modifier-on-the-main-method-of-a-console-app):
  
 ```csharp
 class Program
@@ -44,11 +77,8 @@ class Program
 ```
 
 
-Elsewhere, you need `Task.Run` or setting the current `SynchronizationContext`.
 
-How does this avoid deadlocks? `Task.Run` executes on the threadpool, which can change the `SynchronizationContext`, at the heavy cost of a second thread.
-
-* [About ways of re-syncing](http://stackoverflow.com/questions/42223162/task-run-vs-null-synchronizationcontext/) and [here](http://stackoverflow.com/questions/25095243/set-synchronizationcontext-to-null-instead-of-using-configureawaitfalse/).
+* [About the ways of re-syncing](http://stackoverflow.com/questions/42223162/task-run-vs-null-synchronizationcontext/) and [here](http://stackoverflow.com/questions/25095243/set-synchronizationcontext-to-null-instead-of-using-configureawaitfalse/).
 
 * [Understanding what `SynchronizationContext` does](http://stackoverflow.com/questions/18097471/what-does-synchronizationcontext-do).
 
