@@ -7,8 +7,7 @@ I see a lot of code lately that makes some simple mistakes using the `async ... 
  * A Task is a [promise](https://en.wikipedia.org/wiki/Futures_and_promises) of a value.
  * Most of the time the wait is for network I/O, and [there is no thread waiting](http://blog.stephencleary.com/2013/11/there-is-no-thread.html).
  * Avoid `.Result` as much as possible. Let the async flow.
- * Know when you do need to re-sync. And how to do it.
- * Avoid `Task.Run`. You almost always don't need it.
+ * Avoid `Task.Run`. 
  * Avoid `async void` methods.
  * In async code, you should await wherever possible.
  
@@ -42,62 +41,17 @@ I heard Kathleen Dollard compare the async call stack to a [Light tube](https://
  
  Ideally, you hand the async Task off to your framework. You can do this in ASP MVC and WebApi as they allow [async methods on controllers](http://stackoverflow.com/questions/31185072/how-to-effectively-use-async-await-on-asp-net-web-api), you do this [in NUnit as tests can be async](http://stackoverflow.com/a/21617400/5599), [in NancyFx](https://github.com/NancyFx/Nancy/wiki/Async), OpenRasta, etc. 
 
-## Know when you do need to re-sync, and how to do it.
-
-In general async code contains one or more `await` statements, but also lots of synchronous statements that are not awaited. Doing synchronous things in async code is generally safe. Doing asynchronous things in synchronous code is generally dangerous, and should be avoided. 
-
-There is a short list of times when re-syncing is not avoidable.
-
-- You can't use `async` in these language constructs: constructors, `Dispose` methods and inside `lock` statements. You should re-design around these limitations, i.e. move the async code elsewhere rather than doing resyncronisation.
-
-- ASP.Net filters and child actions must be synchronous. However, [in ASP.NET Core, the entire pipeline is fully asynchronous](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html). There are no synchronous child actions in ASP.NET Core, so it is best to find another construct to use instead.
-
-- The `Main` entry point of a console application must be synchronous. 
-
-### How to re-sync
-
-For a console entry point, you have to do [something like this](http://stackoverflow.com/questions/9208921/cant-specify-the-async-modifier-on-the-main-method-of-a-console-app):
- 
-```csharp
-class Program
-{
-	static void Main(string[] args)
-	{
-		var task = AsyncMain();
-		task.GetAwaiter().GetResult();
-		Console.ReadLine();
-	}
-
-	private static async Task AsyncMain()
-	{
-	  // await the rest of the code
-	}
- }  
-```
-
-
-Elsewhere, you need `Task.Run` or setting the current `SynchronizationContext`.
-
-How does this avoid deadlocks? `Task.Run` executes on the threadpool, which can change the `SynchronizationContext`, at the heavy cost of a second thread.
-
-[Discussing the two ways](http://stackoverflow.com/questions/42223162/task-run-vs-null-synchronizationcontext/43564504#43564504).
-
-[understanding what `SynchronizationContext` does](http://stackoverflow.com/questions/18097471/what-does-synchronizationcontext-do).
-
  
 ## Avoid Task.Run
- 
-Some people have the idea that `Task.Run` is necessary for using `async` and `await`. It is not. Or that it is the best way to avoid deadlocks. While it works, it has the overhead of additional thread.
+
+`Task.Run` Can be used to re-synchronise code when needed. it's not the best way though. It is a blunt instrument, performance will be worse than if the code was not async at all, since you effectively launch an additional thread from the theadpool, and wait for it. Two threads are kept busy for the duration.
+
+And there are problems with other people reading the code. One possibility is that it will be removed by experienced engineers as obviously bad code.  Another is that engineers will come to think that `Task.Run` is necessary to make async work, and scatter it liberally where it really isn't needed. I've seen this. This of course makes removing them like Russian Roulette. Most are harmless, some are deadly.
   
 In async code, you do not need `Task.Run` to start a task since
 [The task returned by an async method will be "hot"](http://stackoverflow.com/a/11707546/5599). i.e. already started. The very heavyweight `Task.Run` construct ties up threads and adds nothing of value.
 
-There are times when it can deadlock, and times when it won't. I have seen cases where the calling code was not async, and using `.Result` to exit the async code caused a deadlock. Then `Task.Run` was used and worked. 
-
-But don't mistake this for the right thing - it is an ugly hack with a large performance penalty, and you should far rather look at propagating the `Task` up the call stack to where the framework can handle it.  
-
-If you get a deadlock in code that does follow the correct async patterns, it probably means that you have other problems lurking. Code that is never async or code that is always async tends to not have these problems. Code that tries to be both in different places often does.
-
+If you actually have a deadlock, see here.
 
 ##  Avoid async void methods
 
@@ -122,49 +76,3 @@ Even quicker operations should also be awaited in order to break code into small
 * [What is the promise pattern](https://www.quora.com/What-is-the-promise-pattern)
 * [Async code in ASP.NET Core](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html)
 
-## The catastrophe
-
-This is actual production code:
-
-```csharp
- protected T ExecWithLoggingAndTiming<T>(Func<T> func)
- {
-        return Task.Run(async () => await ExecWithLoggingAndTimingAsync(() => Task.FromResult(func()))).Result;
- }
-```
-
-As far as I can see:
-
- * There is a method `protected async Task<T> ExecWithLoggingAndTimingAsync<T>(Func<Task<T>> action)` which wraps the `action` code in timer metrics and error logging.
- * Someone needed a sync version of `ExecWithLoggingAndTimingAsync`, and decided that a sync wrapper was the way to do it. First mistake.
- * When it didn't compile, they  just continued piling on code constructs until it compiled, and called it done. 
- * OK, it probably passed some unit tests as well. 
- * But it's still a catastrophe. People have learned from this "pattern" that if it doesn't compile, just add `Task.Run` and `.Result` until it does, and applied it elsewhere. Unreadable code is poor code. And there is significant unnecessary performance overhead from the heavyweight constructs. 
- * The best way to do this is to actually write a `ExecWithLoggingAndTiming` method that does the same `try...catch` and timers as `ExecWithLoggingAndTimingAsync` but without the Task and awaits. Sometimes the sync code is best as just a wrapper around the async code, but there are simpler wrappers than the code above, and this is not one of those times.
-
-Best refactor:
-
-```csharp
- // The sync version of the code to ExecWithLoggingAndTimingAsync, 
- // i.e. without the awaits 
- // this avoids the overhead and confusion of creating tasks and syncing them up again
- protected T ExecWithLoggingAndTiming<T>(Func<T> func)
- {
-   T result = default(T);
-   var timer = Stopwatch.StartNew();
-   try
-   {
-     result = func();
-     
-     timer.Stop;
-     LogElapsedTime(timer.Elapsed);
-     
-     return result;
-   }
-   catch (Exception ex)
-   {
-     _logger.Error("ExecWithLoggingAndTiming failed", ex);
-     throw;
-   }
- }
-```
