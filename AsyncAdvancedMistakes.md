@@ -1,11 +1,13 @@
-# Avoiding advanced mistakes in async await
+# Avoiding resynchronisation mistakes in async code
 
 After writing "Avoiding simple mistakes in async await" and revising it many times, 
-it becomes inescapable that some of the uses and abuses of async code are not simple.
+it becomes inescapable that some of the uses and abuses of async code are not simple, particularly about breaking out of async and preventing deadlocks.
+
+[If you are confused, read this first](./AsyncBasicMistakes). 
 
 ## Stay async
 
-[If you are confused, read this first](./AsyncBasicMistakes). This part will cover getting out of async, i.e. re-synchronising. The first option is always *don't resynchronise*. Avoid it, don't throw away the benefits of async.
+The first option is *don't resynchronise*. Don't throw away the benefits of async. This may be a fair amount of work, adding `await` and `async Task` on many methods, but it should always be the first choice.
 
 ## Know when you do need to re-sync, and how to do it.
 
