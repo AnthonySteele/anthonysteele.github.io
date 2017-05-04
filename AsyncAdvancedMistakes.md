@@ -3,6 +3,8 @@
 After writing "Avoiding simple mistakes in async await" and revising it many times, 
 it becomes inescapable that some of the uses and abuses of async code are not simple.
 
+## Stay async
+
 [If you are confused, read this first](./AsyncBasicMistakes). This part will cover getting out of async, i.e. re-synchronising. The first option is always *don't resynchronise*. Avoid it, don't throw away the benefits of async.
 
 ## Know when you do need to re-sync, and how to do it.
@@ -12,7 +14,6 @@ In general async code contains one or more `await` statements, but also lots of 
 If you get a deadlock in code that does follow the correct async patterns, it probably means that you have other problems lurking. Code that is never async or code that is always async tends to not have these problems. Code that tries to be both in different places often does.
 
 There is a short list of times when re-syncing is not avoidable.
-
 
 - You can't use `async` in these language constructs: constructors, `Dispose` methods and inside `lock` statements. You should re-design around these limitations, i.e. move the async code elsewhere rather than doing resyncronisation.
 
@@ -30,7 +31,7 @@ There is a short list of times when re-syncing is not avoidable.
 
 ## Just Wait.
 
-This is group of methods calls like `DoSomethingAsync().Result`, `.GetAwaiter().GetResult()` and `Wait`. It is approprate in simple cases.
+This is group of methods calls like `.Result`, `.GetAwaiter().GetResult()` and `.Wait()`. It is appropriate in simple cases.
 
 ## Run a task
 
@@ -75,8 +76,6 @@ class Program
 	}
  }  
 ```
-
-
 
 * [About the ways of re-syncing](http://stackoverflow.com/questions/42223162/task-run-vs-null-synchronizationcontext/) and [here](http://stackoverflow.com/questions/25095243/set-synchronizationcontext-to-null-instead-of-using-configureawaitfalse/).
 

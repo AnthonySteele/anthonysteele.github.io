@@ -6,8 +6,8 @@ I see a lot of code lately that makes some simple mistakes using the `async ... 
 
  * A Task is a [promise](https://en.wikipedia.org/wiki/Futures_and_promises) of a value.
  * Most of the time the wait is for network I/O, and [there is no thread waiting](http://blog.stephencleary.com/2013/11/there-is-no-thread.html).
- * Avoid `.Result` as much as possible. Let the async flow.
- * Avoid `Task.Run`. 
+ * Let the async flow. Use `await` not `.Result` to get the result of a task. 
+ * Avoid  becoming synchronous again wherever possible. Avoid Task.Run.
  * Avoid `async void` methods.
  * In async code, you should await wherever possible.
  
@@ -15,13 +15,13 @@ Async can't make your code wait faster, but it can free up threads for greater t
 
 More and more libraries are going to support async, and in some cases support _only_ async. So we need to get used to doing async, and get used to doing it competently.
  
-## A task is a promise
+## A Task is a Promise
  
  Think of `Task<Order>` as a promise of an order later, i.e. "There will be an order. If I don't have it now, I'll have it at some point in the future". [The Computer Science term is "future" or "promise"](https://en.wikipedia.org/wiki/Futures_and_promises).
  
  Since this is C#, there are a few other things that can happen besides the promised order arriving: The value can arrive, and be `null` instead of an order. Or an exception can be thrown instead.
  
-`Async ... await` is basically about allowing you to write code in the familiar linear style, but under the hood, it is reconfigured so that the code after the `await` completes is put in a callback that is executed later. Without `async ... await` we could still write equivalent code using callbacks, but it was just much harder. 
+The language support for `async ... await` is about allowing you to write code in the familiar linear style, but under the hood, it is reconfigured so that the code after the `await` completes is put in a callback that is executed later. Without `async ... await` we could still write equivalent code using callbacks, but it was just much harder. 
 
 This is not unique to C#. Look at how [this Javascript promises library](https://www.promisejs.org/) works with chained callbacks. And [futures and promises in Java](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html).
  
@@ -29,7 +29,7 @@ This is not unique to C#. Look at how [this Javascript promises library](https:/
 
 A Task - the promise of a value later - is a general construct which says nothing about how the value is being generated. It's usually network I/O, and [there is no thread waiting](http://blog.stephencleary.com/2013/11/there-is-no-thread.html) as there would be for computation.
  
-## Avoid taking the result
+## Use `await` not `.Result` to get the result of a task
  
  Most of the time you should not need to use `.Result`. Let the async flow. This means that lots of methods have to be sprinkled with `async`, `Task` and `await`: the caller, the caller's caller and so on up the chain. This is just the cost of it, so get used to it. The model is not so much an "some async methods" in an app as "an async app". 
 
@@ -40,18 +40,21 @@ I heard Kathleen Dollard compare the async call stack to a [Light tube](https://
  Liberal use of `.Result` is red flag. Try moving the `.Result` up to the calling method. I generally do this while refactoring out `.Result` calls as it's a step towards the goal. It will eventually become apparent if your whole operation can be async or not.
  
  Ideally, you hand the async Task off to your framework. You can do this in ASP MVC and WebApi as they allow [async methods on controllers](http://stackoverflow.com/questions/31185072/how-to-effectively-use-async-await-on-asp-net-web-api), you do this [in NUnit as tests can be async](http://stackoverflow.com/a/21617400/5599), [in NancyFx](https://github.com/NancyFx/Nancy/wiki/Async), OpenRasta, etc. 
-
  
 ## Avoid Task.Run
 
+After `.Result`, the second most common way to stop being async is `Task.Run`. It's also a bad idea for much the same reasons.
+
+[`Task.Run` Can be used to re-synchronise code when needed. But you the first option should be to avoid doing this; and if you do, it's not the best way.]((./AsyncAdvancedMistakes)) It is a blunt instrument. Performance will be worse than if the code was not async at all, since you effectively launch an additional thread from the thead pool, and wait for it. Two threads are kept busy for the duration.
+
+And there are problems with other people reading the code: One possibility is that it will be removed by experienced engineers as obviously unnecessary and poorly performing code.  
+
+Another possibility is that engineers will misapprehend that `Task.Run` is necessary to make async work, and scatter it liberally where it isn't needed. I've seen this. 
+
 In async code, you do not need `Task.Run` to start a task since
-[The task returned by an async method will be "hot"](http://stackoverflow.com/a/11707546/5599). i.e. already started. 
+[The task returned by an async method will be "hot"](http://stackoverflow.com/a/11707546/5599). i.e. already started.  
 
-`Task.Run` Can be used to re-synchronise code when needed. But you may not need to resynchronise; and if you do, it's not the best way. It is a blunt instrument. Performance will be worse than if the code was not async at all, since you effectively launch an additional thread from the thead pool, and wait for it. Two threads are kept busy for the duration.
-
-And there are problems with other people reading the code. One possibility is that it will be removed by experienced engineers as obviously bad code.  Another is that engineers will misapprehend that `Task.Run` is necessary to make async work, and scatter it liberally where it isn't needed. I've seen this. This of course makes removing them like Russian Roulette: most are harmless, but a few are deadly.
-  
-[If you actually have a deadlock, see here](./AsyncAdvancedMistakes).
+This of course makes removing the `Task.Run` like Russian Roulette: most are harmless, but a few are deadly.
 
 ##  Avoid async void methods
 
@@ -74,4 +77,4 @@ Even quicker operations should also be awaited in order to break code into small
 * [Async Await Best Practices Cheat Sheet](https://jonlabelle.com/snippets/view/markdown/async-await-best-practices-cheat-sheet)
 * [There is no thread](http://blog.stephencleary.com/2013/11/there-is-no-thread.html).
 * [What is the promise pattern](https://www.quora.com/What-is-the-promise-pattern)
-
+* [Advanced mistakes: when can you actually have a deadlock, and what to do about it](./AsyncAdvancedMistakes).
