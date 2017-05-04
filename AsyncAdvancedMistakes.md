@@ -28,14 +28,14 @@ There is a short list of times when re-syncing is not avoidable.
 ### How to re-sync
 
 * Just Wait
-* Task.Run
+* `Task.Run`
 * Denial of context
 
 ## Just Wait.
 
-This is group of methods calls like `.Result`, `.GetAwaiter().GetResult()` and `.Wait()`. It is appropriate in simple cases.
+This is group of properties and methods calls like `.Result`, `.GetAwaiter().GetResult()` and `.Wait()`. It is appropriate in simple cases.
 
-## Run a task
+## Launch a task with `Task.Run`.
 
 How does this avoid deadlocks? `Task.Run` executes on the threadpool, which can change the `SynchronizationContext`, at the heavy cost of a second thread.
 

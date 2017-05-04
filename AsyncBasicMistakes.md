@@ -7,7 +7,7 @@ I see a lot of code lately that makes some simple mistakes using the `async ... 
  * A Task is a [promise](https://en.wikipedia.org/wiki/Futures_and_promises) of a value.
  * Most of the time the wait is for network I/O, and [there is no thread waiting](http://blog.stephencleary.com/2013/11/there-is-no-thread.html).
  * Let the async flow. Use `await` not `.Result` to get the result of a task. 
- * Avoid  becoming synchronous again wherever possible. Avoid Task.Run.
+ * Avoid  becoming synchronous again wherever possible. Avoid `Task.Run`.
  * Avoid `async void` methods.
  * In async code, you should await wherever possible.
  
