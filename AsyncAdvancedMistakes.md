@@ -1,9 +1,11 @@
 # Avoiding resynchronisation mistakes in async code
 
+[If you are confused, read this first](./AsyncBasicMistakes). 
+
 After writing "Avoiding simple mistakes in async await" and revising it many times, 
 it becomes inescapable that some of the uses and abuses of async code are not simple, particularly about breaking out of async and preventing deadlocks.
 
-[If you are confused, read this first](./AsyncBasicMistakes). 
+In order to understand async deadlocks, you need to [understand the Synchronisation Context](https://msdn.microsoft.com/en-us/magazine/gg598924.aspx). If your code has a synchronisation context and it runs only one thread at a time, then it can deadlock. This is true in Windows desktop GUI apps (Windows forms and WPF), and in ASP; but is false in a console app, a windows service or threadpool thread. 
 
 ## Stay async
 
