@@ -45,7 +45,7 @@ I heard Kathleen Dollard compare the async call stack to a [Light tube](https://
 
 After `.Result`, the second most common way to stop being async is `Task.Run`. It's also a bad idea for much the same reasons.
 
-[`Task.Run` Can be used to re-synchronise code when needed. But you the first option should be to avoid doing this; and if you do, it's not the best way.](./AsyncAdvancedMistakes) It is a blunt instrument. Performance will be worse than if the code was not async at all, since you effectively launch an additional thread from the thead pool, and wait for it. Two threads are kept busy for the duration.
+[`Task.Run` Can be used to re-synchronise code when needed. But you the first option should be to avoid doing this; and if you do, it's not the best way.](./ResyncMistakes) It is a blunt instrument. Performance will be worse than if the code was not async at all, since you effectively launch an additional thread from the thead pool, and wait for it. Two threads are kept busy for the duration.
 
 And there are problems with other people reading the code: One possibility is that it will be removed by experienced engineers as obviously unnecessary and poorly performing code.  
 
@@ -77,4 +77,4 @@ Even quicker operations should also be awaited in order to break code into small
 * [Async Await Best Practices Cheat Sheet](https://jonlabelle.com/snippets/view/markdown/async-await-best-practices-cheat-sheet)
 * [There is no thread](http://blog.stephencleary.com/2013/11/there-is-no-thread.html).
 * [What is the promise pattern](https://www.quora.com/What-is-the-promise-pattern)
-* [Advanced mistakes: when can you actually have a deadlock, and what to do about it](./AsyncAdvancedMistakes).
+* [Advanced mistakes: when can you actually have a deadlock, and what to do about it](./ResyncMistakes).
