@@ -1,4 +1,4 @@
-# Avoiding resynchronisation mistakes in async code
+# Resynchronising async code
 
 After writing "[Avoiding simple mistakes in async await](./AsyncBasicMistakes)" and revising it many times, 
 it becomes inescapable that some of the uses and abuses of async code are not simple, particularly about breaking out of async and preventing deadlocks.
