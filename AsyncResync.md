@@ -9,15 +9,13 @@ If your code has a synchronisation context and it runs only one thread at a time
 This is true in Windows desktop GUI applications (Windows forms and WPF), and in ASP; 
 but is false in a console app, a windows service or threadpool thread, and [false in ASP.Net core](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html). 
 
-## Stay async
+### Best to stay async
 
-The first option is *don't resynchronise*. Don't throw away the benefits of async. This may be a fair amount of work, adding `await` and `async Task` on many methods, but it should always be the first choice.
+The best option is *don't resynchronise*. Don't throw away the benefits of async. This may be a fair amount of work, adding `await` and `async Task` on many methods, but it should always be the first choice.
 
-## Know when you do need to re-sync, and how to do it.
+In general async code contains one or more `await` statements, but also lots of synchronous statements that are not awaited. Doing synchronous things in async code is generally safe. Doing asynchronous things in synchronous code and not awaiting it is generally dangerous, and should be avoided. Code that tries to embed async code within synchronous code often has synchronisation-related problems. Code that is never async or code that is always async tends to not have these.
 
-In general async code contains one or more `await` statements, but also lots of synchronous statements that are not awaited. Doing synchronous things in async code is generally safe. Doing asynchronous things in synchronous code is generally dangerous, and should be avoided. 
-
-If you get a deadlock in code that does follow the correct async patterns, it probably means that you have other problems lurking. Code that is never async or code that is always async tends to not have these problems. Code that tries to be both in different places often does.
+## Know when you do need to re-sync
 
 There is a short list of times when re-syncing is not avoidable.
 
@@ -29,21 +27,23 @@ There is a short list of times when re-syncing is not avoidable.
 
 - [A windows service will also have a synchronous entry point](http://stackoverflow.com/questions/39656932/how-to-handle-async-start-errors-in-topshelf).
 
-### How to re-sync
+## Know how to re-synchronise
+
+There are three ways to re-synchronise:
 
 * Just Wait
 * `Task.Run`
 * Denial of context
 
-## Just Wait.
+### Just Wait.
 
 This is group of properties and methods calls like `.Result`, `.GetAwaiter().GetResult()` and `.Wait()`. It is appropriate in simple cases.
 
-## Launch a task with `Task.Run`.
+### Launch a task with `Task.Run`.
 
 How does this avoid deadlocks? `Task.Run` executes on the threadpool, which can change the `SynchronizationContext`, at the heavy cost of a second thread.
 
-## Denial of context
+### Denial of context
 
 Set the current `SynchronizationContext` to null, so the code that you call is denied access to it.
 
@@ -62,7 +62,7 @@ finally
 ```
 
 
-## Console app
+### Console app
 
 For a console entry point, you can just wait, [something like this](http://stackoverflow.com/questions/9208921/cant-specify-the-async-modifier-on-the-main-method-of-a-console-app):
  
