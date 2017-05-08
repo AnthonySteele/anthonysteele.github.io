@@ -85,7 +85,7 @@ class Program
 	}
  }  
 ```
-It is not a concern that we are blocking on async here as we are in a console app or windows services where there will be no deadlocks, and an additional thread being used is acceptable. There is a language proposal to take away this boilerplate code in C# 7.1
+It is not a concern that we are blocking on async here as we are in a console app or windows services where there will be no deadlocks, and an additional thread being used is acceptable. There is a [language proposal](https://github.com/dotnet/csharplang/blob/master/proposals/async-main.md) to take away this boilerplate code in the future.
 
 `.GetAwaiter().GetResult()` is a little nicer than `.Result` in that it behaves the same, but you will get the first exceptions thrown, instead of an `AggregateException`.
 
