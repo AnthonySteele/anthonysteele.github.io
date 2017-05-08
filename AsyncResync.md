@@ -21,7 +21,7 @@ There is a short list of times when re-syncing is not avoidable.
 
 - You can't use `async` in these language constructs: constructors, `Dispose` methods and inside `lock` statements. You should re-design around these limitations, i.e. move the async code elsewhere rather than doing resyncronisation.
 
-- ASP.NET filters and child actions must be synchronous. However, [in ASP.NET Core, the entire pipeline is fully asynchronous](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html). There are no synchronous child actions in ASP.NET Core, so it is best to find another construct to use instead.
+- In 3rd party frameworks and libraries, for example ASP.NET filters and child actions must be synchronous. However, [in ASP.NET Core, the entire pipeline is fully asynchronous](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html). There are no synchronous child actions in ASP.NET Core, so it is best to find another construct to use instead.
 
 - The `Main` entry point of a console application must be synchronous. 
 
@@ -38,6 +38,8 @@ There are three ways to re-synchronise:
 ### Just Wait.
 
 This is group of properties and methods calls like `.Result`, `.GetAwaiter().GetResult()` and `.Wait()`. It is appropriate in simple cases.
+
+This is very risky and problematic. If you are running somewhere with a synchronisation context (Windows forms, WFP & ASP) or inside a library, you should absolutely avoid this at all costs. This is where deadlocks can occur as you will be preventing any continuations inside the `Task` returning function from being able to be continued on the current (and now blocked) synchronisation context.
 
 ### Launch a task with `Task.Run`.
 
@@ -61,6 +63,7 @@ finally
 }
 ```
 
+This has the advantage over `Task.Run` of not using an additional thread for the initial synchronous invocations, and applying this technique at multiple levels comes at no extra cost, whereas each `Task.Run` with cost yet another thread.
 
 ### Console application example
 
@@ -82,6 +85,9 @@ class Program
 	}
  }  
 ```
+It is not a concern that we are blocking on async here as we are in a console app or windows services where there will be no deadlocks, and an additional thread being used is acceptable. There is a language proposal to take away this boilerplate code in C# 7.1
+
+`.GetAwaiter().GetResult()` is a little nicer than `.Result` in that it behaves the same, but you will get the first exceptions thrown, instead of an `AggregateException`.
 
 ## Links
 
