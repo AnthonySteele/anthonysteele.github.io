@@ -37,9 +37,10 @@ There are three ways to re-synchronise:
 
 ### Just Wait.
 
-This is group of properties and methods calls like `.Result`, `.GetAwaiter().GetResult()` and `.Wait()`. It is appropriate in simple cases.
+This is group of properties and methods calls,  `.Result`, `.GetAwaiter().GetResult()` and `.Wait()`. 
 
-This is very risky and problematic. If you are running somewhere with a synchronisation context (Windows forms, WFP & ASP) or inside a library, you should absolutely avoid this at all costs. This is where deadlocks can occur as you will be preventing any continuations inside the `Task` returning function from being able to be continued on the current (and now blocked) synchronisation context.
+This is very risky and problematic. If you are running somewhere with a synchronisation context (Windows forms, WFP & ASP) or inside a library that can be used in those kinds of apps, you should absolutely avoid this at all costs. 
+This is where deadlocks can occur as you will prevent any continuations inside the `Task` returning function from being able to be continued on the current (and now blocked) synchronisation context.
 
 ### Launch a task with `Task.Run`.
 
