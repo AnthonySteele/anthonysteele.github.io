@@ -7,7 +7,7 @@ In order to understand async deadlocks, [you need to understand the Synchronisat
 and how it differs in the different kinds of application. 
 If your code has a synchronisation context and it runs only one thread at a time, then it can deadlock. 
 This is true in Windows desktop GUI applications (Windows forms and WPF), and in ASP; 
-but is false in a console app, a windows service or threadpool thread, and [false in ASP.Net core](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html). 
+but is false in a console app, a windows service or threadpool thread, and [false in ASP.NET Core](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html). 
 
 ### Best to stay async
 
@@ -21,7 +21,7 @@ There is a short list of times when re-syncing is not avoidable.
 
 - You can't use `async` in these language constructs: constructors, `Dispose` methods and inside `lock` statements. You should re-design around these limitations, i.e. move the async code elsewhere rather than doing resyncronisation.
 
-- ASP.Net filters and child actions must be synchronous. However, [in ASP.NET Core, the entire pipeline is fully asynchronous](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html). There are no synchronous child actions in ASP.NET Core, so it is best to find another construct to use instead.
+- ASP.NET filters and child actions must be synchronous. However, [in ASP.NET Core, the entire pipeline is fully asynchronous](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html). There are no synchronous child actions in ASP.NET Core, so it is best to find another construct to use instead.
 
 - The `Main` entry point of a console application must be synchronous. 
 
