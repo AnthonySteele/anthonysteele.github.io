@@ -62,9 +62,9 @@ finally
 ```
 
 
-### Console app
+### Console application example
 
-For a console entry point, you can just wait, [something like this](http://stackoverflow.com/questions/9208921/cant-specify-the-async-modifier-on-the-main-method-of-a-console-app):
+For a console entry point, you can *just wait*, [as is discussed here](http://stackoverflow.com/questions/9208921/cant-specify-the-async-modifier-on-the-main-method-of-a-console-app):
  
 ```csharp
 class Program
@@ -82,6 +82,8 @@ class Program
 	}
  }  
 ```
+
+## Links
 
 * [About the ways of re-syncing](http://stackoverflow.com/questions/42223162/task-run-vs-null-synchronizationcontext/) and [here](http://stackoverflow.com/questions/25095243/set-synchronizationcontext-to-null-instead-of-using-configureawaitfalse/).
 
