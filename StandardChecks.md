@@ -26,7 +26,7 @@ Then you have the worst of both worlds: large binaries in git, and reliance on o
 
 ### Remove the nuget binary
 
-Remove the `\.nuget` folder, the binaries in it, and remove references to them from `.csproj` files. These are no longer needed, are again unnecessary binary files in the source code repository, and it store a specific version of `nuget.exe`, usually an obsolete one.
+Remove the `\.nuget` folder, the binaries in it, and remove references to them from `.csproj` files. These are no longer needed, are again unnecessary binary files in the source code repository. And it stores a specific version of `nuget.exe`, usually an obsolete one.
 
 If you use custom package sources and want this metadata to live with the project, then you need the `nuget.config` file here. But that's the only file. 
 
