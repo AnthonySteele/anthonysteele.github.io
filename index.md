@@ -1,5 +1,6 @@
 ### Various writings
 
+ * [Considerations in message handling in AWS](./AwsMessageHandling) May 2017
  * [Resynchronising async code](./AsyncResync) May 2017
  * [Standard checks and updates on C# projects](./StandardChecks) Feb 2017
  * [Dates: ISO8601 or pain](./iso8601) Feb 2017

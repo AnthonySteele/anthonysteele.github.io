@@ -4,9 +4,11 @@
 
 Have a look at [the Amazon SQS documentation on how to read a message from an SQS queue](http://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/how-to/sqs/ReceiveMessage.html).
 
-Yes, this tells you how to read messages from a queue. But the gap between that example and a running system like the ones that I have seen id large. This article is all about that gap. 
+Yes, this tells you how to read messages from a queue by calling `sqsClient.ReceiveMessage` or the async version, once. But the gap between that example and a running system like the ones that I have seen id large. This article is all about that gap. 
 
-For starters, you need a persistent message handler that runs all the time, waits for messages and handles them when they arrive, something like:
+## An Application that listens
+
+For starters, you need a persistent message handler that runs all the time, listens  for messages and handles them when they arrive, something like:
 
 ```csharp
 
@@ -34,15 +36,17 @@ So now you have a long-lived process that you can wrap up in a commandline execu
 
 ## Scaling Out
 
-You will reach a scale where one EC2 instance can't handle all of the messages. You will have peaks in load. You will want to deploy changes without downtime.
-You might find out the hard way that a single EC2 instance only promises 99.95% uptime and need resilience to keep running though the inevitable issues. 
+You might reach a scale where one EC2 instance can't handle all of the messages. You will have peaks in load. You will want to deploy changes without downtime.
+You might find out the hard way that a single EC2 instance only promises 99.95% uptime and so you need resilience to keep running though the inevitable issues. 
 
 All of these suggest that you want to run multiple EC2 machines side by side in an [Auto Scaling Group](http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroup.html), and start new ones and terminate old ones without anything going badly wrong. 
 
-The good news is that the code above will basically work, and it allows machines to share a queue of messages and do more-or-less equal amounts of work. The load-spreading doesn't have to be exactly level, but it should be reasonably even.
+The good news is that if you run the code above on multiple machines, it will basically work, and it allows machines to share a queue of messages and do more-or-less equal amounts of work: e.g. if 25 messages arrive all at once, and there are 3 machines each asking for 10 messages each in rapid succession, then the first and second machine will get 10 messages each, and the third machine will pick up the last 5. 
+
+The load-spreading doesn't have to be exactly level, but it should be reasonably even. In that example, what we don't want is the first machine configured to pick up all 25 messages and then spend 25 seconds working through them while the other machines are idle.
 
 I would add to that code: 
-- A health check HTTP endpoint for the Auto Scaling Group. A simple `return OK;` is fine. If the application fails, or cannot start, the ASG will notice.
+- A health check HTTP endpoint for the Auto Scaling Group. A simple `return OK;` is fine. If the application cannot start or fails entirely, then the ASG will notice.
  
 - Configuration of a suitable maximum number of messages to retrieve at a time. This prevents extreme disparities where one handling machine gets there first and takes all the messages while other machines sit idle.
 
@@ -65,6 +69,8 @@ The first means that there is only one message-receiving loop. In practice, it m
 The "queue per message type" option requires more configuration, and that the handling program run multiple handing loops side-by-side on different threads.  Since they all share the same thread pool, if you want to limit messages in progress by keeping track of threads, this should be done once across all message loops.
 
 ## Queue Topology and Threads
+
+Launching threads. If you have 10 messages to process, why process them one at a time when you can use the thread pool to launch 10 worker threads and process them in parallel, while immediately going back to listening for more messages?
 
 You might think that you want to run at most "one thread per core" but it depends on what the message handlers actually do. If they retrieve values from HTTP apis or databases, using `async` might result in much lighter load per thread if they spend a significant fraction of the time waiting for responses.
 
