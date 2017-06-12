@@ -75,7 +75,7 @@ finally
 
 This has the advantage over `Task.Run` of not using an additional thread for the initial synchronous invocations, and applying this technique at multiple levels comes at no extra cost, whereas each `Task.Run` with cost yet another thread.
 
-### Run your code in in a single threaded fasion using `JoinableTaskFactory`
+### Run your code in in a single threaded fashion using `JoinableTaskFactory`
 
 Rather than just mitigating from deadlocks, you can run your code using a `JoinableTaskFactory` from [vs-threading](https://github.com/Microsoft/vs-threading/). `JoinableTaskFactory` internally sets a custom `SynchronizationContext` that will pass the synchronous continuations back to the blocking thread that was used to initially wait with. This results in a single threaded execution, which is more economical with your precious threads.
 
