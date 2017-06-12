@@ -38,7 +38,7 @@ There is a short list of times when re-syncing is not avoidable.
 
 ## Know how to re-synchronise
 
-There are three ways to re-synchronise:
+There are a few ways to re-synchronise:
 
 * Just Wait
 * `Task.Run`
@@ -65,7 +65,7 @@ SynchronizationContext.SetSynchronizationContext(null);
 
 try
 {
-	// do something
+	// do something async
 }
 finally
 {
@@ -74,6 +74,16 @@ finally
 ```
 
 This has the advantage over `Task.Run` of not using an additional thread for the initial synchronous invocations, and applying this technique at multiple levels comes at no extra cost, whereas each `Task.Run` with cost yet another thread.
+
+### Use a library
+
+e.g. using [vs-threading](https://github.com/Microsoft/vs-threading/)
+
+```csharp
+var context = new JoinableTaskContext();
+var jtf = new JoinableTaskFactory(context);
+var result = jtf.Run(() => DoSomethingAsync());
+```
 
 ### Console application example
 
