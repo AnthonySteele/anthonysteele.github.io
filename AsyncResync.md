@@ -9,6 +9,15 @@ If your code has a synchronisation context and it runs only one thread at a time
 This is true in Windows desktop GUI applications (Windows forms and WPF), and in ASP; 
 but is false in a console app, a windows service or threadpool thread, and [false in ASP.NET Core](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html). 
 
+| Platform                                         | Has Sync Context | One at a time |
+|--------------------------------------------------|------------------|---------------|
+| WinForms                                         | Yes              | Yes           |
+| WPF                                              | Yes              | Yes           |
+| ASP.Net                                          | Yes              | Yes           |
+| Default (Thread pool, Console apps, NUnit tests) | Yes              | No            |
+| ASP.Net Core                                     | No               | No            |
+
+
 ### Best to stay async
 
 The best option is *don't resynchronise*. Don't throw away the benefits of async. This may be a fair amount of work, adding `await` and `async Task` on many methods, but it should always be the first choice.
@@ -97,3 +106,7 @@ It is not a concern that we are blocking on async here as we are in a console ap
 * [Understanding what `SynchronizationContext` does](http://stackoverflow.com/questions/18097471/what-does-synchronizationcontext-do).
 
 * [Async code in ASP.NET Core and the lack of synchronisation context](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html)
+
+* [Async in C# - The Good, the Bad and the Ugly - slides from a talk by Stuart Lang](https://speakerdeck.com/slang25/async-in-c-number-the-good-the-bad-and-the-ugly)
+
+* [The Microsoft.VisualStudio.Threading library](https://github.com/Microsoft/vs-threading/)
