@@ -75,9 +75,9 @@ finally
 
 This has the advantage over `Task.Run` of not using an additional thread for the initial synchronous invocations, and applying this technique at multiple levels comes at no extra cost, whereas each `Task.Run` with cost yet another thread.
 
-### Use a library
+### Use a library that has a custom synchronisation context.
 
-e.g. using [vs-threading](https://github.com/Microsoft/vs-threading/)
+You aren't going to want to write your own synchronisation context, but you can  e.g. use a library like [vs-threading](https://github.com/Microsoft/vs-threading/)
 
 ```csharp
 var context = new JoinableTaskContext();
