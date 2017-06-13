@@ -9,13 +9,14 @@ If your code is running in an application model that sets a synchronisation cont
 Application models that have this property are: Windows desktop GUI applications (Windows forms and WPF), and in ASP; 
 but is false in a console app, a windows service or work which has been explicity queued on a thread pool thread (e.g. `Task.Run(...)`), and [false in ASP.NET Core](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html). 
 
-| Platform                                         | Has Sync Context | One at a time |
-|--------------------------------------------------|------------------|---------------|
-| WinForms                                         | Yes              | Yes           |
-| WPF                                              | Yes              | Yes           |
-| ASP.NET                                          | Yes              | Yes           |
-| Default (Thread pool, Console apps, NUnit tests) | No               | No            |
-| ASP.NET Core                                     | No               | No            |
+| Platform                                         | Has an exclusive Synch. Context |
+|--------------------------------------------------|---------------------------------|
+| WinForms                                         | Yes                             |
+| WPF                                              | Yes                             |
+| ASP.NET                                          | Yes                             |
+| Queued on the thread pool via `Task.Run`         | No                              |
+| Default (Console apps, NUnit tests)              | No                              |
+| ASP.NET Core                                     | No                              |
 
 
 ### Best to stay async
@@ -122,3 +123,5 @@ It is not a concern that we are blocking on async here as we are in a console ap
 * [Async in C# - The Good, the Bad and the Ugly - slides from a talk by Stuart Lang](https://speakerdeck.com/slang25/async-in-c-number-the-good-the-bad-and-the-ugly)
 
 * [The Microsoft.VisualStudio.Threading library](https://github.com/Microsoft/vs-threading/)
+
+Thanks to [Stuart Lang](https://github.com/slang25) for correcting mistakes and explaining complexities.
