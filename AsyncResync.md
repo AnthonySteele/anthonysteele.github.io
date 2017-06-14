@@ -7,16 +7,17 @@ In order to understand async deadlocks, [you need to understand the Synchronisat
 and how it differs in the different kinds of application. 
 If your code is running in an application model that sets a synchronisation context which only allows one delegate to be ran at a time, your code can deadlock if you try to synchronously wait for code to complete which is asynchronous.
 Application models that have this property are: Windows desktop GUI applications (Windows forms and WPF), and in ASP; 
-but is false in a console app, a windows service or work which has been explicity queued on a thread pool thread (e.g. `Task.Run(...)`), and [false in ASP.NET Core](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html). 
+but is false in a console app, a windows service or work which has been explicitly queued on a thread pool thread (e.g. `Task.Run(...)`), and [false in ASP.NET Core](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html). 
 
-| Platform                                         | Has an exclusive Synch. Context |
-|--------------------------------------------------|---------------------------------|
-| WinForms                                         | Yes                             |
-| WPF                                              | Yes                             |
-| ASP.NET                                          | Yes                             |
-| Queued on the thread pool via `Task.Run`         | No                              |
-| Default (Console apps, NUnit tests)              | No                              |
-| ASP.NET Core                                     | No                              |
+
+| Application Model                        | Has an exclusive Synch. Context |
+|------------------------------------------|---------------------------------|
+| WinForms                                 | Yes                             |
+| WPF                                      | Yes                             |
+| ASP.NET                                  | Yes                             |
+| Queued on the thread pool via `Task.Run` | No                              |
+| Default (Console apps, NUnit tests)      | No                              |
+| ASP.NET Core                             | No                              |
 
 
 ### Best to stay async
@@ -45,7 +46,7 @@ There are a few ways to re-synchronise:
 * `Task.Run`
 * Denial of context
 
-### Just Wait.
+### Just Wait
 
 This is group of properties and methods calls,  `.Result`, `.GetAwaiter().GetResult()` and `.Wait()`. 
 
@@ -76,6 +77,9 @@ finally
 
 This has the advantage over `Task.Run` of not using an additional thread for the initial synchronous invocations, and applying this technique at multiple levels comes at no extra cost, whereas each `Task.Run` with cost yet another thread.
 
+But rather than just set the `SynchronizationContext` to null, we prefer the technique below, using a custom `SynchronizationContext` in a library.
+
+
 ### Run your code in in a single threaded fashion using `JoinableTaskFactory`
 
 Rather than just mitigating from deadlocks, you can run your code using a `JoinableTaskFactory` from [vs-threading](https://github.com/Microsoft/vs-threading/). `JoinableTaskFactory` internally sets a custom `SynchronizationContext` that will pass the synchronous continuations back to the blocking thread that was used to initially wait with. This results in a single threaded execution, which is more economical with your precious threads.
@@ -87,6 +91,8 @@ var context = new JoinableTaskContext();
 var jtf = new JoinableTaskFactory(context);
 var result = jtf.Run(() => DoSomethingAsync());
 ```
+
+This approach is in many cases the best way.
 
 ### Console application example
 
