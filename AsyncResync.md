@@ -45,6 +45,7 @@ There are a few ways to re-synchronise:
 * Just Wait
 * `Task.Run`
 * Denial of context
+* Custom Context
 
 ### Just Wait
 
