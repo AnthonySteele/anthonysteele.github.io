@@ -22,7 +22,7 @@ but is false in a console app, a windows service or work which has been explicit
 
 ### Best to stay async
 
-The best option is *don't resynchronise*. Don't throw away the benefits of async. This may be a fair amount of work, adding `await` and `async Task` on many methods, but it should always be the first choice.
+The best option is to stay async from top to bottom, and *don't resynchronise*. Don't throw away the benefits of async. This may be a fair amount of work, adding `await` and `async Task` on many methods, but it should always be the first choice.
 
 In general async code contains one or more `await` statements, but also lots of synchronous statements that are not awaited. Doing synchronous things in async code is generally safe. Doing asynchronous things in synchronous code and not awaiting it is generally dangerous, and should be avoided. Code that tries to embed async code within synchronous code often has synchronisation-related problems. Code that is never async or code that is always async tends to not have these.
 
@@ -51,12 +51,19 @@ There are a few ways to re-synchronise:
 
 This is group of properties and methods calls,  `.Result`, `.GetAwaiter().GetResult()` and `.Wait()`. 
 
-This is very risky and problematic. If you are running somewhere with a synchronisation context (Windows forms, WFP & ASP) or inside a library that can be used in those kinds of apps, you should absolutely avoid this at all costs. 
+This is very risky and problematic. If you are running somewhere with a synchronisation context (Windows forms, WFP & ASP) or inside a library that can be used in those kinds of apps, you should absolutely avoid this at all costs. In other words, code like this in a library can deadlock the calling app.
+
+
 This is where deadlocks can occur as you will prevent any continuations inside the `Task` returning function from being able to be continued on the current (and now blocked) synchronisation context.
+
+*Status*: Avoid entirely except in very specific cases where the application model is known, e.g. in the `Main` method of a console app.
 
 ### Launch a task with `Task.Run`.
 
 How does this avoid deadlocks? `Task.Run` executes on the threadpool, which can change the `SynchronizationContext`, at the heavy cost of a second thread.
+
+*Status*: Workable but not performant. Use techniques below instead.
+
 
 ### Denial of context
 
@@ -80,6 +87,8 @@ This has the advantage over `Task.Run` of not using an additional thread for the
 
 But rather than just set the `SynchronizationContext` to null, we prefer the technique below, using a custom `SynchronizationContext` in a library.
 
+*Status*: Workable. Use techniques below instead.
+
 
 ### Run your code in in a single threaded fashion using `JoinableTaskFactory`
 
@@ -93,7 +102,7 @@ var jtf = new JoinableTaskFactory(context);
 var result = jtf.Run(() => DoSomethingAsync());
 ```
 
-This approach is in many cases the best way.
+*Status*: Best practice in many cases.
 
 ### Console application example
 
