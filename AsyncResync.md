@@ -5,12 +5,12 @@ it becomes inescapable that some of the uses and abuses of async code are not si
 
 In order to understand async deadlocks, [you need to understand the Synchronisation Context](https://msdn.microsoft.com/en-us/magazine/gg598924.aspx) 
 and how it differs in the different kinds of application. 
-If your code is running in an application model that sets a synchronisation context which only allows one delegate to be ran at a time, your code can deadlock if you try to synchronously wait for code to complete which is asynchronous.
-Application models that have this property are: Windows desktop GUI applications (Windows forms and WPF), and in ASP; 
-but is false in a console app, a windows service or work which has been explicitly queued on a thread pool thread (e.g. `Task.Run(...)`), and [false in ASP.NET Core](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html). 
+If your code is running in an application model that sets a synchronisation context which only allows one delegate to run at a time, your code can deadlock if you try to synchronously wait for code which is asynchronous to complete.
+Application models that have this property are: Windows desktop GUI applications (Windows forms and WPF), and in ASP web applications; 
+but it is false in console applications, in windows services or in work which has been explicitly queued on a thread pool thread (e.g. via `Task.Run(...)`), and is [false in ASP.NET Core](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html). 
 
 
-| Application Model                        | Has an exclusive Synch. Context |
+| Application Model                        | Has an exclusive synch. context |
 |------------------------------------------|---------------------------------|
 | WinForms                                 | Yes                             |
 | WPF                                      | Yes                             |
@@ -19,6 +19,7 @@ but is false in a console app, a windows service or work which has been explicit
 | Default (Console apps, NUnit tests)      | No                              |
 | ASP.NET Core                             | No                              |
 
+The options to avoid deadlock are:
 
 ### Best to stay async
 
@@ -32,9 +33,9 @@ There is a short list of times when re-syncing is not avoidable.
 
 - You can't use `async` in these language constructs: constructors, `Dispose` methods and inside `lock` statements. You should re-design around these limitations, i.e. move the async code elsewhere rather than doing resyncronisation.
 
-- In 3rd party frameworks and libraries, for example ASP.NET filters and child actions must be synchronous. However, [in ASP.NET Core, the entire pipeline is fully asynchronous](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html). There are no synchronous child actions in ASP.NET Core, so it is best to find another construct to use instead.
+- When the frameworks or 3rd party library insists. For example ASP.NET filters and child actions must be synchronous. However, [in ASP.NET Core, the entire pipeline is fully asynchronous](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html). There are no synchronous child actions in ASP.NET Core, so it is best to find another construct to use instead.
 
-- The `Main` entry point of a console application must be synchronous. 
+- The `Main` entry point of a console application must be synchronous. This limitation will be removed in a future release.
 
 - [A windows service will also have a synchronous entry point](http://stackoverflow.com/questions/39656932/how-to-handle-async-start-errors-in-topshelf).
 

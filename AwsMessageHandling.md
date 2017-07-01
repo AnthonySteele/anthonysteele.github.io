@@ -4,11 +4,11 @@
 
 Have a look at [the Amazon SQS documentation on how to read a message from an SQS queue](http://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/how-to/sqs/ReceiveMessage.html).
 
-Yes, this tells you how to read messages from a queue by calling `sqsClient.ReceiveMessage` or the async version, once. But the gap between that example and a running system like the ones that I have seen id large. This article is all about that gap. 
+Yes, this tells you how to read messages from a queue by calling `sqsClient.ReceiveMessage` or the async version, once. But the gap between that example and a running system like the ones that I have seen is large. This article is all about that gap. 
 
 ## An Application that listens
 
-For starters, you need a persistent message handler that runs all the time, listens  for messages and handles them when they arrive, something like:
+For starters, you need a persistent message handler that runs all the time, listens  for messages and handles them when they arrive. This is something like:
 
 ```csharp
 
@@ -32,7 +32,7 @@ private async Task CheckForMessages()
 }
 ```
 
-So now you have a long-lived process that you can wrap up in a commandline executable or a windows service - the second option is less portable but is easy to manage, [often using TopShelf](http://topshelf-project.com/). But things have just begun.
+So now you have a long-lived process that you can wrap up in a commandline executable or a windows service - the second option is less portable but is easy to manage, [often using TopShelf](http://topshelf-project.com/). Run it in AWS and messages will be processed all the time. But things have just begun.
 
 ## Scaling Out
 
@@ -46,7 +46,7 @@ The good news is that if you run the code above on multiple machines, it will ba
 The load-spreading doesn't have to be exactly level, but it should be reasonably even. In that example, what we don't want is the first machine configured to pick up all 25 messages and then spend 25 seconds working through them while the other machines are idle.
 
 I would add to that code: 
-- A health check HTTP endpoint for the Auto Scaling Group. A simple `return OK;` is fine. If the application cannot start or fails entirely, then the ASG will notice.
+- [A health check HTTP endpoint](https://skeltonthatcher.com/blog/http-healthchecks-for-a-resilient-platform/) for the Auto Scaling Group. A simple `return OK;` is fine. If the application cannot start or fails entirely, then the ASG will notice.
  
 - Configuration of a suitable maximum number of messages to retrieve at a time. This prevents extreme disparities where one handling machine gets there first and takes all the messages while other machines sit idle.
 
@@ -62,19 +62,19 @@ Errors will lead you on to considering retry policy (how many times should it re
 
 Consider if you want one queue for all messages or one queue per message type. 
 
-The "one queue of all" option does the routing of specific message to code that handles it inside the application, and the second does it in AWS infrastructure. 
+The "one queue for all" option does the routing of specific message to code that handles it inside the application, and the second does it in AWS infrastructure. 
 
-The first means that there is only one message-receiving loop. In practice, it makes issues with messages in the error queue harder to diagnose, as it can accumulate different messages.
+The first means that there is only one message-receiving loop. And a shared error queue. In practice, it makes issues with messages in the error queue harder to diagnose, as this error queue can accumulate different kinds of messages.
 
 The "queue per message type" option requires more configuration, and that the handling program run multiple handing loops side-by-side on different threads.  Since they all share the same thread pool, if you want to limit messages in progress by keeping track of threads, this should be done once across all message loops.
 
 ## Queue Topology and Threads
 
-Launching threads. If you have 10 messages to process, why process them one at a time when you can use the thread pool to launch 10 worker threads and process them in parallel, while immediately going back to listening for more messages?
+If you have 10 messages to process, why process them one at a time when you can use the thread pool to launch 10 worker threads and process them in parallel, while immediately going back to listening for more messages? When do you stop asking for more messages?
 
-You might think that you want to run at most "one thread per core" but it depends on what the message handlers actually do. If they retrieve values from HTTP apis or databases, using `async` might result in much lighter load per thread if they spend a significant fraction of the time waiting for responses.
+You might think that you want to run at most "one thread per core" but it depends on what the message handlers actually do. If they retrieve values from HTTP apis or databases, as is typical, using `async` might result in much lighter load per handler if they spend a significant fraction of the time waiting for responses.
 
-This leads on to how to leverage the multi-threaded advantage that "heavyweight" languages like C# and Java have. Otherwise you night as well use lambdas, to handle these messages. These are free-floating functions where effectively AWS is handling the scaling and threading issues.
+This leads on to how to leverage the multi-threaded advantage that "heavyweight" languages like C# and Java have. Otherwise you night as well use lambdas to handle these messages. These are free-floating functions where effectively AWS is handling the scaling and threading issues.
 
 But, [as Ian Cooper notes](https://medium.com/altdotnet/on-the-need-for-a-c-renaissance-634078d4e865) "Python, Ruby, and especially Node.JS work well with I/O bound workloads. But all use the process model to scale. If your workload is CPU bound there can be advantages to using a vm like the JVM (or the CLR) to scale."
 
@@ -88,4 +88,4 @@ But the thread management issues in an application are tricky to get right.  The
 
 Throttling when requests take longer than usual is an issue. There are similarities between a doubling in the number of incoming messages and a doubling in the time taken to process a message - both will result in doubling in the average number of messages being processed at any one time. 
 
-I don't believe that there is a definitive, general and robust library for this yet.
+I don't believe that there is a definitive, general and robust library for this yet. But these are the issues that I have come across.
