@@ -107,7 +107,7 @@ var result = jtf.Run(() => DoSomethingAsync());
 
 ### Console application example
 
-Using C# 7.1 or later, you can declare the program entry point as e.g. `public static async Task<int> Main(string[] args)` and the code to wait for the task will be generated for you. On earlier versions, you can *just wait* yourself, [as is discussed here](http://stackoverflow.com/questions/9208921/cant-specify-the-async-modifier-on-the-main-method-of-a-console-app):
+Using [C# 7.1](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-7-1) or later, you can declare the program entry point as e.g. `public static async Task<int> Main(string[] args)` and the code to wait for the task will be generated for you. On earlier versions, you can *just wait* yourself, [as is discussed here](http://stackoverflow.com/questions/9208921/cant-specify-the-async-modifier-on-the-main-method-of-a-console-app):
  
 ```csharp
 class Program
