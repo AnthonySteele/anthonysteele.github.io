@@ -35,7 +35,7 @@ There is a short list of times when re-syncing is not avoidable.
 
 - When the frameworks or 3rd party library insists. For example ASP.NET filters and child actions must be synchronous. However, [in ASP.NET Core, the entire pipeline is fully asynchronous](http://blog.stephencleary.com/2017/03/aspnetcore-synchronization-context.html). There are no synchronous child actions in ASP.NET Core, so it is best to find another construct to use instead.
 
-- The `Main` entry point of a console application must be synchronous. This limitation will be removed in a future release.
+- it used to be that the `Main` entry point of a console application must be synchronous. [This limitation is removed in C# Version 7.1](https://blogs.msdn.microsoft.com/mazhou/2017/05/30/c-7-series-part-2-async-main/).
 
 - [A windows service will also have a synchronous entry point](http://stackoverflow.com/questions/39656932/how-to-handle-async-start-errors-in-topshelf).
 
@@ -107,7 +107,7 @@ var result = jtf.Run(() => DoSomethingAsync());
 
 ### Console application example
 
-For a console entry point, you can *just wait*, [as is discussed here](http://stackoverflow.com/questions/9208921/cant-specify-the-async-modifier-on-the-main-method-of-a-console-app):
+Using C# 7.1 or later, you can declare the program entry point as e.g. `public static async Task<int> Main(string[] args)` and the code to wait for the task will be generated for you. On earlier versions, you can *just wait* yourself, [as is discussed here](http://stackoverflow.com/questions/9208921/cant-specify-the-async-modifier-on-the-main-method-of-a-console-app):
  
 ```csharp
 class Program
@@ -125,7 +125,7 @@ class Program
 	}
  }  
 ```
-It is not a concern that we are blocking on async here as we are in a console app or windows services where there will be no deadlocks, and an additional thread being used is acceptable. There is a [language proposal](https://github.com/dotnet/csharplang/blob/master/proposals/async-main.md) to take away this boilerplate code in the future.
+It is not a concern that we are blocking on async here: as we are in a console app or windows services where there is no exclusive synchronisation context, there will be no deadlocks, and an additional thread being used is acceptable.
 
 `.GetAwaiter().GetResult()` is a little nicer than `.Result` in that it behaves the same, but you will get the first exceptions thrown, instead of an `AggregateException`.
 
