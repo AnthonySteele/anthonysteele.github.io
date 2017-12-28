@@ -33,9 +33,9 @@ This all supposes that code has an owner. If you don't have such ownership, i.e.
 
 If you are going to use PRs, consider these guidelines to make the experience less painful:
 
-* Extra process that you use but do not need is counter-productive: it causes extra cognitive load, extra work, slower delivery and can even cause errors. Ask yourself if you really need it.
+* Extra process that you use but do not need is counter-productive: it causes extra cognitive load, extra work, slower delivery and can even cause errors. Try to discard it.
 
-* The PR workflow is most appropriate with public Open-Source where anyone can view and submit a PR, but only a few can write to the master branch. It is fairly appropriate for "internal open source" or "shared code" that lives within your organisation but is worked on and used by a large number of teams, it is possibly appropriate when you have a remote team who are also working on a codebase, and it is least appropriate for a co-located team who own a codebase and are the main committers.
+* The PR workflow is most appropriate with public open source where anyone can view and submit a PR, but only a few can write to the master branch. It is fairly appropriate for "internal open source" or "shared code" that lives within your organisation but is worked on and used by a large number of teams, it is possibly appropriate when you have a remote workers who are also working on a codebase, and it is least appropriate for a co-located team who own a codebase and are the main committers.
 
 * Make PRs are short-lived as possible. Try not to have lots of outstanding PRs. A long queue of old PRs is a warning sign. 
 
@@ -49,8 +49,9 @@ If you are going to use PRs, consider these guidelines to make the experience le
 
 * If a PR is obsoleted by other commits that make some of the same changes or otherwise fix the same problem, then anyone should close it. The author can assess against the current master if there are any remaining parts that are worth extracting as a new PR.
 
-* Consider your release process. Does merging four PRs mean four separate deployments to production? How long does each take? Can and should you group PRs in one deployment, and does this depend on if they are mjor or minor changes such as writing docs in the `Readme` file or renaming a variable. Where is the bottleneck in the system? 
+* Consider your release process. Does merging four PRs mean four separate deployments to production? How long does each take? Can and should you group PRs in one deployment, and does this depend on if they are major or minor changes? Where is the bottleneck in the system? 
 
-* Consider your testing process. Running unit tests against PRs as well as on master can be very useful (but is not in itself Continuous Integration). How long does this take, and is it a bottleneck?
+* Consider your testing process. Running unit tests against PRs as well as on master can be very useful, but is not in itself Continuous Integration. How long does this take, and is it a bottleneck?
+
 
 
