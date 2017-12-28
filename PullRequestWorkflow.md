@@ -45,7 +45,7 @@ If you are going to use PRs, consider these guidelines to make the experience le
 
 * It is up to the repo owners to review PRs and merge the good ones, and ask for clarification and offer suggestions; or close the ones that are not good. Do not let an unmanageable PR backlog build up.
 
-* Merge the oldest good PRs first, as a general rule. This has several benefits: PRs are merged in a predictable order, not as favours. And it reduces merge conflicts or at least makes them the responsibility of the person who opens a new PR when they can see that a existing PR will conflict.
+* Merge the oldest good PRs first, as a general rule. This has several benefits: PRs are merged in a predictable order, not as favours. And it reduces merge conflicts or at least makes them the responsibility of the person who opens a new PR when they can see that it will clash with a existing PR.
 
 * If a PR is obsoleted by other commits that make some of the same changes or otherwise fix the same problem, then anyone should close it. The author can assess against the current master if there are any remaining parts that are worth extracting as a new PR.
 
