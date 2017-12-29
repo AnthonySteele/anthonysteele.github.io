@@ -44,13 +44,15 @@ If you are going to use PRs, consider these guidelines to make the experience le
 
 * Make PRs are short-lived as possible. Try not to have lots of outstanding PRs. A long queue of old PRs is a warning sign. 
 
+* As a general rule, the longer the PR author can be involved, the better. Hopefully they can be involved until thier change is deployed to production and verified to work as expected. They should not consider it "done" and have no further involvement once the PR is submitted.
+
 * It is up to the PR author to keep the PR up to date with the `master` branch  by merging or rebasing and fixing merge conflicts.
 
 * It is up to the PR author to follow  up with the owners if their PR has not been reviewed or merged, to make changes as requested, and to explain why it is needed or to close it if it is no longer needed.
 
 * It is up to the repo owners to review PRs and merge the good ones, and ask for clarification and offer suggestions; or close the ones that are not good. Do not let an unmanageable PR backlog build up.
 
-* Merge the oldest good PRs first, as a general rule. This has several benefits: PRs are merged in a predictable order, not as favours. And it reduces merge conflicts or at least makes them the responsibility of the person who opens a new PR when they can see that it will clash with a existing PR.
+* Deal with the oldest PRs first, as a general rule. This has several benefits: PRs are merged in a predictable order, not as favours. And it reduces merge conflicts or at least makes them the responsibility of the person who opens a new PR when they can see that it will clash with a existing PR.
 
 * If a PR is obsoleted by other commits that make some of the same changes or otherwise fix the same problem, then anyone should close it. The author can assess against the current master if there are any remaining parts that are worth extracting as a new PR.
 
