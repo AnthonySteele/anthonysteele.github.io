@@ -1,3 +1,6 @@
+## Against Pull Requests
+
+
 The git [Pull Request](https://help.github.com/articles/using-pull-requests/) is a powerful tool. But just because you have it, [does not mean that you have to use it all the time](https://en.wikipedia.org/wiki/Law_of_the_instrument). 
 
 Pull requests have a powerful legitimate use. Consider a team that owns on a codebase and works on it regularly. 
@@ -29,13 +32,15 @@ It might be that the lack of PRs would force you to do other things: good, those
 This all supposes that code has an owner. If you don't have such ownership, i.e. nothing but feature teams, you are going to have a bad time in the long run because of this lack of ownership.
 
 
-## Practices with PRs
+## Practices for using Pull Requests
 
 If you are going to use PRs, consider these guidelines to make the experience less painful:
 
 * Extra process that you use but do not need is counter-productive: it causes extra cognitive load, extra work, slower delivery and can even cause errors. Try to discard it.
 
 * The PR workflow is most appropriate with public open source where anyone can view and submit a PR, but only a few can write to the master branch. It is fairly appropriate for "internal open source" or "shared code" that lives within your organisation but is worked on and used by a large number of teams, it is possibly appropriate when you have a remote workers who are also working on a codebase, and it is least appropriate for a co-located team who own a codebase and are the main committers.
+
+* Even for a co-located team who own a private codebase and commit freely to it, allow pull requests from elsewhere in the organisation.
 
 * Make PRs are short-lived as possible. Try not to have lots of outstanding PRs. A long queue of old PRs is a warning sign. 
 
