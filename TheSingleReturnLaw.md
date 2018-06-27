@@ -4,7 +4,7 @@ I wrote this a few years ago (before 2012), about the idea that a method or func
 
 * Do you code in C or similar old-school, low-level language? If so, stop reading now because the rest of this article does not apply to your practices. The arguments in favour of the single-return style originated in the C programming language for reasons of manual resource management. But these reasons are irrelevant to Java, C#, JavaScript, Ruby, Python etc. 
 
-* There is a high bar to clear to call something a "law" and the idea that "a method should have at most one return statement" does not meet it for modern languages. There is no formal study that shows that this rule leads to safer, more readable or otherwise better code in these languages. It is therefor just a style. 
+* There is a high bar to clear to call something a "law" and the idea that "a method should have at most one return statement" does not meet it for modern languages. There is no formal study that shows that this rule leads to safer, more readable or otherwise better code in these languages. It is therefore just a style. 
 
 * It is not a useful style when applied as a blanket rule. There are cases where a single return is more readable or simpler, and cases where it isn't.  If you learn when and how to use multiple returns, you can write more expressive code. 
 
