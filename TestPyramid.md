@@ -48,16 +48,18 @@ Sometimes you find a bug, and characterise it with a failing end-to-end test. Bu
 
 YMMV, but approximately, more than 2, but less than 8. Play it by ear.
 
-New techniques do come along allowing new testing seams. e.g. in ASP.NET, you can now launch the web app in a light-weight in-memory host, and optionally supply mock data stores to it, send http requests to it, all of this in-process. This is above a conventional unit test in scope, but below a test that deploys the web application to a test server and then makes queries to it across a network.
+Your team and organisation will need to have a common vocabulary of naming layers, but bear in mind that these are not universal. You can identify where tests fit by the metrics above.
+
+New techniques do come along allowing new testing seams. e.g. in ASP.NET, you can now launch the web application in a light-weight in-memory host, and optionally supply mock data stores to it, send http requests to it, all of this in-process. This is above a conventional unit test in scope, but below a test that deploys the web application to a test server and then makes queries to it across a network.
 
 Would these replace unit tests and post-deploy integration tests? Only partly. I would advocate for a mix of all of these in the test structure.
 
 ## Test-like techniques
 
-There are also things that we don't consider to be tests, but play similar roles to tests. You can consider them "test-adjacent" techniques:
+There are also things that we don't strictly consider to be tests, but play similar roles to tests. You can consider them "test-adjacent" techniques:
 
 At the bottom, fastest and most frequent is in the development environment:
-If you have a language with strong typing, the compiler rejects some things as invalid upfront. With types, you don't need a test to tell you that you passed a customer to an order method - the compiler will block that. A linter plays a similar role in e.g. JavaScript.
+If you have a language with strong typing, the compiler rejects some things as invalid upfront. With types, you don't need a test to tell you that you passed a customer to an order method - the compiler will block that. When the language is not compiled, a linter such as [ESLint for JavaScript](https://eslint.org/) plays a similar role.
 
 At the other end are post-deploy things sometime called "[testing in production](https://medium.com/@copyconstruct/testing-in-production-the-safe-way-18ca102d0ef1)".
 
@@ -89,7 +91,7 @@ DRY should of course be used in tests, but not overused. "Beware the share" of c
 
 Should you test config files?
 
-Rule of thumb: If it's in a file, and if it being incorrect can cause your app to not work properly, the try to cover it with a test. it doesn't matter if the file type is `.cs`, `.js` or `.json` and `.yml`.
+Rule of thumb: If it's in a file, and if it being incorrect can cause your system to not work properly, the try to cover it with a test. it doesn't matter if the file type is `.cs`, `.js` or `.json` and `.yml`.
 
 And "infrastructure as configuration and code" is good, so lots of things will rightly be in files. Tests are part of the chain of automation.
 
