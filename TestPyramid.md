@@ -65,7 +65,7 @@ logging and metrics on error rates and execution times will warn you of issues s
 
 You may be working with a well-tested system, and thinking that "we test so that we never deploy bad code anywhere" or "we have a full-featured staging environment so that we catch all problem before they get to production". These are worthy goals, but consider that each technique reaches the point of diminishing returns: if making your staging environment ever more production-like is becoming more and more expensive and delivering less benefit, consider if canary releases to production would be more effective for you.
 
-On the other hand, you might be working with an untested system, in which case merely having a unit test run on CI server before merging, and after merging checking that the system can be deployed to a test server and will respond `200 OK` to simple get request will be immensely valuable - you quickly have a simple 2-level test pyramid.
+On the other hand, you might be working with an untested system, in which case try merely having a run of unit tests on CI server before merging changes, and after merging checking that the system can be deployed to a test server and will respond `200 OK` to simple get request. This will be immensely valuable - you now have a simple 2-level test pyramid that can be expanded upon.
 
 ## Pitfalls
 
