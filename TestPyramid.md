@@ -83,11 +83,11 @@ These either obscure the above problems with mocks behind a façade, or it purpo
 
 ## DRY
 
-DRY should be used in tests, but not overused, "beware the share" of coupling unrelated and distant things in order to "reduce duplication" - it is correctly observed that coupling damages more software than repetition. "self-contained" counts for a lost in unit tests. Look for dependencies on shared internal NuGet packages, or tests that can't be run at the same time as other test, especially near the bottom of the pyramid.
+DRY should of course be used in tests, but not overused. "Beware the share" of coupling unrelated and distant things in order to "reduce duplication" - it is correctly observed that coupling damages more software than repetition does. Being self-contained counts for a lot in unit tests. Look for dependencies on shared internal NuGet packages, or tests that can't be run at the same time as other test, especially near the bottom of the pyramid.
 
 ## Testing configuration
 
-Should you test config file?
+Should you test config files?
 
 Rule of thumb: If it's in a file, and if it being incorrect can cause your app to not work properly, the try to cover it with a test. it doesn't matter if the file type is `.cs`, `.js` or `.json` and `.yml`.
 
