@@ -19,20 +19,20 @@ Test at the top are "High-level": **large, coupled, few, slow, infrequent, expen
 
 Unit tests are:
 
-* Small: test a part of the system.
-* Decoupled: have few, if any, external dependencies such as http services, database, file systems, etc. There may be use of mocks.
-* Numerous: there are a lot of them.
-* Fast: Test execution time is low. You can still run the whole test suite quickly, despite the large numbers of tests.
-* Frequent: As a consequence, they are run often, for fast feedback in a development cycle.
-* Cheap: it is not hard to create, add to or delete tests.
+* **Small**: test a part of the system.
+* **Decoupled**: have few, if any, external dependencies such as http services, database, file systems, etc. There may be use of mocks.
+* **Numerous**: there are a lot of them.
+* **Fast**: Test execution time is low. You can still run the whole test suite quickly, despite the large numbers of tests.
+* **Cheap**: it is not hard to create, add to or delete tests.
+* **Frequent**: As a consequence, they are run often, for fast feedback in a development cycle.
 
 Tests at the top are:
 
-* Large: They test the whole system.
-* Coupled: Test multiple parts from UI through to services and data stores. often a "user journey".
-* Slow: Take a while to run, are run less often.
-* Expensive: May require complex frameworks or tools, configuration and setup, and need upkeep.
-* Few: As a consequence, there are not many of them.
+* **Large**: They test the whole system.
+* **Coupled**: Test multiple parts from UI through to services and data stores. often a "user journey".
+* **Slow**: Take a while to run, are run less often.
+* **Expensive**: May require complex frameworks or tools, configuration and setup, and need upkeep.
+* **Few**: As a consequence, there are not many of them, Or at least there _should not be_ many of them if you want the testing to work well.
 
 Tests in the middle of the pyramid are intermediate on these metrics.
 
@@ -81,11 +81,11 @@ If you have to touch the tests a lot when doing refactoring, then you probably a
 ## Abstraction
 
 Use of high-concept testing libraries is a thing that fails time and again.
-These either obscure the above problems with mocks behind a façade, or it purports to "read like English, so the business people will get involved" - it doesn't and they wont. Or both. And the library inevitably comes with dependencies, learning curves, Impedance  mismatch and other frictions.
+These either obscure the above problems with mocks behind a façade, or it purports to "read like English, so the business people will get involved" - it doesn't and they won't. And the library inevitably comes with dependencies, learning curves, Impedance mismatch and other frictions.
 
 ## Don't Repeat Yourself
 
-DRY should of course be used in tests, but not overused. "Beware the share" of coupling unrelated and distant things in order to "reduce duplication" - it is correctly observed that coupling damages more software than repetition does. Being self-contained counts for a lot in unit tests. Look for dependencies on shared internal NuGet packages, or tests that can't be run at the same time as other test, especially near the bottom of the pyramid.
+DRY should of course be used in tests, but not overused. "[Beware the share](https://github.com/97-things/97-things-every-programmer-should-know/blob/4e03ea6022379dc32f4b0cce82b64c323d7f23c1/en/thing_07/README.md)" of coupling unrelated and distant things in order to "reduce duplication" - it is correctly observed that coupling damages more software than repetition does. Being self-contained counts for a lot in unit tests. Look for dependencies on shared internal NuGet packages, or tests that can't be run at the same time as other test, especially near the bottom of the pyramid.
 
 ## Testing configuration
 
