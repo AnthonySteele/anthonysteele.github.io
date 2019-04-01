@@ -91,6 +91,6 @@ DRY should of course be used in tests, but not overused. "[Beware the share](htt
 
 Should you test config files?
 
-Rule of thumb: If it's in a file, and if it being incorrect can cause your system to not work properly, the try to cover it with a test. it doesn't matter if the file type is `.cs`, `.js` or `.json` and `.yml`.
+Yes. A rule of thumb: If it's in a file, and if it being incorrect can cause your system to not work properly, the try to cover it with a test. It doesn't matter if the file types are `.cs`, `.js` for code, or `.json` and `.yml` for config.
 
 And "infrastructure as configuration and code" is good, so lots of things will rightly be in files. Tests are part of the chain of automation over these files.
