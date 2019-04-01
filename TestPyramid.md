@@ -5,11 +5,13 @@ I still find a lot of value in [the "test pyramid" concept](https://martinfowler
 
 The lowest layer of tests is usually called "unit tests" but past that, the naming is not standard. They get called integration tests, acceptance tests, end-to-end-tests etc. The different layers can have wildly varying names, or different definitions of the same terms, and you can spend a lot of time trying to define terms. And even [how to do unit tests is debatable, not necessarily just class tests](https://www.youtube.com/watch?v=EZ05e7EMOLM).
 
+Your team and organisation will need to have a common vocabulary of naming test layers, but bear in mind that these are not universal. I think that it's more important to have a feel about where tests are placed, based on the metrics below; and about how these layers relate.
+
 ## Pyramid as architecture
 
-But there are basic characteristics that can help you place tests on the pyramid.
+There are basic characteristics that can help you place tests on the pyramid.
 
-Tests at the bottom are "Low-Level": **small, isolated, numerous, fast, frequent, cheap**.
+Tests at the bottom are "Low-Level": **small, decoupled, numerous, fast, frequent, cheap**.
 
 As you move up, this changes.
 
@@ -18,19 +20,19 @@ Test at the top are "High-level": **large, coupled, few, slow, infrequent, expen
 Unit tests are:
 
 * Small: test a part of the system.
-* Isolated: have few, if any, external dependencies such as http services, database, file systems, etc. There may be use of mocks.
+* Decoupled: have few, if any, external dependencies such as http services, database, file systems, etc. There may be use of mocks.
 * Numerous: there are a lot of them.
-* Fast: Test execution time is low. You can still run the whole test suite quickly.
-* Frequent: They are run a lot, for fast feedback in a development cycle.
-* Cheap: they're not hard to create, add to or delete.
+* Fast: Test execution time is low. You can still run the whole test suite quickly, despite the large numbers of tests.
+* Frequent: As a consequence, they are run often, for fast feedback in a development cycle.
+* Cheap: it is not hard to create, add to or delete tests.
 
 Tests at the top are:
 
 * Large: They test the whole system.
 * Coupled: Test multiple parts from UI through to services and data stores. often a "user journey".
-* Few: not many of them.
 * Slow: Take a while to run, are run less often.
 * Expensive: May require complex frameworks or tools, configuration and setup, and need upkeep.
+* Few: As a consequence, there are not many of them.
 
 Tests in the middle of the pyramid are intermediate on these metrics.
 
@@ -47,8 +49,6 @@ Sometimes you find a bug, and characterise it with a failing end-to-end test. Bu
 ## How many layers
 
 YMMV, but approximately, more than 2, but less than 8. Play it by ear.
-
-Your team and organisation will need to have a common vocabulary of naming layers, but bear in mind that these are not universal. You can identify where tests fit by the metrics above.
 
 New techniques do come along allowing new testing seams. e.g. in ASP.NET, you can now launch the web application in a light-weight in-memory host, and optionally supply mock data stores to it, send http requests to it, all of this in-process. This is above a conventional unit test in scope, but below a test that deploys the web application to a test server and then makes queries to it across a network.
 
@@ -74,7 +74,7 @@ On the other hand, you might be working with an untested system, in which case t
 ## Mocks
 
 Over-reliance on mocks in unit tests is a smell, it leads to tests that are not readable or maintainable.
-Mr Cooper's solution: test a subsystem not a class, refactor the code to be easier to work with, consider fewer interfaces that are just there for DI. If you can mock the data stores and other external dependencies, you might have all that you need.
+Mr Cooper's solution: test a subsystem not a class, refactor the code to be easier to work with [by pushing Input and Output to the edges](https://www.goparamore.io/ports-adapters); consider eliminating interfaces that are there purely for DI. If you can mock the data stores and other external dependencies, you might have all the interfaces that you need.
 
 If you have to touch the tests a lot when doing refactoring, then you probably aren't doing it well.
 
@@ -93,5 +93,4 @@ Should you test config files?
 
 Rule of thumb: If it's in a file, and if it being incorrect can cause your system to not work properly, the try to cover it with a test. it doesn't matter if the file type is `.cs`, `.js` or `.json` and `.yml`.
 
-And "infrastructure as configuration and code" is good, so lots of things will rightly be in files. Tests are part of the chain of automation.
-
+And "infrastructure as configuration and code" is good, so lots of things will rightly be in files. Tests are part of the chain of automation over these files.
