@@ -21,17 +21,17 @@ Test at the top are "High-level": **large, coupled, few, slow, infrequent, expen
 
 Unit tests are:
 
-* **Small**: test a part of the system.
-* **Decoupled**: have few, if any, external dependencies such as http services, database, file systems, etc. There may be use of mocks.
-* **Numerous**: there are a lot of them.
+* **Small**: They test a part of the system.
+* **Decoupled**: They have few, if any, external dependencies such as http services, database, file systems, etc. There may be use of mocks.
+* **Numerous**: There are a lot of them.
 * **Fast**: Test execution time is low. You can still run the whole test suite quickly, despite the large numbers of tests.
-* **Cheap**: it is not hard to create, add to or delete tests.
+* **Cheap**: It is not hard to create, add to or delete tests.
 * **Frequent**: As a consequence, they are run often, for fast feedback in a development cycle.
 
 Tests at the top are:
 
 * **Large**: They test the whole system.
-* **Coupled**: Test multiple parts from UI through to services and data stores. often a "user journey".
+* **Coupled**: Test multiple parts from UI through to services and data stores. Often a "user journey".
 * **Slow**: Take a while to run, are run less often.
 * **Expensive**: May require complex frameworks or tools, configuration and setup, and need upkeep.
 * **Few**: As a consequence, there are not many of them, Or at least there _should not be_ many of them if you want the testing to work well.
@@ -67,7 +67,9 @@ At the other end are post-deploy things sometime called "[testing in production]
 
 logging and metrics on error rates and execution times will warn you of issues soon after they happen. These techniques are very valuable, as an addition to tests. And we can amplify this with canary release or mirroring live traffic onto a test environment.
 
-You may be working with a well-tested system, and thinking that "we test so that we never deploy bad code anywhere" or "we have a full-featured staging environment so that we catch all problem before they get to production". These are worthy goals, but consider that each technique reaches the point of diminishing returns: if making your staging environment ever more production-like is becoming more and more expensive and delivering less benefit, consider if canary releases to production would be more effective for you.
+You may be working with a well-tested system, and thinking that "we test so that we never deploy bad code anywhere" or "we have a full-featured staging environment so that we catch all problem before they get to production".
+These are worthy goals, but perfection is unattainable and each technique reaches the point of diminishing returns.
+If making your staging environment ever more production-like is becoming more and more expensive and delivering less benefit, take a step back and consider if spending the effort on e.g. enabling canary releases to production instead would be more effective.
 
 On the other hand, you might be working with an untested system, in which case try merely having a run of unit tests on CI server before merging changes, and after merging checking that the system can be deployed to a test server and will respond `200 OK` to simple get request. This will be immensely valuable - you now have a simple 2-level test pyramid that can be expanded upon.
 
