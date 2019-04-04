@@ -1,6 +1,8 @@
-# The Test pyramid
+# The Test Pyramid
 
-I still find a lot of value in [the "test pyramid" concept](https://martinfowler.com/bliki/TestPyramid.html).
+_An intermediate-level refresher of my take on the whats and whys of the "Test Payramid" concept._
+
+I still find a lot of value in [the "Test Pyramid" concept](https://martinfowler.com/bliki/TestPyramid.html).
  Martin Fowler's post is good and short read, and most of what I am saying here is either stated or implied there.
 
 The lowest layer of tests is usually called "unit tests" but past that, the naming is not standard. They get called integration tests, acceptance tests, end-to-end-tests etc. The different layers can have wildly varying names, or different definitions of the same terms, and you can spend a lot of time trying to define terms. And even [how to do unit tests is debatable, not necessarily just class tests](https://www.youtube.com/watch?v=EZ05e7EMOLM).
