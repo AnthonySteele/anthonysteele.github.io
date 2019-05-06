@@ -1,6 +1,6 @@
 # The Test Pyramid
 
-_An intermediate-level refresher of my take on the whats and whys of the "Test Payramid" concept._
+_An intermediate-level refresher of my take on the whats and whys of the "Test Pyramid" concept._
 
 I still find a lot of value in [the "Test Pyramid" concept](https://martinfowler.com/bliki/TestPyramid.html).
  Martin Fowler's post is good and short read, and most of what I am saying here is either stated or implied there.
