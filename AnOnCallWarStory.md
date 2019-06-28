@@ -23,8 +23,7 @@ Management were not allowing sufficient time for alerts to be squashed, focusing
 If I had refused to be on that rota, it would likely have collapsed as the other two people were under the same pressure and would not have coped with it.
 A big reason why I didn't quit on-call was to not leave them in the soup. In retrospect, I think that this gave me more leverage than I realized at the time: If I had quit, that rota could not have continued to function.
 
-I raised tomylinemanager that this was too hard. I got the pep talk in response: I was told that it was fine and normal, things were functioning as intended, and that the stress was sustainable.
-I no longer agree with these statements. I eventually contacted the manager's manager, who got three more people onto that rota, which eased the symptoms.
+I raised to my line manager that this was too hard. I got the pep talk in response: It was fine and normal, things were functioning as intended, and that the stress was sustainable. But it was not. I eventually contacted the manager's manager, who got three more people onto that rota, which eased the symptoms.
 
 Shortly after that, due to the ramp-up of issues, upper management called a complete release freeze. This was a complete reversal of development direction, and IMHO a huge over-reaction.
 For one thing, it severely bottlenecked the ability to deploy more stable and operable code, if that was our chosen direction.
