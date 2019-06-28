@@ -33,6 +33,6 @@ I don't hate on-call on the whole, even though I look back on on-call during tha
 
 ## Links
 
-[Tips on running an on-call rota](https://blog.hinterlands.org/2010/07/running-an-oncall-rota).
-[You build it, you run it, Chris O’Dell - Agile on the Beach 2018. Slides](https://speakerdeck.com/chrisann/you-build-it-you-run-it-1).
-[You build it, you run it, Chris O’Dell - Agile on the Beach 2018. Video](https://www.youtube.com/watch?v=7tTsxfsxw3Y).
+* [Tips on running an on-call rota](https://blog.hinterlands.org/2010/07/running-an-oncall-rota).
+* [You build it, you run it, Chris O’Dell - Agile on the Beach 2018. Slides](https://speakerdeck.com/chrisann/you-build-it-you-run-it-1).
+* [You build it, you run it, Chris O’Dell - Agile on the Beach 2018. Video](https://www.youtube.com/watch?v=7tTsxfsxw3Y).
