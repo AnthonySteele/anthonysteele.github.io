@@ -23,9 +23,7 @@ Not only were there simply fewer people to ask, they were the one who was on las
 
 Management were not allowing sufficient time for alerts to be squashed, focusing on all-in for features. More than anything else it stressed me out to come in on Monday and try to raise the issues in the face of the features.
 
-I was told that it was fine and normal, things were functioning as intended, and that the stress was sustainable. I no longer think that thiese were true statements.
-
-I eventually contacted the manager's manager, who got two more people onto that rota, which eased the symptoms.
+I was told that it was fine and normal, things were functioning as intended, and that the stress was sustainable. I no longer agree with these statements. I eventually contacted the manager's manager, who got two more people onto that rota, which eased the symptoms.
 
 Shortly after that, due to the ramp-up of issues, upper management called a complete release freeze. This was a complete reversal of development direction, and IMHO a huge over-reaction.
 For one thing, it severely bottlenecked the ability to deploy more stable and operable code, if that was our chosen direction.
