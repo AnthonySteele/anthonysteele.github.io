@@ -23,7 +23,7 @@ Not only were there simply fewer people to ask, they were the one who was on las
 
 Management were not allowing sufficient time for alerts to be squashed, focusing on all-in for features. More than anything else it stressed me out to come in on Monday and try to raise the issues in the face of the features.
 
-I was told that it was fine and normal, things were functioning as intended, and that the stress was sustainable.
+I was told that it was fine and normal, things were functioning as intended, and that the stress was sustainable. I no longer think that thiese were true statements.
 
 I eventually contacted the manager's manager, who got two more people onto that rota, which eased the symptoms.
 
