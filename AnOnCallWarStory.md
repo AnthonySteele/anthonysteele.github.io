@@ -23,10 +23,12 @@ Not only were there simply fewer people to ask, they were the one who was on las
 
 Management were not allowing sufficient time for alerts to be squashed, focusing on all-in for features. More than anything else it stressed me out to come in on Monday and try to raise the issues in the face of the features.
 
-I was told that it was fine and normal. I don't think that it was.
+I was told that it was fine and normal, things were functioning as intended, and that the stress was sustainable.
+
+I eventually contacted the manager's manager, who got two more people onto that rota, which eased the symptoms.
 
 Shortly after that, due to the ramp-up of issues, upper management called a complete release freeze. This was a complete reversal of development direction, and IMHO a huge over-reaction.
-For one thing, it severely bottlenecked the ability to deploy more stable and operable code, if that was our chosen direction. 
+For one thing, it severely bottlenecked the ability to deploy more stable and operable code, if that was our chosen direction.
 But that's a different war story. The on-call stress largely went away, but a different stress replaced it.
 
 ## The Learnings
