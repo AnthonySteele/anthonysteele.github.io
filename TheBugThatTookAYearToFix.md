@@ -42,9 +42,13 @@ It was an "eventual consistency" problem, a race condition. In a distributed sys
 
 The fix was a design change. The `OrderAccepted` message was revised to contain not just an order id, but was a "fat message" containing a JSON representation of the order. The call to the order API was eliminated, and the problem went away.
 
-The consequences were that, in general, calling back for details about the message just received started to be rightly regarded as bad idea. Aside, from eventual consistency concerns, even when things go well it's not the best design: As part of the push for reliability, some systems were designated "mission critical", i.e. we wanted them to be running always, more so than other systems. In the original design, if `OrderPartnerWorker` was mission critical, then _so was the order API_ because `OrderPartnerWorker` could not function without it. `OrderPartnerWorker`'s uptime is constrained by the order API's uptime.
+The consequences were that, in general, calling back for details about the message just received started to be rightly regarded as bad idea.
 
-The "fat message" decoupled them; it eliminated that dependency and improved reliability. A while later we learned that the common technical term for this pattern is (unsurprisingly) not "fat message", It is [Event-Carried State Transfer](https://martinfowler.com/articles/201701-event-driven.html). This talk explains more: [Event Driven Collaboration, by Ian Cooper at NDC](https://www.youtube.com/watch?v=PreAnSofAsA&feature=youtu.be&t=1819)
+Even when things go well it's not the best design: As part of the push for reliability, some services  were designated "mission critical", i.e. we wanted them to be running always, more so than other services. In the original design, if `OrderPartnerWorker` was mission critical, then _so was the order API_ because `OrderPartnerWorker` could not function without it. `OrderPartnerWorker`'s uptime is constrained by the order API's uptime. The "fat message" decoupled them; it eliminated that dependency and improved reliability.
+
+And when things don't go well, the `OrderPartnerWorker` should be able to process the message not by relying on the shifting state of other services, but from data that is either in the message itself, or that it already has stored when listening to other messages.
+
+A while later we learned that the common technical term for this pattern is (unsurprisingly) not "fat message", It is [Event-Carried State Transfer](https://martinfowler.com/articles/201701-event-driven.html). This talk explains more: [Event Driven Collaboration, by Ian Cooper at NDC](https://www.youtube.com/watch?v=PreAnSofAsA&feature=youtu.be&t=1819)
 
 The other thing is that distributed systems are hard, the edge cases will surprise you. We knew some things about SQS's edge cases, and so we checked that our message handlers were idempotent (they were), But still the issue was not anticipated. You can't plan for everything that happens at scale so good logging and monitoring are important. As is learning from others best practices.
 
