@@ -2,7 +2,7 @@
 
 Here is another war story.
 
-One of the issues that was raised to the team that I was on, was an order that could not be processed. Just one order at a time. Once in a while, For no clear reason. Everything looked good, and yet it failed.
+One of the issues that was raised to the team that I was on, was an order that could not be processed. Just one order at a time. Once in a while, for no clear reason. Everything looked good, and yet it failed.
 
 The cause was eventually tracked down, and the fix applied, but that took the best part of a year of intermittent effort.
 
@@ -10,11 +10,13 @@ The cause was eventually tracked down, and the fix applied, but that took the be
 
 The team that I was on, if I remember it right, had a service called `OrderPartnerWorker`, that received messages over SQS on AWS. The affected message was called `OrderAccepted`, and it contained an order id for the new order. We processed it, eventually forwarding it to the correct third party.
 
-Sometimes, around once per week, this failed.  The team sending the message insisted that all was well at their end.  We didn't have much to go on, so simply had to improve logging around the `OrderPartnerWorker` code and wait for it to recur.
+Sometimes, around once per week, this failed. The team sending the message insisted that all was well at their end.  We didn't have much to go on, so simply had to improve logging around the `OrderPartnerWorker` code and wait for it to recur.
 
 We eliminated many things: it wasn't some resource exhaustion or concurrency thing, correlated with high load - it was only around twice as likely to occur when there were twice as many orders.
 
 ## The friction
+
+ Losing orders is about the most serious failure that could happen in this business: the company doesn't get to make money on the transaction, and the customer is annoyed. An outage when orders aren't being processed at all was taken very seriously, but this wasn't an outage, just a recurring blip.
 
 There were two teams involved, so there is a political, human dimension. The message exchanged literally formed the point of contact between their systems. JIRA tickets formed the point of contact between the people.
 
@@ -34,11 +36,11 @@ What was happening in this case is that the `OrderAccepted` message was received
 
 ## The Learnings
 
-The fix was a design change. The revised `OrderAccepted` message contained not just an order id, but was a "fat message" containing a JSON representation of the order. The call  to the order API was eliminated, and the problem went away.
+The fix was a design change. The `OrderAccepted` message was revised to contain not just an order id, but was a "fat message" containing a JSON representation of the order. The call to the order API was eliminated, and the problem went away.
 
-The consequences were that, in general, calling back for details about the message just received started to be rightly regarded as bad idea. As part of the push for reliability, some systems were designated "mission critical", i.e. we wanted them to be running always, more so than other systems. In the original design, if `OrderPartnerWorker` was mission critical, then _so was the order API_ because `OrderPartnerWorker` could not function without it. It's uptime is constrained by the order API's uptime.
+The consequences were that, in general, calling back for details about the message just received started to be rightly regarded as bad idea. As part of the push for reliability, some systems were designated "mission critical", i.e. we wanted them to be running always, more so than other systems. In the original design, if `OrderPartnerWorker` was mission critical, then _so was the order API_ because `OrderPartnerWorker` could not function without it. `OrderPartnerWorker`'s uptime is constrained by the order API's uptime.
 
-A "fat message" would decouple things; eliminate that dependency and improve reliability.
+The "fat message" decoupled them; it eliminated that dependency and improved reliability.
 
 A while later we learned that the common technical term for this pattern is (unsurprisingly) not "fat message", It is [Event-Carried State Transfer](https://martinfowler.com/articles/201701-event-driven.html). This talk explains more: [Event Driven Collaboration, by Ian Cooper at NDC](https://www.youtube.com/watch?v=PreAnSofAsA&feature=youtu.be&t=1819)
 
