@@ -13,7 +13,7 @@ This was my first experience of on-call, and I wanted that experience in "DevOps
 it was going OK, I learned how to operate the production systems, e.g. how and when to scale up. Minor issues seen in production got fixed along the way.
 
 But then a few months later, one person moved and one person resigned. On-call went from once every 5 weeks to once every 3 weeks.
-At the same time load was ramping up, and there were more and more capacity-related issues. Weekends were busy times for this company. At the same time there was a big push for more features.
+At the same time load was ramping up, and there were more and more capacity-related issues. Weekends and evenings were busy times for this company. At the same time there was a big push for more features.
 
 Call-outs became very common over the weekend. It became very unpleasant, and bad for my general well-being. In retrospect, the stress that was feeling could easily progressed to burnout.
 
@@ -22,12 +22,14 @@ Not only were there simply fewer people to ask, they were the one who was on las
 
 Management were not allowing sufficient time for alerts to be squashed, focusing on all-in for features. More than anything else it stressed me out to come in on Monday and try to raise the issues in the face of the features.
 
+I raised to my line manager that this was too hard. I got the pep talk in response: It was fine and normal, things were functioning as intended, and that the stress was sustainable. But it was not.
+
 If I had refused to be on that rota, it would likely have collapsed as the other two people were under the same pressure and would not have coped with it.
 A big reason why I didn't quit on-call was to not leave them in the soup. In retrospect, I think that this gave me more leverage than I realized at the time: If I had quit it, that rota could not have continued to function.
 
-I raised to my line manager that this was too hard. I got the pep talk in response: It was fine and normal, things were functioning as intended, and that the stress was sustainable. But it was not. I eventually contacted the manager's manager, who got three more people onto that rota, which eased the symptoms.
+Eventually I contacted the manager's manager, who got three more people onto that rota. This eased the pressure.
 
-Shortly after that, due to the ramp-up of issues, upper management called a complete release freeze. This was a complete reversal of development direction, and IMHO a huge over-reaction.
+Shortly after that, due to the ramp-up of issues and outages, upper management called a complete release freeze. This was a complete reversal of development direction, and IMHO a huge over-reaction.
 For one thing, it severely bottlenecked the ability to deploy more stable and operable code.
 But that's a different war story. The on-call stress largely went away, but a different stress replaced it.
 
@@ -36,8 +38,12 @@ But that's a different war story. The on-call stress largely went away, but a di
 Three people on a rota that experiences significant numbers of call-outs is not enough. I feel that I know more about what is acceptable for on-call now, and what is a danger sign, and would flag up that situation earlier.
 It was untenable both in respect of not enough number of people on the rota, and what is a too-large volume of call-outs. Burnout was a risk.
 
-I don't hate on-call on the whole, even though I look back on on-call during that period of time with loathing.
-On-call is a necessary part of closing the feedback loop, and doing it right gives a lot of benefit. But it's just a part.  If the other parts aren't there, it won't work and you will feel the pain.
+I don't hate on-call on the whole, and would not hesitate to recommend the practice others.
+But I look back on my experience of on-call during that period of time with loathing. On call done well gives a lot of benefit, but done badly can be very bad, so setting it up well is important.
+
+On-call is a necessary part of closing the feedback loop, but it's just a part.  If the other parts aren't there, it won't work and you will feel the pain.
+
+I'm  in my case particularly to listening to the on-call issues, allocating more time to fixing them - knowing when to focus more on reliability, operability, scalability, rather than features, and a sustainable mix of both with minor course corrections, rather than sudden changes of direction. See for example having an [error budget](https://danlebrero.com/2017/07/16/error-budget-google-solution-for-innovating-at-a-sustainable-pace/).
 
 ## Other things to call out
 
