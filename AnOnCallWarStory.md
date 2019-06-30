@@ -31,7 +31,7 @@ Eventually I contacted the manager's manager, who got three more people onto tha
 
 Shortly after that, due to the ramp-up of issues and outages, upper management called a complete release freeze. This was a complete reversal of development direction, and IMHO a huge over-reaction.
 For one thing, it severely bottlenecked the ability to deploy more stable and operable code.
-But that's a different war story. The on-call stress largely went away, but a different stress replaced it.
+The on-call stress largely went away, but a different stress replaced it. But that's a different war story.
 
 ## The Learnings
 

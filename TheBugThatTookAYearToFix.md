@@ -28,7 +28,7 @@ We eliminated many possible causes: it wasn't some resource exhaustion or concur
 
 After a while the logging was good enough to see what was failing, and the investigation turned to timing issues. This was finally the right track.
 
-What was happening in this case is that the `OrderAccepted` message was received, the `OrderPartnerWorker` immediately went to the order API and tried to get details of the accepted order over HTTP. The order API seemed to reply  "What accepted order? 404 It doesn't exist!". More confounding, the order API was not erroring or running slow according to logs, and it has the "missing" order details. 
+What was happening in this case is that the `OrderAccepted` message was received, the `OrderPartnerWorker` immediately went to the order API and tried to get details of the accepted order over HTTP. The order API seemed to reply  "What accepted order? 404 It doesn't exist!". More confounding, the order API was not erroring or running slow according to logs, and it has the "missing" order details.
 
 But the order API was not the `OrderAccepted` message sender. The order API also listened to other (further upstream) messages about orders and put data in in its store, to respond to later GET requests.
 
@@ -38,7 +38,7 @@ It was more a design issue than anything else. Both the upstream and downstream 
 
 SNS and SQS are extremely reliable and scalable systems, I would happily use them regardless of if I am handling 1 message per week, or if I am handling millions of messages per day. The consumers would look different: a lambda in the first case vs. multiple instances of a full app in the second, but that's a another story.
 
-_Almost all_ messages are delivered over SNS once, very quickly; but there are edge cases, outliers and failures, and at scale they happen. Given e.g. a million messages per day, a "one in a million" event will happen daily. SNS and SQS tend to fail in the direction of delivering a message late, or delivering a message multiple times instead of dropping the message. It is "at least once" delivery.
+_Almost all_ messages are delivered over SNS once, very quickly; but there are edge cases, outliers and failures, and at scale they happen. Given e.g. a million messages per day, a "one in a million" event will happen daily. SNS and SQS tend to fail in the direction of delivering a message late, or delivering a message multiple times rather than dropping the message. It has ["at least once" delivery](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues.html#standard-queues-at-least-once-delivery).
 
 Once in a long while the message to order API that created the order there arrived tens of seconds late there, and it literally didn't know about that order yet when `OrderPartnerWorker` tried to query it.
 
@@ -54,8 +54,14 @@ Even when things go well it's not the best design: As part of the push for relia
 
 And when things don't go well, the `OrderPartnerWorker` should be able to process the message not by relying on the current state of other services, but from data that is either in the message itself, or that it already has stored when listening to other messages.
 
-A while later we learned that the common technical term for this pattern is (unsurprisingly) not "fat message", It is [Event-Carried State Transfer](https://martinfowler.com/articles/201701-event-driven.html). This talk explains more: [Event Driven Collaboration, by Ian Cooper at NDC](https://www.youtube.com/watch?v=PreAnSofAsA&feature=youtu.be&t=1819)
+A while later we learned that the common technical term for this pattern is (unsurprisingly) not "fat message", It is [Event-Carried State Transfer](https://martinfowler.com/articles/201701-event-driven.html).
 
 The other thing is that distributed systems are hard, the edge cases will surprise you. We knew some things about SQS's edge cases, and so we checked that our message handlers were idempotent (they were) and retried (they were), But still the issue was not anticipated. You can't plan for everything that happens at scale so good logging and monitoring are important. As is learning from others best practices.
 
 Another thing is the hard parts can be at the seams, which can be [both technical and political seams](https://en.wikipedia.org/wiki/Conway%27s_law). When teams disagree on how severe the issue is; when one team feels the consequences (in the form of on-call issues), but another team owns the fix, this is a recipe for friction.
+
+References:
+
+* [Event-Carried State Transfer - Martin Fowler](https://martinfowler.com/articles/201701-event-driven.html)
+* [Event Driven Collaboration - Ian Cooper at NDC](https://www.youtube.com/watch?v=PreAnSofAsA&feature=youtu.be&t=1819)
+* [Data on the Outside versus Data on the Inside - Pat Helland - PDF](http://cidrdb.org/cidr2005/papers/P12.pdf).
