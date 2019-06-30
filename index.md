@@ -1,5 +1,8 @@
 ### Various writings
 
+ * War stories (June 2019):
+   * [An On-call War Story](./AnOnCalLWarStory)
+   * [The Bug That Took a Year to Fix](./TheBugThatTookAYearToFix)
  * [The Test Pyramid](./TestPyramid) April 2018
  * [Considerations in message handling in AWS](./AwsMessageHandling) May 2017
  * [Resynchronising async code](./AsyncResync) May 2017

@@ -8,17 +8,17 @@ But it's not a combat zone. There are rules to making it work. Here is my "war s
 ## The Story
 
 I had been at the company for a few months, was getting to know the systems, I was added to the on-call roster.
-This was my first experience of on-call, and I wanted that experience in "DevOps" practices.
+This was my first experience of on-call, and I wanted that experience in "DevOps" practices. I get a kick out of finding issues in the production logs, reducing noise and increasing reliability, and this seemed like the right way to get there.
 
 it was going OK, I learned how to operate the production systems, e.g. how and when to scale up. Minor issues seen in production got fixed along the way.
 
-But then a few months later, one person moved and one person resigned. On-call went from once every 5 weeks to once every 3 weeks.
-At the same time load was ramping up, and there were more and more capacity-related issues. Weekends and evenings were busy times for this company. At the same time there was a big push for more features.
+But then a few months later, one person moved to a different team and one person resigned. On-call went from once every 5 weeks to once every 3 weeks.
+At the same time load on the system  was ramping up, and there were more and more capacity-related issues. Weekends and evenings were busy times for this company. At the same time there was a big push for more features.
 
-Call-outs became very common over the weekend. It became very unpleasant, and bad for my general well-being. In retrospect, the stress that was feeling could easily progressed to burnout.
+Call-outs became very common over the weekend. It became very unpleasant, and bad for my general well-being. In retrospect, the stress that was feeling was progressing to burnout.
 
-Rota flexibility disappeared. I could not swap any dates.
-Not only were there simply fewer people to ask, they were the one who was on last week and the one who is on next week; and neither was happy about taking on more on-call.
+Rota flexibility disappeared. I could not swap any on-call days any more.
+Not only were there simply fewer people to ask, they were limited to the one who was on last week and the one who is on next week; and neither was happy about taking on more on-call.
 
 Management were not allowing sufficient time for alerts to be squashed, focusing on all-in for features. More than anything else it stressed me out to come in on Monday and try to raise the issues in the face of the features.
 
