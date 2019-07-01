@@ -14,7 +14,7 @@ Sometimes, around once per week, this failed. The team sending the message insis
 
 ## The Friction
 
- Losing orders is about the most serious failure that could happen in this business: the company doesn't get to make money on the transaction, and the customer is annoyed. An outage when orders aren't being processed at all was taken very seriously, but this wasn't an outage, just a recurring blip.
+ Losing orders is about the most serious failure that could happen in this business: the company doesn't get to make money on the transaction, and the customer is annoyed. If there is an outage during which no orders are processed at all, that is was taken very seriously; but this wasn't an outage, just a recurring blip on individual orders.
 
 There were two teams involved, so there is a political, human dimension. The message exchanged literally formed the point of contact between their systems. JIRA tickets formed the point of contact between the people.
 
@@ -40,19 +40,21 @@ SNS and SQS are extremely reliable and scalable systems, I would happily use the
 
 _Almost all_ messages are delivered over SNS once, very quickly; but there are edge cases, outliers and failures, and at scale they happen. Given e.g. a million messages per day, a "one in a million" event will happen daily. SNS and SQS tend to fail in the direction of delivering a message late, or delivering a message multiple times rather than dropping the message. It has ["at least once" delivery](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues.html#standard-queues-at-least-once-delivery).
 
-Once in a long while the message to order API that created the order there arrived tens of seconds late there, and it literally didn't know about that order yet when `OrderPartnerWorker` tried to query it.
+Once in a long while, on the outer edges of possibility, there was tens of seconds of delay in the message flow to order API, so it created the order data much later than expected. In this case `OrderPartnerWorker` queried order API _before it knew about that order yet_.
+
+This didn't correlate with load on our system, but it might correlate with load on AWS's SQS infrastructure across all users of the AWS platform in that region.
 
 ## The Learnings
 
 It was an "eventual consistency" problem, a race condition. In a distributed system if your service is told that "order `12345` has just been accepted", you can't always assume that other services are in that same state right then. They might not have got there yet, or they might have moved on to another state. And the order in which it's designed to happen is not always the order in which it does happen.
 
-The design fix was that the `OrderAccepted` message was revised to contain not just an order id, but was a "fat message" containing a JSON representation of the order. The call to the order API was eliminated, and the problem went away.
+The design fix was that the `OrderAccepted` message was revised to contain not just an order id, but to be a "fat message" containing a JSON representation of the order. The call to the order API was eliminated, and the problem went away.
 
 The consequences were that, in general, calling back for details about the message just received started to be rightly regarded as bad idea.
 
 Even when things go well it's not the best design: As part of the push for reliability, some services  were designated "mission critical", i.e. we wanted them to be running always, more so than other services. In the original design, if `OrderPartnerWorker` was mission critical, then _so was the order API_ because `OrderPartnerWorker` could not function without it. `OrderPartnerWorker`'s uptime is constrained by the order API's uptime. The "fat message" decoupled them; it eliminated that dependency and improved reliability.
 
-And when things don't go well, the `OrderPartnerWorker` should be able to process the message not by relying on the current state of other services, but from data that is either in the message itself, or that it already has stored when listening to other messages.
+And when things don't go well, as in this bug, then the `OrderPartnerWorker` should be able to process the message not by relying on the current state of other services, but from data that is either in the message itself, or that it already has stored when listening to other messages.
 
 A while later we learned that the common technical term for this pattern is (unsurprisingly) not "fat message", It is [Event-Carried State Transfer](https://martinfowler.com/articles/201701-event-driven.html).
 
