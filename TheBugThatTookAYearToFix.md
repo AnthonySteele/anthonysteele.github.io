@@ -8,7 +8,7 @@ The cause was eventually tracked down, and the fix applied, but that took the be
 
 ## The Bug
 
-The team that I was on, if I remember it right, had a service called `OrderPartnerWorker`, that received messages over SQS on AWS. The affected message was called something like `OrderAccepted`, and it contained an order id for the new order. We processed it, eventually forwarding it to the correct third party.
+The team that I was on, if I remember it right, had a service called `OrderPartnerWorker`, that received messages over SNS and SQS on AWS. The affected message was called something like `OrderAccepted`, and it contained an order id for the new order. We processed it, eventually forwarding it to the correct third party.
 
 Sometimes, around once per week, this failed. The team sending the message insisted that all was well at their end.  We didn't have much to go on, so simply had to add logging around the `OrderPartnerWorker` code and wait for it to recur. Logging was improving across the whole system at this time, from an initial low standard.
 
@@ -18,7 +18,7 @@ Sometimes, around once per week, this failed. The team sending the message insis
 
 There were two teams involved, so there is a political, human dimension. The message exchanged literally formed the point of contact between their systems. JIRA tickets formed the point of contact between the people.
 
-I'm sorry to say that in this point the teams, who were seldom in the same room, had different priorities, and did not see eye-to-eye. The downstream team knew that there was a real issue. The upstream team claimed that "if there is an issue, it's not ours" and had more urgent things to do than investigate someone elses "one order a week" issues. The downstream team wanted correctness, not ongoing late-night call-outs; and we were worried that it happened twice this week and once the week before; there was nothing to stop it happening hundreds of times next week, in which case the CTO would be breathing down our neck.
+I'm sorry to say that in this point the teams, who were seldom in the same room, had different priorities, and did not see eye-to-eye. It reached an impasse. The downstream team knew that there was a real issue. The upstream team claimed that "if there is an issue, it's not ours" and had more urgent things to do than investigate someone elses "one order a week" issues. The downstream team wanted correctness, not ongoing late-night call-outs; and we were worried that if it happened twice this week and once the week before; there was nothing to stop it happening hundreds of times next week, in which case the CTO would be breathing down our neck.
 
 Loud conversations were had in meetings, embarrassing bystanders. Fingers were pointed. There are still memories.
 

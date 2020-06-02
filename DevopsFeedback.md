@@ -50,7 +50,7 @@ So I believe that what is new in emphasis in developing with DevOps, is the *Ops
 
 And that we can and should pay even more attention to this, and in making that process repeatable, fast, verified and safe, by automation. I think we need more painless observability.
 
-The fact that this is a feedback loop, which we are seeking to make faster means that this is an agile process. "Faster" meaning we can go around the loop in less time. Which also means that we can afford to instead take smaller increments of change around the loop more often, and observe what effect they have in isolation; or verify that a small refactoring code change or library update has no observable effect and is thus safe. This means more confident refactoring, more incremental change and therefore more safety and learning.
+The fact that this is a feedback loop, which we are seeking to make faster means that this is an agile process. "Faster" meaning we can go around the loop in less time. Which also means that we can afford to instead take smaller increments of change around the loop more often, and observe what effect they have in isolation; or verify that a small refactoring code change or library update has no observable effect and is thus safe. This means more confident refactoring, more incremental change, and therefore more safety and learning. It means more responding to customer needs and operational issues.
 
 You might say, in the style of the Agile Manifesto: "We value feedback loops over linear processes". [Linear pipelines are dead](https://speakerdeck.com/hibri/pipelines-are-dead).
 
