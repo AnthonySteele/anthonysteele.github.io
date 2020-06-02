@@ -63,3 +63,4 @@ You might say, in the style of the Agile Manifesto: "We value feedback loops ove
 * [What is DevOps - Collab.Net](https://resources.collab.net/devops-101/what-is-devops)
 * [DevOps Culture - Martin Fowler](https://martinfowler.com/bliki/DevOpsCulture.html)
 * [Pipelines are Dead. Long live feedback loops! - Hibri Marzook](https://speakerdeck.com/hibri/pipelines-are-dead)
+* [Care and Feeding of Feedback Cycles - Elisabeth Hendrickson ](https://www.youtube.com/watch?v=F0BRsnYwnBk)
