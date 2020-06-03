@@ -108,6 +108,10 @@ You can make `CustomerMapper.Map` an extension method as `CustomerViewModel Map(
 
 So you disagree, and like AutoMapper, and we can do different things, what's the problem? The issue comes when I have to maintain code damaged by AutoMapper. Or when lack of AutoMapper is assumed to be a defect and not a virtue.
 
+Or when a Junior developer says
+
+> I've seen a lot of logic stuffed into AutoMapper. It becomes this weird magic thing that is very hard to understand. Especially as a junior dev.
+
 The next person to review a Pull Request with the suggestion that "_you must use AutoMapper for this!_" will be directed to this essay, in the hope that they might learn something. AutoMapper is very much optional.
 
 ## Links
