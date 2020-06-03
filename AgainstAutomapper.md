@@ -26,18 +26,18 @@ If your AutoMapper mappings are not trivial - then that configuration in the Aut
 
 Let me repeat that:
 
-* If the mapping is trivial, you're better without AutoMapper because it's simple to do without it.
-* And if the mapping is _not_ trivial then you're better off without it because of that complexity.
+* If the mapping is trivial, then you're better without AutoMapper because it's simple to do without it.
+* If the mapping is _not_ trivial then you're better off without AutoMapper because of that complexity.
 
 Mappings in dumb code is [Boring Technology](http://boringtechnology.club). AutoMapper is [Clever code](https://guifroes.com/clever-code-is-bad/). Clever code  doesn't impress me. Boring code with zero dependencies does.
 
 ### AutoMapper will attract hidden business logic
 
-AutoMapper is supposedly transparent. It's pretty clear what it  _should_ be doing in e.g. `var viewModel = mapper.Map<CustomerViewModel>(dataModel);`. 
+AutoMapper is supposedly transparent. It's pretty clear what it  _should_ be doing in e.g. `var viewModel = mapper.Map<CustomerViewModel>(dataModel);`.
 
 Emphasis on _should_. It's completely hiding the details of what it _is actually_ doing in the mapping. I have run into confusion and complexity on occasion here. It would be nice if the mapping was straightforward, but often it isn't. And the mapping is "non-local" - i.e. not easy to step into or find from the call site.
 
-AutoMapper configuration tends to attract business logic. I have seen significant facts about how the business logic works, embedded in AutoMapper field mappings, which is not the place for them. 
+AutoMapper configuration tends to attract business logic. I have seen significant facts about how the business logic works, embedded in AutoMapper field mappings, which is not the place for them.
 
 When I have to maintain a "mature" codebase that has been worked on for several years, and I see that it uses AutoMapper, my heart sinks a bit because I know that there are almost always going to be difficulties hidden therein. I know that they _should_ not be difficulties of business logic in the mapping. And yet there usually are. It attracts trouble rather than being the "pit of success".
 
@@ -53,13 +53,22 @@ AutoMapper solves a problem. But it's a trivial problem that doesn't take a libr
 
 ## When to Use AutoMapper
 
-The author, Jimmy Bogard says:
+The author, Jimmy Bogard [says](https://jimmybogard.com/automappers-design-philosophy/):
+
+> I set out to build a tool that:
+>
+> * Enforced a convention for destination types
+> * Removed all those null reference exceptions
+> * Made it super easy to test
 
 > AutoMapper works because it enforces a convention. It assumes that your destination types are a subset of the source type. It assumes that everything on your destination type is meant to be mapped. It assumes that the destination member names follow the exact name of the source type.
 > With AutoMapper, we could enforce our view model design philosophy. This is the true power of conventions - laying down a set of enforceable design rules that help you streamline development along the way.
+
+So there is a better case for AutoMapper when the mapping is is "wide but shallow" i.e. lots of fields to map, but the names map exactly without complex configuration. The value add seems to be in object flattening and null handling - but this might not be so important any more, since modern c# has several new tricks to deal with nulls.
+
 > If you find yourself hating a tool, it's important to ask - for what problems was this tool designed to solve? And if those problems are different than yours, perhaps that tool isn't a good fit.
 
-I agree with that, but I think it's a corollary the cases at which AutoMapper excels are a _tiny_ subset of the real-world uses that it is put to. And that the required discipline to make the usage of it transparent is seldom present, because there's nothing enforcing that discipline other than higher maintenance costs a while later.
+I don't disagree with that, but I think it's a corollary the cases at which AutoMapper excels are a small subset of the real-world uses that it is put to. And that the required discipline to make the usage of it transparent by sorting out the underlying mismatches is seldom present, because there's nothing enforcing that discipline other than higher maintenance costs later on.
 
 ## Example
 
@@ -80,7 +89,7 @@ public class CustomerViewModel
 
 public static class CustomerMapper
 {
-    public CustomerViewModel Map(CustomerDataModel dataModel)
+    public static CustomerViewModel Map(CustomerDataModel dataModel)
     {
         return new CustomerViewModel
         {
@@ -91,13 +100,13 @@ public static class CustomerMapper
 }
 ```
 
-`CustomerMapper.Map` is a "pure" function, i.e output depends only on input, and there is no other there is no state either accessed or altered by it. So it is easily testable, if you feel the need.
+`CustomerMapper.Map` is a "[Pure function](https://en.wikipedia.org/wiki/Pure_function)", i.e output depends only on input, and there is no "side effect", no other state either accessed or altered by it. So it is easily testable, if you feel the need.
 
-You can make `CustomerMapper.Map` an extension method on `CustomerDataModel` if you want. You can pull it out to a separate namespace to both the Data Model and View Model if you want.
+You can make `CustomerMapper.Map` an extension method as `CustomerViewModel Map(this CustomerDataModel dataModel)` if you want. You can pull it out to a separate namespace to both the Data Model and View Model if you want. It can be coupled or decoupled as you need.
 
 ## Horses for courses
 
-So you disagree, and like AutoMapper, and we can do different things, what's the problem? The issue comes when I have to maintain code damaged by AutoMapper, or I am asked to use it as though I missed something obvious in not using it.
+So you disagree, and like AutoMapper, and we can do different things, what's the problem? The issue comes when I have to maintain code damaged by AutoMapper. Or when lack of AutoMapper is assumed to be a defect and not a virtue.
 
 The next person to review a Pull Request with the suggestion that "_you must use AutoMapper for this!_" will be directed to this essay, in the hope that they might learn something. AutoMapper is very much optional.
 
