@@ -1,10 +1,10 @@
 # AutoMapper considered harmful
 
-TR:dr: You don't need it. Just write the mapping code.
+TL:DR: You don't need it. Just write the mapping code.
 
 ## Why mapping
 
-Consider a simple dotNET data API. How many different kinds of [Data Transfer Object](https://martinfowler.com/eaaCatalog/dataTransferObject.html) do you need?  In a simple example, there has to be a class that maps to the data store - the "data model", and there has to be a class that is serialized as the HTTP response - the "view model".
+Consider a simple .NET data API. How many different kinds of [Data Transfer Object](https://martinfowler.com/eaaCatalog/dataTransferObject.html) do you need?  In a simple example, there has to be a class that maps to the data store - the "data model", and there has to be a class that is serialized as the HTTP response - the "view model".
 
 I view the data model complexity as part of how complex the code needs to be. Right after the `File|New Project`, the data model and the view model might be the same type, call it `CustomerModel`. But as the project grows in size and complexity, it is very likely that you will want to separate these two concerns. e.g. When some fields on the data model are not exposed to the web, or some fields on the view model are computed or come from another source, and not stored in the data model. So at that point you split `CustomerDataModel` from `CustomerViewModel`, and now you have to map between them.
 
@@ -43,19 +43,20 @@ When I have to maintain a "mature" codebase that has been worked on for several 
 
 ## Testing
 
-Did you know that there is a `AssertConfigurationIsValid` method for [testing AutoMapper configurations](https://docs.automapper.org/en/stable/Configuration-validation.html). Neither did I, I never see it used. There's noting compelling it.
+Did you know that there is a `AssertConfigurationIsValid` method for [testing AutoMapper configurations](https://docs.automapper.org/en/stable/Configuration-validation.html). Neither did I, I never see it used. There's nothing forcing use of it.
 
-How should you test a class that uses as `IMapper`? The obvious idea is to mock the IMapper response, meaning that your test is more complex, doesn't reflect an actual run, and the mapping logic does not get tested.
+How should you test a class that uses as `IMapper`? The obvious idea is to mock the `IMapper` and the response. But this means that your test is more complex, doesn't reflect an actual run, and the mapping logic does not get tested.
 
 ## Libraries to solve known problems
 
-AutoMapper solves a problem. But it's a trivial problem that doesn't take a library to solve. I tend to prefer libraries (e.g. a JSON Serializer, or SQL driver) when:
+AutoMapper solves a problem. But it's a trivial problem that doesn't take a library to solve. I tend to prefer libraries (e.g. a JSON Serializer, or SQL mapper]) when:
 
-* I can't do it myself trivially, which typically means that there is complexity or special knowledge required to write it. I know I couldn't get every aspect if a Json parser or SQL mapper correct the first time around, so why bother with all that effort when the problem has already been solved.
+* I can't do it myself trivially, which typically means that there is complexity or special knowledge required to write it. I know I couldn't get every aspect if a Json Serializer or SQL mapper correct the first time around, so why bother with all that effort when the problem has already been solved.
 
-* At the edges of the app. I'm much happier saying "here is where we hand off the response that has been built up to the serializer" or "here is where we hand it to the DB driver" than I am saying "it disappears over here and pops up again there with a different type and some new fields".
+* It is at the edges of the app. I'm much happier saying "here is where we hand off the response that has been built up to the serializer" or "here is where we hand it to the DB driver" than I am saying "it disappears over here and pops up again there with a different type and some new fields".
 
-* It's not going to contain business logic. In both the JSON and SQL cases you're using a DTO that is specific to the business problem at hand. e.g. `CustomerViewModel` captures how the customer data is represented when serialized as JSON. You can control that to some extent with attributes, but overusing these attributes for funky serialization would be an obvious code smell. That logic isn't injected into the serializer. Instead, the "view model" class definition is used as the specification for what should be serialized.
+* It is going to be given data, not business logic. You can control what is serialized to some extent with attributes and options, but overusing these these for complex serialization would be an obvious code smell. That logic isn't generally injected into the serializer. Instead, the `CustomerViewModel` class definition is used as that specification of how the customer data is represented when serialized as JSON, because this is much more legible.\
+This seems to be a case of "moving the complexity around" to a better place for it, rather than eliminating it: We shape `CustomerDataModel` and `CustomerViewModel` DTOs to capture the specifics in the data types and data values _before_ it is handed to the SQL and JSON code respectively, to serialize in a straightforward way.The necessary complexity must exist, but there are better and more readable places for it than the configuration of any library.
 
 ## When to Use AutoMapper
 
