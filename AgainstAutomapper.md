@@ -41,6 +41,12 @@ AutoMapper configuration tends to attract business logic. I have seen significan
 
 When I have to maintain a "mature" codebase that has been worked on for several years, and I see that it uses AutoMapper, my heart sinks a bit because I know that there are almost always going to be difficulties hidden therein. I know that they _should_ not be difficulties of business logic in the mapping. And yet there usually are. It attracts trouble rather than being the "pit of success".
 
+## Testing
+
+Did you know that there is a `AssertConfigurationIsValid` method for [testing AutoMapper configurations](https://docs.automapper.org/en/stable/Configuration-validation.html). Neither did I, I never see it used. There's noting compelling it.
+
+How should you test a class that uses as `IMapper`? The obvious idea is to mock the IMapper response, meaning that your test is more complex, doesn't reflect an actual run, and the mapping logic does not get tested.
+
 ## Libraries to solve known problems
 
 AutoMapper solves a problem. But it's a trivial problem that doesn't take a library to solve. I tend to prefer libraries (e.g. a JSON Serializer, or SQL driver) when:
@@ -49,7 +55,7 @@ AutoMapper solves a problem. But it's a trivial problem that doesn't take a libr
 
 * At the edges of the app. I'm much happier saying "here is where we hand off the response that has been built up to the serializer" or "here is where we hand it to the DB driver" than I am saying "it disappears over here and pops up again there with a different type and some new fields".
 
-* It's not going to contain business logic. In both the JSON and SQL cases you're using a DTO that is specific to the business problem at hand. e.g. `CustomerViewModel` captures how the customer data is represented when serialized as JSON. You can control that to some extent with attributes, but overusing these attributes for funky serialization would be an obvious code smell. That logic isn't injected into the serializer.
+* It's not going to contain business logic. In both the JSON and SQL cases you're using a DTO that is specific to the business problem at hand. e.g. `CustomerViewModel` captures how the customer data is represented when serialized as JSON. You can control that to some extent with attributes, but overusing these attributes for funky serialization would be an obvious code smell. That logic isn't injected into the serializer. Instead, the "view model" class definition is used as the specification for what should be serialized.
 
 ## When to Use AutoMapper
 
@@ -60,7 +66,7 @@ The author, Jimmy Bogard [says](https://jimmybogard.com/automappers-design-philo
 > * Enforced a convention for destination types
 > * Removed all those null reference exceptions
 > * Made it super easy to test
-
+>
 > AutoMapper works because it enforces a convention. It assumes that your destination types are a subset of the source type. It assumes that everything on your destination type is meant to be mapped. It assumes that the destination member names follow the exact name of the source type.
 > With AutoMapper, we could enforce our view model design philosophy. This is the true power of conventions - laying down a set of enforceable design rules that help you streamline development along the way.
 
