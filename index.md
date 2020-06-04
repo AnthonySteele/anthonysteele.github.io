@@ -1,5 +1,8 @@
 # Various writings
 
+* 2020
+  * [DevOps for Developers](./DevopsFeedback)
+  * [Against AutoMapper](./AgainstAutoMapper)
 * War stories (June 2019):
   * [An On-call War Story](./AnOnCallWarStory)
   * [The Bug That Took a Year to Fix](./TheBugThatTookAYearToFix)
