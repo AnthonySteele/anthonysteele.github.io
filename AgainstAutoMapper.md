@@ -43,13 +43,13 @@ When I have to maintain a "mature" codebase that has been worked on for several 
 
 ## Testing
 
-Did you know that there is a `AssertConfigurationIsValid` method for [testing AutoMapper configurations](https://docs.automapper.org/en/stable/Configuration-validation.html). Neither did I, I never see it used. There's nothing forcing use of it.
+Did you know that there is a method `AssertConfigurationIsValid` for [testing AutoMapper configurations](https://docs.automapper.org/en/stable/Configuration-validation.html)? It "checks to make sure that every single Destination type member has a corresponding type member on the source" which is one kind of error. I did not know about it either: I never see it used. Yet it's best practice that you should _always_ test AutoMapper configurations wity this. But here's nothing forcing use of it.
 
-How should you test a class that uses as `IMapper`? The obvious idea is to mock the `IMapper` and the response. But this means that your test is more complex, doesn't reflect an actual run, and the mapping logic does not get tested.
+How should you test a class that uses an `IMapper`? The obvious idea is to mock the `IMapper` and the response from it. But this means that your test mocks are more complex, the test doesn't reflect an actual run, and the mapping logic does not get tested.
 
 ## Libraries to solve known problems
 
-AutoMapper solves a problem. But it's a trivial problem that doesn't take a library to solve. I tend to prefer libraries (e.g. a JSON Serializer, or SQL mapper]) when:
+AutoMapper solves a problem. But it's a trivial problem that doesn't take a library to solve. I tend to prefer libraries (e.g. a JSON Serializer, or SQL mapper) when:
 
 * I can't do it myself trivially, which typically means that there is complexity or special knowledge required to write it. I know I couldn't get every aspect if a Json Serializer or SQL mapper correct the first time around, so why bother with all that effort when the problem has already been solved.
 
@@ -72,6 +72,14 @@ The author, Jimmy Bogard [says](https://jimmybogard.com/automappers-design-philo
 > With AutoMapper, we could enforce our view model design philosophy. This is the true power of conventions - laying down a set of enforceable design rules that help you streamline development along the way.
 
 So there is a better case for AutoMapper when the mapping is is "wide but shallow" i.e. lots of fields to map, but the names map exactly without complex configuration. The value add seems to be in object flattening and null handling - but this might not be so important any more, since modern c# has several new tricks to deal with nulls.
+
+It also is key if you can enforce the convention that view model member names match. I am in favour of names matching as much as possible anyway, simply because it is less unnecessary complexity to keep in mind. But when they do easily match, there is a better case for AutoMapper. Lets consider when that's easy and when it is not:
+
+* If your view model is consumed by a razor page or other templating engine, for server-side rendering in the same application then you have complete freedom to name the view model field anything that you want, and you can easily enforce the convention.
+* If your view model is served on an API, and consumed by an associated front-end such as a "Single-Page App" then it's is quite easy to change the view model, if the corresponding front-end change is made and shipped at the same time.
+* If your view model is served on an internal API, and consumed by more than one in-house client, then it is harder to change view model layout, but you can probably get impacted parties to make the necessary changes, given time.
+* If your view model is served on a public API, and consumed by many parties outside of the organization, then this is very hard, and as a rule you never change field names without a very good reason and lots of time for client to migrate. Changes are often batched, and there is often a "new" and "old" version of an endpoint running in parallel for a long time. Expect to send reminders to help some clients with the migration.
+* If your model is sent to a third-party API then you have no choice, they define the contract.
 
 > If you find yourself hating a tool, it's important to ask - for what problems was this tool designed to solve? And if those problems are different than yours, perhaps that tool isn't a good fit.
 
