@@ -8,11 +8,11 @@ About pipelines and feedback loops.
 
  I want to know the truth of how it ran, for better or worse. Otherwise, how can I improve it? In order to run software well in production, we need be prepared to invest in build, test and deploy automation, and live monitoring and logging for after that.
 
- I'm also a fan of "Agile" and "[Continuous Delivery](https://en.wikipedia.org/wiki/Continuous_delivery)" methods that I encountered before DevOps". And I think that iteration is key to them. The values of the [Agile Manifesto](https://agilemanifesto.org/) do not specifically say "feed back and iterate" but I think it's present there - especially in "Responding to change". The idea likely dates back to  [The OODA Loop](https://en.wikipedia.org/wiki/OODA_loop).
+ I'm also a fan of "Agile" and "[Continuous Delivery](https://en.wikipedia.org/wiki/Continuous_delivery)" methods that I encountered before "DevOps". And I think that iteration is key to them. The values of the [Agile Manifesto](https://agilemanifesto.org/) do not specifically say "feed back and iterate" but I think it's present there - especially in "Responding to change". The idea likely dates back to  [The OODA Loop](https://en.wikipedia.org/wiki/OODA_loop).
 
 ## About DevOps
 
-What is "DevOps"? It's not a product, it's not a team. It's not rebranded System Administration or Scrum. Although it is subject to the same forces that render those terms nearly meaningless words in many contexts. It's not a particular deploy pipeline. It's not only about deploy pipelines in general, although you will need them. It's a way of thinking.
+What is "DevOps"? It's not a product, it's not [a team](https://www.thoughtworks.com/radar/techniques/separate-devops-team). It's not rebranded System Administration or Scrum. Although it is subject to the same forces that render those terms nearly meaningless words in many contexts. It's not a particular deploy pipeline. It's not only about deploy pipelines in general, although you will need them. It's a way of thinking.
 
 The clue to "DevOps" is right there in the word itself, which joins "Development" and "Operations" into one thing. Maybe "DevelOperations" was considered and rejected as too hard to say. Before I'd heard of "DevOps" I had heard of "**[You build it, you run it](https://www.youtube.com/watch?v=UNxhm89DwlY)**", which I think is as good a summary as you'll get in six words. Consider that you can also phrase that as "You _Develop_ it, you _Operate_ it".
 
