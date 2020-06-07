@@ -12,7 +12,7 @@ About pipelines and feedback loops.
 
 ## About DevOps
 
-What is "DevOps"? It's not a product, it's not [a team](https://www.thoughtworks.com/radar/techniques/separate-devops-team). It's not rebranded System Administration or Scrum. Although it is subject to the same forces that render those terms nearly meaningless words in many contexts. It's not a particular deploy pipeline. It's not only about deploy pipelines in general, although you will need them. It's a way of thinking.
+What is "DevOps"? It's not a product, it's not [a team](https://www.thoughtworks.com/radar/techniques/separate-devops-team). It's not rebranded System Administration or Scrum. Although it is subject to the same forces that have slowly rendered those terms nearly meaningless words in many contexts. It's not a particular deploy pipeline. It's not only about deploy pipelines in general, although you will need them. It's a way of thinking.
 
 The clue to "DevOps" is right there in the word itself, which joins "Development" and "Operations" into one thing. Maybe "DevelOperations" was considered and rejected as too hard to say. Before I'd heard of "DevOps" I had heard of "**[You build it, you run it](https://www.youtube.com/watch?v=UNxhm89DwlY)**", which I think is as good a summary as you'll get in six words. Consider that you can also phrase that as "You _Develop_ it, you _Operate_ it".
 
