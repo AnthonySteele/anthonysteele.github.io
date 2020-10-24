@@ -59,16 +59,18 @@ Some rules are "Always" and "Never" cases, but many will be "Should" - i.e. Pref
 
 Rules should have a reason. If you do not consider the reasons for rules, you might end up carrying cargo-cult rules such as [Single Return](./TheSingleReturnLaw), [Yoda conditions](https://en.wikipedia.org/wiki/Yoda_conditions) or "constants in `ALL_CAPS`", in languages where they are no longer needed.
 
-Languages have different coding conventions, and some of that is by chance and culture e.g. [Use of K&R brace style](https://en.wikipedia.org/wiki/Indentation_style#K&R_style)). But some of it is down to how the language works, and that can vary: the examples given above are useful in `C`, but do not make sense in `C#`. So the experience gained in other languages and ecosystems is valuable, but is not infallible.
+Languages have different coding conventions, and some of that is by chance and culture e.g. [Use of K&R brace style](https://en.wikipedia.org/wiki/Indentation_style#K&R_style). But some of it is down to how the language works, and that can vary: the examples given above are useful in `C`, but do not make sense in `C#`. So the experience gained in other languages and ecosystems is valuable, but is not infallible.
 
 Consider writing the rule with a reason, e.g. as "You **should** do _some action_ so that _desired outcome_." and see if it still makes sense.
 
 ## Automate
 
-Automation is faster and more consistent than eyeball inspection and manual fixing. Let the computer do the rote work, be it detecting issues with a linter such as the Roslyn Analysers, or automating spacing rules via a `.editorconfig` file and a formatter such as `dotnet format`.
+Automation is faster and more consistent than eyeball inspection and manual fixing. Let the computer do the rote work, be it detecting issues with a linter such as the Roslyn Analysers, or automating spacing rules via [a `.editorconfig` file](https://editorconfig.org/) and a formatter [such as `dotnet format`](https://github.com/dotnet/format).
 
 ## Group and progress
 
-A coding style is not just a bag of unrelated items. Consider structuring it from low level to high level, e.g. from spacing to syntax to compiler warnings to library usage, to building and testing to good practices for more specialized topics such as interacting with platforms such as AWS.
+A coding style is not just a bag of unrelated items. Consider structuring it from low level to high level, e.g. from spacing to syntax to compiler warnings to SRP to library usage, to building and testing practices, to architecture and good practices for more specialized topics such as interacting with AWS or other platforms.
 
-You might find that you end up with several distinct documents, covering different but related topics, with different linked literature.
+You might find that you end up with several distinct documents, covering different but related topics, with different linked literature and different reasons to change.
+
+Beware of vague statements. e.g. Writing "good design is better" is something that we can all agree with, but fails to educate anyone on what constitutes good design or in which way it is better and under what circumstances.
