@@ -1,4 +1,4 @@
-# On coding Standards
+# On Coding Standards
 
 So you're doing a coding standard. Here are my thoughts on how to go about it. It's light on actual coding style rules, mostly concerned with how to derive and present these rules.
 
@@ -59,7 +59,7 @@ Some rules are "Always" and "Never" cases, but many will be "Should" - i.e. Pref
 
 Rules should have a reason. If you do not consider the reasons for rules, you might end up carrying cargo-cult rules such as [Single Return](./TheSingleReturnLaw), [Yoda conditions](https://en.wikipedia.org/wiki/Yoda_conditions) or "constants in `ALL_CAPS`", in languages where they are no longer needed.
 
-Languages have different coding conventions, and only some of that is by chance and culture. Some of it, like the examples given above, are useful in `C`, but do not make sense in `C#`. The experience gained in other languages and ecosystems is valuable, but is not infallible.
+Languages have different coding conventions, and some of that is by chance and culture e.g. [Use of K&R brace style](https://en.wikipedia.org/wiki/Indentation_style#K&R_style)). But some of it is down to how the language works, and that can vary: the examples given above are useful in `C`, but do not make sense in `C#`. So the experience gained in other languages and ecosystems is valuable, but is not infallible.
 
 Consider writing the rule with a reason, e.g. as "You **should** do _some action_ so that _desired outcome_." and see if it still makes sense.
 
