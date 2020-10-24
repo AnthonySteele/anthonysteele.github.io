@@ -1,17 +1,16 @@
 # On coding Standards
 
-So you're doing a coding standard. Here are my thoughts on how to go about it.
+So you're doing a coding standard. Here are my thoughts on how to go about it. It's light on actual coding style rules, mostly concerned with how to derive and present these rules.
 
 ## Alignment
 
 A standard is about aligning code into common patterns, to make it more readable to a new viewer. (and avoiding pitfalls to performance, robustness etc).
-Just as a team style is better than a personal style, an organization style is better still, and an industry standard best of all. Therefor, align with the industry standard.
+Just as a team style is preferred over than a personal style, an organization style is better still, and an industry standard best of all. Therefor, align with the industry standard.
 
 ## Use prior art
 
 There is plenty of prior art now. Use it, instead of re-inventing it.
-IMHO, the style guide should link to the standards instead of paraphrasing them. e.g. start with "We follow these industry standards"  and then the links to them.
-And then only, "with the following exceptions, clarifications and extensions..."
+IMHO, the style guide should link to the standards instead of paraphrasing them. e.g. start with "We follow these industry standards", and then after the links, "with the following exceptions, clarifications and extensions..."
 
 It is usually a waste of time to write your own standards from scratch, in many ways: the effort to create it, and the effort for new hires to learn how it differs from their prior industry experience, and the effort to get them to follow it.
 
@@ -32,9 +31,11 @@ When two different styles are equivalent (or even when they are not), the one th
 Even though there may be no objective truth to this, it is still worth getting a common familiar style.
 Just understand that sometimes a choice has to be made, to aid regularity, even when neither option is superior in any objectively quantifiable way.
 
+Sometimes you just have to use the unfamiliar rule for a while before your opinion of it changes.
+
 ## Simplicity
 
-Minimize accidental complexity. When there is free choice, pick the style where the rules are more simple and consistent. e.g. the rule that "if statements are always followed by a block" in the style
+Minimize accidental complexity. When there is free choice, pick the style where the rules are more simple and consistent. e.g. the simple rule that "if statements are always followed by a block" in the style
 
 ```csharp
 if (cond)
@@ -49,14 +50,16 @@ This is one of the reasons why, despite initial resistance, use of `var` has bec
 
 ## Levels of rule strength
 
-Use the levels: **Must**, **Should**, **Should Not**, **Must not** as per [RFC 2119](https://tools.ietf.org/html/rfc2119) to describe rules.
+Use the levels: **Must**, **Should**, **Should Not**, **Must not** as per [RFC 2119: Key words to Indicate Requirement Levels](https://tools.ietf.org/html/rfc2119) to describe rules.
 Equivalently, these are called **Do**, **Consider**, **Avoid**, **Do Not**.
 
 Some rules are "Always" and "Never" cases, but many will be "Should" - i.e. Prefer to do it this way, unless you have a good reason not to, as this is a sensible default.
 
+## Reasons
+
 Rules should have a reason. If you do not consider the reasons for rules, you might end up carrying cargo-cult rules such as [Single Return](./TheSingleReturnLaw), [Yoda conditions](https://en.wikipedia.org/wiki/Yoda_conditions) or "constants in `ALL_CAPS`", in languages where they are no longer needed.
 
-Languages have different coding conventions, and only some of that is by chance and culture. Some of it, like the examples given above, make sense in `C`, but do not in `C#`. The experience gained in other languages and ecosystems is valuable, but is not infallible.
+Languages have different coding conventions, and only some of that is by chance and culture. Some of it, like the examples given above, are useful in `C`, but do not make sense in `C#`. The experience gained in other languages and ecosystems is valuable, but is not infallible.
 
 Consider writing the rule with a reason, e.g. as "You **should** do _some action_ so that _desired outcome_." and see if it still makes sense.
 
