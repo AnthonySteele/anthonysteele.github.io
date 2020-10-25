@@ -20,7 +20,7 @@ Call-outs became very common over the weekend. It became very unpleasant, and ba
 Rota flexibility disappeared. I could not swap any on-call days any more.
 Not only were there simply fewer people to ask, they were limited to the one who was on last week and the one who is on next week; and neither was happy about taking on more on-call.
 
-Management were not allowing sufficient time for alerts to be squashed, focusing on all-in for features. More than anything else it stressed me out to come in on Monday and try to raise the issues in the face of the features.
+Management were not allowing sufficient time for alerts to be squashed, focusing on all-in for features. More than anything else, it stressed me out to come in on Monday and try to raise the issues in the face of the features.
 
 I raised to my line manager that this was too hard. I got the pep talk in response: It was fine and normal, things were functioning as intended, and that the stress was sustainable. But it was not.
 
