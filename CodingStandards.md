@@ -70,7 +70,7 @@ Consider writing the rule with a reason, e.g. as "You **should** do _some action
 
 ## Group and Progression
 
-A coding style is not just a bag of unrelated items. Consider structuring it from low level to high level, e.g. from spacing to syntax to compiler warnings to SRP to library usage, to building and testing practices, to architecture and good practices for more specialized topics such as interacting with AWS or other platforms.
+A coding style is not just a bag of unrelated items. Consider structuring it from low level to high level, e.g. from spacing to syntax to compiler warnings to [S.R.P.](https://en.wikipedia.org/wiki/Single-responsibility_principle) to library usage, to building and testing practices, to architecture and good practices for more specialized topics such as interacting with Azure, AWS or other platforms.
 
 The place to innovate and add value is higher up, where existing style guides don't cover your specific cases.
 
