@@ -1,6 +1,7 @@
 # Various writings
 
 * 2020
+  * [On Coding Standards](./CodingStandards)
   * [DevOps for Developers](./DevopsFeedback)
   * [Against AutoMapper](./AgainstAutoMapper)
 * War stories (June 2019):
