@@ -62,12 +62,14 @@ This is one of the reasons why, despite initial resistance, use of `var` has bec
 
 ## Automate
 
-Look for the automated tools: Automation is far faster and more consistent than eyeball inspection and manual fixing.
-Let the computer do the rote work, be it detecting issues with a linter such as [the Roslyn Analysers](https://github.com/dotnet/roslyn-analyzers),
-or automating spacing rules via [a `.editorconfig` file](https://editorconfig.org/) and a formatter [such as `dotnet format`](https://github.com/dotnet/format).
-Even fixing the compiler warnings and turning on "warnings as errors" counts.
+Look for the automated tools: Let the computer do the rote work. Automation is far faster and more consistent than eyeball inspection and manual fixing.
 
-If you are fortunate, your modern language comes with a standard formatter and a standard style such as [this](https://github.com/rust-lang/rustfmt) or [this](https://blog.golang.org/gofmt).
+If you are fortunate, your modern language comes with a standard formatter and a standard style included from day one, such as [this for Rust](https://github.com/rust-lang/rustfmt) or [this for Golang](https://blog.golang.org/gofmt).
+If not (and this is the case in the .NET world) then you will likely find all the pieces that you want if you look around.
+There may be emerging standards and well-known tools.
+
+In .NET [there is `dotnet format`](https://github.com/dotnet/format) for spacing, editor support for [the `.editorconfig` file](https://editorconfig.org/).
+And the [Roslyn Analysers](https://github.com/dotnet/roslyn-analyzers) for linting. Even fixing the compiler warnings and turning on "warnings as errors" counts.
 
 ## Levels of Rule Strength
 
