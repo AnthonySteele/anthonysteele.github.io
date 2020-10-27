@@ -10,7 +10,7 @@ And further, it should spread good practices, resulting in code with desirable c
 You can warn of pitfalls and capture institutional knowledge of problems overcome.
 
 Just as a _team_ style is preferred over than a _personal_ style when working with others, an _organization_ style is better still,
-and an _industry standard_ best of all. Therefor, align with the industry standards by default.
+and an _industry standard_ best of all. Therefore, align with the industry standards by default.
 
 ## Use Prior Art
 
@@ -78,7 +78,7 @@ Equivalently, these are called **Do**, **Consider**, **Avoid**, and **Do Not**.
 
 Some rules are "Always" and "Never" cases, but the majority will be "Should" / "Should not" strength:
 it says "Prefer to do it this way, unless you have a good reason to do otherwise, as this is a sensible default."
-It instructs novices who have no preference yet, without blocking experts from making exceptions where necessary.
+It instructs novices who have no preference yet, without blocking experts from making exceptions where there is a good reason to.
 
 ## Rules Should Have Reasons
 
