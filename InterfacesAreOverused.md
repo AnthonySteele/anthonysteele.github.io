@@ -10,7 +10,7 @@ Over-use of interfaces comes about from over-adherence to a useful pattern: the 
 
 It is said that a class must have an interface "for testability". This statement might be misleading: adding an interface to a class doesn't make _that class_ more testable, it makes _other classes_ that use that class more testable, when the use the interface instead. This is a form of the [Dependency Inversion Principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle) - AKA the **D** in SOLID.
 
-To use the most common example, a `CustomerRepository` class contains code that talks to a data store. It has methods to `Load`, `Save` etc. It could be a SQL database, it could be AWS DynamoDB, or other, it doesn't matter for this example. Can you unit test this database code? No. [A test that involves a database is not a unit test](https://www.artima.com/weblogs/viewpost.jsp?thread=126923). Although you can integration test it instead.
+To use the most common example, a `CustomerRepository` class contains code that talks to a data store. It has methods to `Load`, `Save` etc. The data store could be a SQL database, it could be AWS DynamoDB, or other, it doesn't matter for this example. Can you unit test this database code? No. [A test that involves a database is not a unit test](https://www.artima.com/weblogs/viewpost.jsp?thread=126923). Although you can integration test it instead.
 
 Giving the `CustomerRepository` an `ICustomerRepository` interface will not change that class's testability. What it will do is allow code that uses a `CustomerRepository` to instead use the `ICustomerRepository` and be tested with a substitute implementation. You can separate out code that is coupled to the database from the rest, which can now be tested without that database dependency.
 
@@ -98,7 +98,7 @@ Does that look simplistic? I have seen code much like that, but only after we ha
 ```
 
 But the issue is how to test _with_ this function, how to test code that calls it. You want to cover both `true` and `false` cases.
-Does this need to be put on a "service" with an interface for that? almost certainly not.
+Does this need to be put on a "service" with an interface for that? Almost certainly not.
 Where you can test all the outcomes by controlling the inputs to the method under test, you won't need to mock the function in order to control the return value from it. Sometimes this is as simple as
 
 ```csharp
@@ -143,8 +143,6 @@ Consider not implementing them if you can get away with it. Add an interface if 
 
 ## Fin
 
-It's good and appropriate to interface a class in some cases - especially isolating classes that encapsulate external dependencies, and can't be unit tested in this definition https://artima.com/weblogs/viewpost.jsp?thread=126923
-
-So that their consumers can be unit tested
+It's good and appropriate to interface a class in some cases - especially isolating classes that encapsulate external dependencies, and [can't be unit tested in this definition](https://artima.com/weblogs/viewpost.jsp?thread=126923) so that their consumers can be unit tested.
 
 However this idea gets overused, and should not be an inflexible rule. Adding interfaces to all "service" classes containing business logic is unnecessary, and adding interface classes that contain merely data is going to make it less usable.
