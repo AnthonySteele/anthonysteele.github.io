@@ -137,9 +137,9 @@ Would you mock a `StringBuilder` in order to get the rest test value returned fr
 
 ## Services
 
-Consider not implementing them if you can get away with it. Add an interface if it becomes necessary, not to pass code review or some inflexible rule.
+"Service" is one of those words that is often so general and overused as to not mean much. On classes that are not a repository or otherwise wrapping external code, and also contain business logic or other "doing stuff"code, consider not implementing interfaces if you can get away with it. Add an interface if it becomes necessary, not to pass code review or some inflexible rule.
 
-[avoid testing implementation details, test behaviors](https://youtu.be/EZ05e7EMOLM?t=1441).
+[avoid testing implementation details, test behaviors](https://youtu.be/EZ05e7EMOLM?t=1441). Often the number of classes involved is an "implementation detail" that you want tests not to change even while it is be refactored.
 
 ## Fin
 
