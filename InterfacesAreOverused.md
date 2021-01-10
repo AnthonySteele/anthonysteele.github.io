@@ -46,7 +46,7 @@ public class CustomerResponse
 
 There is no benefit to interfacing these objects. None at all. You can test with this DTO already: Anything that you want to do in test by mocking the DTO can be done more easily by simply newing up a DTO instance with the required state in it.
 
-## value objects should not have interfaces
+## Value objects should not have interfaces
 
 A [value object](https://martinfowler.com/bliki/ValueObject.html) is a small strongly typed value, used to avoid "[primitive obsession](https://wiki.c2.com/?PrimitiveObsession)".  a `DateTime` is a good example of a value object that we might define if it wasn't already built-in.
 
@@ -128,6 +128,8 @@ Be careful to collect like functions with like. A single static class called "He
 In one company that I worked at, there was a library called "GeneralFunctions" that did everything from SQL databases to logging to string slicing. And it became a pain point. e.g. How did you update the ADO database driver? Go through GeneralFunctions, and be sure not to break any of the dozens of other projects using it, maybe just for string slicing but who knows, really. Or the other way around: not being able to change string utilities because it would break the database driver version was a real and self-inflicted problem.
 
 In time, the motto became "Just say no to General Functions", it being personified as an difficult old military man who really should have retired already.
+
+If this needs to be NuGet packages, then it should be several of those: e.g. `LoggingFunctions`, `DatabaseFunctions` etc. This should then divide up the code with its dependant packages. e.g. only `DatabaseFunctions`  would depend on the ADO database driver.
 
 ## Builders
 
