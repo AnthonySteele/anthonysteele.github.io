@@ -2,7 +2,7 @@
 
 Interfaces are overused in a lot of C# code, and in some cases are not merely extra baggage, but are actively the wrong thing to do. Apologies if you think this is obvious. In that case, this post is not aimed at experienced people like you, so move on and pay it no more attention.
 
-However, I see this misuse of interfaces in everyday c# code in multiple companies; and mentioning it on twitter generated a lot of replies. Like, the most engagement in months. So clearly there's something to say here.
+However, I see this misuse of interfaces in everyday c# code in multiple companies; and mentioning it on twitter generated a lot of replies. In fact, the most engagement in months. So clearly there's something to say here.
 
 ## When do you want to have in interface
 
@@ -140,6 +140,18 @@ Would you mock a `StringBuilder` in order to get the rest test value returned fr
 "Service" is one of those words that is often so general and overused as to not mean much. On classes that are not a repository or otherwise wrapping external code, and also contain business logic or other "doing stuff"code, consider not implementing interfaces if you can get away with it. Add an interface if it becomes necessary, not to pass code review or some inflexible rule.
 
 [avoid testing implementation details, test behaviors](https://youtu.be/EZ05e7EMOLM?t=1441). Often the number of classes involved is an "implementation detail" that you want tests not to change even while it is be refactored.
+
+This suggests that e.g. testing using [the ASP test host](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.testhost) is a good place. I think that this is as far from the code as you can go and still do unit tests without a lot of friction:
+
+* It's still fast, but only if you set it up for that, not if you do full host setup and teardown on each test.
+* You test from the outside, so there is some work to do to e.g. serialise requests going in and de-serialise responses coming out.
+* It's possible to use mocks, but it takes some work and therefor is typically done for only a few key services (that contain external dependencies) rather than the usual explosion of mocks.
+
+## Tests that use dozens of mocks are an anti-pattern
+
+I mean that they are fragile, as they are tightly coupled to the code and break when any method signature or implementation detail changes. Therefor they discourage refactoring and make the code a lot less malleable.  They are hard to read, the mock syntax is often complex and verbose. Exactly what is being tested is often hard to discern.
+
+It propagates the idea (as seen on a CV) that "unit testing with `NSubstitute`" is an actual and desirable skill.
 
 ## Fin
 
