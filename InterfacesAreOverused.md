@@ -49,6 +49,7 @@ public class CustomerResponse
 The data interface might look like:
 
 ```csharp
+// NB: this is bad code
 public interface ICustomerResponse
 {
   string FirstName { get; init; }
@@ -56,7 +57,6 @@ public interface ICustomerResponse
   DateTime? DateOfBirth { get; init; }
   Address Address { get; init; }
 }
-// NB: this is bad code
 ```
 
 There is no benefit to this kind of interface on these objects. None at all. You can test with this data already: Anything that you want to do in test by mocking the interface can be done more easily by simply newing up a DTO instance with the required state in it.
@@ -67,7 +67,7 @@ A [value object](https://martinfowler.com/bliki/ValueObject.html) is a small str
 
 A value object could contain values like e.g. an `x,y,z` co-ordinate (e.g. three integers), or keys such as an `AccountId` e.g. a string, but with validation rules: all account ids are strings, but only some strings are account ids. The characteristic is that that two different objects containing the same _value_ should be considered equal. This is true for AccountId's and 3-d points.
 
-A `DateTime` is a good example of a value object that we might define if it wasn't already built-in. Note that the [System.DateTime struct](https://docs.microsoft.com/en-us/dotnet/api/system.datetime) actually implements several interfaces, but all of them are small and focused around cross-cutting capabilities: e.g. `IComparable` says "I can compare two DateTimes, they have a sort order" - and it has just one method, `CompareTo`. Supporting those interfaces allows it to support various capabilities, e.g. be a Dictionary key or be sorted in a list.
+A `DateTime` is a good example of a value object that we might define if it wasn't already built-in. Note that the [System.DateTime struct](https://docs.microsoft.com/en-us/dotnet/api/system.datetime) actually implements five or six interfaces, but all of them are small and focused around cross-cutting capabilities: e.g. be a Dictionary key, or be sorted in a list.
 
  But none of these interfaces are going to be interfaces to the Date and Time data, e.g. there is no interface with a `int Hour { get; }` property! It would serve no purpose.
 
@@ -82,11 +82,11 @@ This gives you a value object with correct equality semantics, in  very little c
 The value object pattern is IMHO very much underused in C#, and this might be partly because of the assumption about how to implement it: I have seen more than one implementation of a a value, floundering as a class with an interface to the data.
 
 ```csharp
+// NB: this is bad code
 public interface IAccountId
 {
   string value { get; }
 }
-// NB: this is bad code
 ```
 
 This is pointless, this will get in your way. A value object can be unit tested just fine as is. e.g:
