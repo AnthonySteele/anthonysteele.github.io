@@ -17,6 +17,7 @@ To use the most common example, a `CustomerStore` class contains code that talks
 Decorating the `CustomerStore` class with an `ICustomerStore` interface will not change that class's testability. What it will do is allow code that uses a `CustomerStore` to instead use the `ICustomerStore` and be tested with a substitute implementation. You can separate out code that is coupled to the database from the rest, which can now be tested without that database dependency.
 
 ```csharp
+// this is very simplified
 interface ICustomerStore
 {
   Customer GetById(int id);
@@ -188,9 +189,31 @@ This suggests that e.g. testing using [the ASP test host](https://docs.microsoft
 
 ## Tests that use dozens of mocks are an anti-pattern
 
-I mean that they are fragile, as they are tightly coupled to the code and break when any method signature or implementation detail changes. Therefor they discourage refactoring and make the code a lot less malleable.  They are hard to read, the mock syntax is often complex and verbose. Exactly what is being tested is often hard to discern.
+These that over-use mocks are fragile, as they are tightly coupled to the code and break when any method signature or implementation detail changes. Therefor they discourage refactoring and make the code a lot less malleable.  They are hard to read, the mock syntax is often complex and verbose. Exactly what is being tested is often hard to discern.
 
 It propagates the idea (as seen on a CV) that "unit testing with `NSubstitute`" is an actual and desirable skill.
+
+Even when testing with interfaces, _mocks_ are overused. It is actually easy to make a "fake implementation" of the interface that does some of the expected behaviour, e.g.
+
+```csharp
+class FakeCustomerStore: ICustomerStore
+  {
+      public List<Customer> Customers { get; } = new List<Customer>();
+
+      public Customer GetById(int id) => Customers.FirstOrDefault(c => c.Id == id);
+      
+      public void Save(Customer customer)
+      {
+          Customers.Add(customer);
+      }
+  }
+```
+
+The `Customers` list is public so that a test with a reference to the class type can inspect the contents, to verify e.g. if a customer was saved to the list.
+
+This fake be as simple or as complex as you like, _it's just your code_ it doesn't need a framework to set up a specific behaviour. It has the benefit over the usual mocking-framework style that once defined, `FakeCustomerStore` can be used any number of times with fewer total lines of code than specifying mock setup each time.
+
+Sometimes you don't need to mock a dependency when the fake or [null object](https://en.wikipedia.org/wiki/Null_object_pattern) is built in. e.g.  for `Microsoft.Extensions.Logging.ILogger` there is [NullLogger.Instance](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.abstractions.nulllogger.instance).
 
 ## Fin
 
