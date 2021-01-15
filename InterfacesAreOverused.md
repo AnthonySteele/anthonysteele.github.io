@@ -46,7 +46,7 @@ A Data Transfer Object typically contains data from some source: It is a row fro
 e.g.
 
 ```csharp
-public class CustomerResponse
+class CustomerResponse
 {
   public string FirstName { get; init; }
   public string FamilyName { get; init; }
@@ -59,7 +59,7 @@ The data interface might look like:
 
 ```csharp
 // NB: this is bad code
-public interface ICustomerResponse
+interface ICustomerResponse
 {
   string FirstName { get; init; }
   string FamilyName { get; init; }
@@ -118,7 +118,7 @@ This is pointless, this will get in your way. A value object can be unit tested 
 "Just a function" is useful, where it's a small amount of code, no or few dependencies, and "pure", i.e. no state or side effects. e.g. If the code is
 
 ```csharp
-public static bool IsBankWithExtraComplianceRules(string bankName)
+static bool IsBankWithExtraComplianceRules(string bankName)
 {
     return 
       string.Equals(bankName, "MegaGloboBank", StringComparison.OrdinalIgnoreCase) ||
@@ -189,24 +189,24 @@ This suggests that e.g. testing using [the ASP test host](https://docs.microsoft
 
 ## Tests that use dozens of mocks are an anti-pattern
 
-These that over-use mocks are fragile, as they are tightly coupled to the code and break when any method signature or implementation detail changes. Therefor they discourage refactoring and make the code a lot less malleable.  They are hard to read, the mock syntax is often complex and verbose. Exactly what is being tested is often hard to discern.
+Tests that over-use mocks are fragile, as they are tightly coupled to the code and break when any method signature or implementation detail changes. Therefor they discourage refactoring and make the code a lot less malleable.  They are often  hard to read, as the mock syntax is often complex and verbose. Exactly what is being tested is often hard to discern.
 
-It propagates the idea (as seen on a CV) that "unit testing with `NSubstitute`" is an actual and desirable skill.
+It propagates the idea (as seen on a CV) that "unit testing with `NSubstitute`" is an actual and desirable skill. A mocking framework is not a unit testing framework, and a particular unit testing framework is not the skill of unit testing.
 
 Even when testing with interfaces, _mocks_ are overused. It is actually easy to make a "fake implementation" of the interface that does some of the expected behaviour, e.g.
 
 ```csharp
 class FakeCustomerStore: ICustomerStore
-  {
-      public List<Customer> Customers { get; } = new List<Customer>();
+{
+    public List<Customer> Customers { get; } = new List<Customer>();
 
-      public Customer GetById(int id) => Customers.FirstOrDefault(c => c.Id == id);
-      
-      public void Save(Customer customer)
-      {
-          Customers.Add(customer);
-      }
-  }
+    public Customer GetById(int id) => Customers.FirstOrDefault(c => c.Id == id);
+    
+    public void Save(Customer customer)
+    {
+        Customers.Add(customer);
+    }
+}
 ```
 
 The `Customers` list is public so that a test with a reference to the class type can inspect the contents, to verify e.g. if a customer was saved to the list.
