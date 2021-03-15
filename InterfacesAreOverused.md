@@ -76,7 +76,7 @@ A [value object](https://martinfowler.com/bliki/ValueObject.html) is a small str
 
 A value object could contain values like e.g. an `x,y,z` co-ordinate (e.g. three integers), or keys such as an `AccountId` e.g. a string, but with validation rules: all account ids are strings, but only some strings are account ids. The characteristic is that that two different objects containing the same _value_ should be considered equal. This is true for AccountId's and 3-d points.
 
-A `DateTime` is a good example of a value object that we might define if it wasn't already built-in. Note that the [System.DateTime struct](https://docs.microsoft.com/en-us/dotnet/api/system.datetime) actually implements five or six interfaces, but all of them are small and focused around cross-cutting capabilities: e.g. be a Dictionary key, or be sorted in a list.
+A `DateTime` is a good example of a value object that we might define if it wasn't already built-in. Note that the [System.DateTime struct](https://docs.microsoft.com/en-us/dotnet/api/system.datetime) actually implements five or six interfaces, but all of them are small and focused around cross-cutting capabilities: e.g. be a Dictionary key, or be sorted in a list. Most of these interfaces are [implemented by a large number of unrelated types](https://docs.microsoft.com/en-us/dotnet/api/system.icomparable).
 
  But none of these interfaces are going to be interfaces to the Date and Time data, e.g. there is no interface with a `int Hour { get; }` property! It would serve no purpose.
 

@@ -61,7 +61,7 @@ Would these replace unit tests and post-deploy integration tests? Only partly. I
 There are also things that we don't strictly consider to be tests, but play similar roles to tests. You can consider them "test-adjacent" techniques:
 
 At the bottom, fastest and most frequent is in the development environment:
-If you have a language with [static type checking](https://en.wikipedia.org/wiki/Type_system#Static_type_checking), the compiler rejects some things as invalid upfront. With types, you don't need a test to tell you that you passed a customer to an order method - the compiler will block that. When the language is not compiled, a linter such as [ESLint for JavaScript](https://eslint.org/) plays a similar role. And in compiled languages, linters are also useful for producing high-quality code. e.g. [Roslyn analysers](https://docs.microsoft.com/en-us/visualstudio/extensibility/getting-started-with-roslyn-analyzers) and [Sonarqube](https://www.sonarqube.org/).
+If you have a language with [static type checking](https://en.wikipedia.org/wiki/Type_system#Static_type_checking), the compiler rejects some things as invalid upfront. With types, you don't need a test to tell you that you passed a customer to an order method - the compiler will block that. When the language is not compiled, a linter such as [ESLint for JavaScript](https://eslint.org/) plays a similar role. And in compiled languages, linters are also useful for producing high-quality code. e.g. [Roslyn analysers](https://docs.microsoft.com/en-us/visualstudio/extensibility/getting-started-with-roslyn-analyzers) and [SonarQube](https://www.sonarqube.org/).
 
 At the other end are post-deploy things sometime called "[testing in production](https://medium.com/@copyconstruct/testing-in-production-the-safe-way-18ca102d0ef1)".
 
@@ -82,6 +82,12 @@ Mr Cooper's solution: test a subsystem not a class, refactor the code to be easi
 
 If you have to touch the tests a lot when doing refactoring, then you probably aren't doing it well.
 
+## A Unit test tests a class
+
+This is not always true. A unit test tests one "thing", be it a class, a function or a subsystem composed of one or more closely related classes. Much like the "Responsibility" in SRP, there is no precise definition of the thing: it's an design guideline not a scientific measure. It is useful, even though we can't always remove ambiguity over where the boundary should be drawn.
+
+Consider this: If I want to refactor to extract a class, should I hesitate because of the overhead of changing tests that will ensue? Shouldn't my tests still be useful and relevant without modification, after the class is extracted in the code under test?
+
 ## Abstraction
 
 Use of high-concept testing libraries is a thing that fails time and again.
@@ -90,6 +96,10 @@ These either obscure the above problems with mocks behind a façade, or it purpo
 ## Don't Repeat Yourself
 
 DRY should of course be used in tests, but not overused. "[Beware the share](https://github.com/97-things/97-things-every-programmer-should-know/blob/4e03ea6022379dc32f4b0cce82b64c323d7f23c1/en/thing_07/README.md)" of coupling unrelated and distant things in order to "reduce duplication" - it is correctly observed that coupling damages more software than repetition does. Being self-contained counts for a lot in unit tests. Look for dependencies on shared internal NuGet packages, or tests that can't be run at the same time as other test, especially near the bottom of the pyramid.
+
+There are test-specific patterns to reduce duplication in tests. e.g. if the data setup is verbose and repetitive, look at a [Test Data Builder](https://wiki.c2.com/?TestDataBuilder) class.
+If a group of asserts is repeated or verbose, extract a method named e.g. `AssertValidOrderWasDelivered`. If this is used in multiple source files, extract a class for it.
+Avoid making a "base test for tests". It becomes unwieldy as unrelated concerns pile up there, so it is more flexible to extract classes, i.e.: [favour composition over inheritance](https://en.wikipedia.org/wiki/Composition_over_inheritance).
 
 ## Testing configuration
 
