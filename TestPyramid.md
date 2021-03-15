@@ -84,7 +84,7 @@ If you have to touch the tests a lot when doing refactoring, then you probably a
 
 ## A Unit test tests a class
 
-This is not always true. A unit test tests one "thing", be it a class, a function or a subsystem composed of one or more closely related classes.  or [whatever code meets the requirement](https://www.youtube.com/watch?v=EZ05e7EMOLM&t=1490s) Much like the "Responsibility" in SRP, there is no precise definition of the thing: it's an design guideline not a scientific measure. It is useful, even though we can't always remove ambiguity over where the boundary should be drawn.
+This is not always true. A unit test tests one "thing", be it a class, a function or a subsystem composed of one or more closely related classes, or [whatever code meets the requirement](https://www.youtube.com/watch?v=EZ05e7EMOLM&t=1490s). Much like the "Responsibility" in SRP, there is no precise definition of the thing: it's an design guideline not a scientific measure. It is useful, even though we can't always remove ambiguity over where the boundary should be drawn.
 
 Consider this: If I want to refactor to extract a class, [should I hesitate because of the overhead of changing tests that will ensue](https://www.youtube.com/watch?v=EZ05e7EMOLM&t=600s)? Shouldn't my tests still be useful and relevant without modification, after the class is extracted in the code under test? If they're too closely coupled, I cannot do that many more.
 
@@ -99,7 +99,7 @@ DRY should of course be used in tests, but not overused. "[Beware the share](htt
 
 There are test-specific patterns to reduce duplication in tests. e.g. if the data setup is verbose and repetitive, look at a [Test Data Builder](https://wiki.c2.com/?TestDataBuilder) class.
 If a group of asserts is repeated or verbose, extract a method named e.g. `AssertValidOrderWasDelivered`. If this is used in multiple source files, extract a class for it.
-Avoid making a "base test for tests". It becomes unwieldy as unrelated concerns pile up there, so it is more flexible to extract classes, i.e.: [favour composition over inheritance](https://en.wikipedia.org/wiki/Composition_over_inheritance).
+Avoid making a "base class for tests". It becomes unwieldy as unrelated concerns pile up there, so it is more flexible to extract classes, i.e.: [favour composition over inheritance](https://en.wikipedia.org/wiki/Composition_over_inheritance).
 
 ## Testing configuration
 
