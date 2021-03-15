@@ -86,7 +86,7 @@ If you have to touch the tests a lot when doing refactoring, then you probably a
 
 This is not always true. A unit test tests one "thing", be it a class, a function or a subsystem composed of one or more closely related classes.  or [whatever code meets the requirement](https://www.youtube.com/watch?v=EZ05e7EMOLM&t=1490s) Much like the "Responsibility" in SRP, there is no precise definition of the thing: it's an design guideline not a scientific measure. It is useful, even though we can't always remove ambiguity over where the boundary should be drawn.
 
-Consider this: If I want to refactor to extract a class, [should I hesitate because of the overhead of changing tests that will ensue](https://www.youtube.com/watch?v=EZ05e7EMOLM&t=600s)? Shouldn't my tests still be useful and relevant without modification, after the class is extracted in the code under test?
+Consider this: If I want to refactor to extract a class, [should I hesitate because of the overhead of changing tests that will ensue](https://www.youtube.com/watch?v=EZ05e7EMOLM&t=600s)? Shouldn't my tests still be useful and relevant without modification, after the class is extracted in the code under test? If they're too closely coupled, I cannot do that many more.
 
 ## Abstraction
 
