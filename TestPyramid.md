@@ -77,10 +77,10 @@ On the other hand, you might be working with an untested system, in which case t
 
 ## A Unit test tests a class
 
-This is not always true. The word "unit" tell me two things:
+This is not always true. The word "unit" tells us two things:
 
 * As per the dictionary definition of [unit](https://www.oxfordlearnersdictionaries.com/definition/english/unit), this is the smallest "single thing" in the test suite, the atom of tests.
-* If it was always a test of a class or method, it would be named "class test" or "method test". The choice of a different term _unit_ implies that the scope of a unit is not always the same as those.
+* If it always tested a class or method, it would be named "class test" or "method test". The choice of a different term, _unit_, implies that the scope of a unit is not always the same as those.
 
 Much like the "Responsibility" in SRP, there is no precise definition of the "unit": it's a design guideline not a rigorous  measure. In fact we can choose what "unit" suits us in the circumstances.
 
