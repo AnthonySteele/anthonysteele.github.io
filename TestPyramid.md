@@ -75,18 +75,26 @@ On the other hand, you might be working with an untested system, in which case t
 
 ## Pitfalls
 
+## A Unit test tests a class
+
+This is not always true. The word "unit" tell me two things:
+
+* As per the dictionary definition of [unit](https://www.oxfordlearnersdictionaries.com/definition/english/unit), this is the smallest "single thing" in the test suite, the atom of tests.
+* If it was always a test of a class or method, it would be named "class test" or "method test". The choice of a different term _unit_ implies that the scope of a unit is not always the same as those.
+
+Much like the "Responsibility" in SRP, there is no precise definition of the "unit": it's a design guideline not a rigorous  measure. In fact we can choose what "unit" suits us in the circumstances.
+
+A unit test tests one chunk of functionality, be it a class, a function or a subsystem composed of one or more closely related classes, or [whatever code meets the requirement](https://www.youtube.com/watch?v=EZ05e7EMOLM&t=1490s).
+
+Consider this: If I want to refactor to extract a class, [should I hesitate because of the overhead of changing tests that will ensue](https://www.youtube.com/watch?v=EZ05e7EMOLM&t=600s)? Shouldn't my tests still be useful and relevant without modification, after a class is extracted in the code under test? If they're too closely coupled, I cannot do that any more.
+
 ## Mocks
 
 Over-reliance on mocks in unit tests is a smell, it leads to tests that are not readable or maintainable.
 Mr Cooper's solution: test a subsystem not a class, refactor the code to be easier to work with [by pushing Input and Output to the edges](https://www.goparamore.io/ports-adapters); consider eliminating interfaces that are there purely for DI. If you can mock the data stores and other external dependencies, you might have all the interfaces that you need.
 
-If you have to touch the tests a lot when doing refactoring, then you probably aren't doing it well.
-
-## A Unit test tests a class
-
-This is not always true. A unit test tests one "thing", be it a class, a function or a subsystem composed of one or more closely related classes, or [whatever code meets the requirement](https://www.youtube.com/watch?v=EZ05e7EMOLM&t=1490s). Much like the "Responsibility" in SRP, there is no precise definition of the thing: it's an design guideline not a scientific measure. It is useful, even though we can't always remove ambiguity over where the boundary should be drawn.
-
-Consider this: If I want to refactor to extract a class, [should I hesitate because of the overhead of changing tests that will ensue](https://www.youtube.com/watch?v=EZ05e7EMOLM&t=600s)? Shouldn't my tests still be useful and relevant without modification, after the class is extracted in the code under test? If they're too closely coupled, I cannot do that many more.
+ "Refactoring" means changing non-test code, with the support of existing tests.
+ If you have to touch the tests a lot when doing refactoring, then you probably aren't doing it well.
 
 ## Abstraction
 
