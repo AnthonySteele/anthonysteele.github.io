@@ -153,7 +153,7 @@ Where you can test all the outcomes by controlling the inputs to the method unde
 
 Do you know that the `IsBankWithExtraComplianceRules` function was called? The fact that this function was called or not is not an interesting business outcome. The extra rules being run (or not) is. Test that this happens.
 
-[A test is not always scoped to a method or a class](https://www.youtube.com/watch?v=EZ05e7EMOLM). You should be able to refactor by extracting the method, [and the tests still pass and add value](https://www.youtube.com/watch?t=600&v=EZ05e7EMOLM&).  
+[A test is not always scoped to a method or a class](https://www.youtube.com/watch?v=EZ05e7EMOLM). You should be able to refactor by extracting the method, [and the tests still pass and add value](https://www.youtube.com/watch?t=600&v=EZ05e7EMOLM&).  Fine-grained, close-coupled unit tests are not always best. 
 
 ### When to extract static functions
 
