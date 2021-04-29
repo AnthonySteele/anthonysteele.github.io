@@ -6,7 +6,7 @@ These interfaces tend to be created _upfront_, with the object, in advance of an
 
 Apologies if you think this is obvious.  However, I see this misuse of interfaces in everyday c# code in multiple companies; and mentioning it on twitter generated a lot of replies. In fact, the most engagement in months. So clearly there's something to say here.
 
-## When do you want to have in interface
+## When do you want to have an interface
 
 Over-use of interfaces comes about from over-adherence to an often useful pattern: the idea that a class has an interface and then gets mocked in unit tests.
 
@@ -111,7 +111,9 @@ This is pointless, this will get in your way. A value object can be unit tested 
   Assert.Throws<InvalidOperationException>(() => new AccountId("not valid"));
 ```
 
- But the issue is not testing them, it is how to test _with_ them. I have never seen a case where the interface adds a useful testability seam. Would you say "We need to pass in an `ITimeSpan` instead of a `TimeSpan` so that we can mock the result returned we add an hour? That is insanity. Value objects work much more like an `int` than like a `CustomerStore`. You just pass in the value that you want to test with.
+ But the issue is not testing them, it is how to test _with_ them. I have never seen a case where the interface adds a useful testability seam. Would you say "We need to pass in an `ITimeSpan` instead of a `TimeSpan` so that we can mock the result returned we add an hour? That is insanity. 
+ 
+Value objects work much more like an `int` than like a `CustomerStore`. You just pass in the value that you want to test with. Sometimes you make ina interface for how to get these objects, e.g. a `ITimeSource` (also called an `IClock` ) so that you can test with a clock set to a specific time. This is an example of when a factory is a useful pattern.
 
 ## Pure static functions are useful
 
