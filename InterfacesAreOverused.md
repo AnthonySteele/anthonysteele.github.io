@@ -6,7 +6,7 @@ These interfaces tend to be created _upfront_, with the object, in advance of an
 
 Apologies if you think this is obvious.  However, I see this misuse of interfaces in everyday c# code in multiple companies; and mentioning it on twitter generated a lot of replies. In fact, the most engagement in months. So clearly there's something to say here.
 
-## When do you want to have in interface
+## When do you want to have an interface
 
 Over-use of interfaces comes about from over-adherence to an often useful pattern: the idea that a class has an interface and then gets mocked in unit tests.
 
@@ -111,7 +111,9 @@ This is pointless, this will get in your way. A value object can be unit tested 
   Assert.Throws<InvalidOperationException>(() => new AccountId("not valid"));
 ```
 
- But the issue is not testing them, it is how to test _with_ them. I have never seen a case where the interface adds a useful testability seam. Would you say "We need to pass in an `ITimeSpan` instead of a `TimeSpan` so that we can mock the result returned we add an hour? That is insanity. Value objects work much more like an `int` than like a `CustomerStore`. You just pass in the value that you want to test with.
+ But the issue is not testing them, it is how to test _with_ them. I have never seen a case where the interface adds a useful testability seam. Would you say "We need to pass in an `ITimeSpan` instead of a `TimeSpan` so that we can mock the result returned we add an hour? That is insanity. 
+ 
+Value objects work much more like an `int` than like a `CustomerStore`. You just pass in the value that you want to test with. Sometimes you make an interface for how to get these objects, e.g. a `ITimeSource` (also called an `IClock` ) so that you can test with a clock that returns a specific time. This is an example of when a factory is a useful pattern.
 
 ## Pure static functions are useful
 
@@ -151,7 +153,7 @@ Where you can test all the outcomes by controlling the inputs to the method unde
 
 Do you know that the `IsBankWithExtraComplianceRules` function was called? The fact that this function was called or not is not an interesting business outcome. The extra rules being run (or not) is. Test that this happens.
 
-[A test is not always scoped to a method or a class](https://www.youtube.com/watch?v=EZ05e7EMOLM). You should be able to refactor by extracting the method, [and the tests still pass and add value](https://www.youtube.com/watch?t=600&v=EZ05e7EMOLM&).
+[A test is not always scoped to a method or a class](https://www.youtube.com/watch?v=EZ05e7EMOLM). You should be able to refactor by extracting the method, [and the tests still pass and add value](https://www.youtube.com/watch?t=600&v=EZ05e7EMOLM&).  [Fine-grained, close-coupled unit tests are not always best](https://www.anthonysteele.co.uk/TestPyramid#pitfalls).
 
 ### When to extract static functions
 
@@ -214,6 +216,10 @@ The `Customers` list is public so that a test with a reference to the class type
 This fake be as simple or as complex as you like, _it's just your code_ it doesn't need a framework to set up a specific behaviour. It has the benefit over the usual mocking-framework style that once defined, `FakeCustomerStore` can be used any number of times with fewer total lines of code than specifying mock setup each time.
 
 Sometimes you don't need to mock a dependency when the fake or [null object](https://en.wikipedia.org/wiki/Null_object_pattern) is built in. e.g.  for `Microsoft.Extensions.Logging.ILogger` there is [NullLogger.Instance](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.abstractions.nulllogger.instance).
+
+## Factory pattern
+
+There's whole lot of  jokes about Java that it over uses the "Factory" pattern. e.g. "I had a problem, so I thought to use Java, now I have a `ProblemFactory`". Well, the Factory pattern is a useful one, _sometimes_. e.g. the `IClock` mentioned above is a `DateTime` factory. The joke is that the common style is to do it always, without thinking, regardless of if it solves a problem or not. Much like interfaces in C#.
 
 ## Fin
 
