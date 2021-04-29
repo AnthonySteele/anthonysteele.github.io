@@ -153,7 +153,7 @@ Where you can test all the outcomes by controlling the inputs to the method unde
 
 Do you know that the `IsBankWithExtraComplianceRules` function was called? The fact that this function was called or not is not an interesting business outcome. The extra rules being run (or not) is. Test that this happens.
 
-[A test is not always scoped to a method or a class](https://www.youtube.com/watch?v=EZ05e7EMOLM). You should be able to refactor by extracting the method, [and the tests still pass and add value](https://www.youtube.com/watch?t=600&v=EZ05e7EMOLM&).
+[A test is not always scoped to a method or a class](https://www.youtube.com/watch?v=EZ05e7EMOLM). You should be able to refactor by extracting the method, [and the tests still pass and add value](https://www.youtube.com/watch?t=600&v=EZ05e7EMOLM&).  
 
 ### When to extract static functions
 
@@ -216,6 +216,10 @@ The `Customers` list is public so that a test with a reference to the class type
 This fake be as simple or as complex as you like, _it's just your code_ it doesn't need a framework to set up a specific behaviour. It has the benefit over the usual mocking-framework style that once defined, `FakeCustomerStore` can be used any number of times with fewer total lines of code than specifying mock setup each time.
 
 Sometimes you don't need to mock a dependency when the fake or [null object](https://en.wikipedia.org/wiki/Null_object_pattern) is built in. e.g.  for `Microsoft.Extensions.Logging.ILogger` there is [NullLogger.Instance](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.abstractions.nulllogger.instance).
+
+## Factory pattern
+
+There's whole lot of  jokes about Java that it over uses the "Factory" pattern. e.g. "I had a problem, so I thought to use Java, now I have a `ProblemFactory`". Well, the Factory pattern is a useful one, _sometimes_. e.g. the `IClock` mentioned above is a `DateTime` factory. The joke is that the common style is to do it always, without thinking, regardless of if it solves a problem or not. Much like interfaces in C#.
 
 ## Fin
 
