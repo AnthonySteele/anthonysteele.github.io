@@ -40,13 +40,7 @@ Then we change the return value  `List<ProcessResult>` to `IEnumerable<ProcessRe
 
 The weaker returned type means that the caller can do fewer things with it. It's the reverse of a parameter!
 
-## Variance
-
-The "smell" that alerted me to this difference was an abundance of methods that made a `List<T>`, return it typed as an `IEnumerable<T>`, to callers who immediately call `.ToList()` on it,
-because they need the list functionality back, or have the warning about "Possible multiple enumeration of IEnumerable".
-
-This is a bit like [Covariance and Contravariance](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/covariance-contravariance/).
-C# uses the keywords [`in`](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/in-generic-modifier) and [`out`](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/out-generic-modifier) for these, because `in` (contravariant, using a less derived type) is used for input values, but  `out` (covariant, using a more derived type) is used for returning values.
+## Inversion
 
 If I have a method typed:
 
@@ -60,9 +54,18 @@ But I can also use a _subtype_ of `ParamType` for the input parameter and - note
 
 So I get the most value when the input types are a more base type (with more sub types) and the return type is a more derived type (with more base types).
 
+## Variance
+
+The "smell" that alerted me to this difference was an abundance of methods that made a `List<T>`, return it typed as an `IEnumerable<T>`, to callers who immediately call `.ToList()` on it,
+because they need the list functionality back, or have the warning about "Possible multiple enumeration of IEnumerable".
+
+This is a bit like [Covariance and Contravariance](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/covariance-contravariance/).
+C# uses the keywords [`in`](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/in-generic-modifier) and [`out`](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/out-generic-modifier) for these, 
+because `in` (contravariant, using a less derived type) is used for input values, but  the inverse, `out` (covariant, using a more derived type) is used for returning values.
+
 ## Conclusions
 
-The practice of using a base type (with a weaker contract) for input parameters to a method where possible, does not also apply to the return value.
+The practice of using a base type (with a weaker contract) for input parameters to a method where possible, does not also apply to the return value. It is inverted.
 
 The input parameters to a method should be the weakest type that the method can easily use. e.g. if we lower the parameter type from e.g. `List<Customer> customers` to `IEnumerable<Customer> customers` and there are no issues with the method's code, then do that. This gives the caller maximum flexibility of values to give to the method.
 
