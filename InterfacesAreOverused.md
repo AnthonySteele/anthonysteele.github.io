@@ -8,8 +8,7 @@ Apologies if you think this is obvious.  However, I see this misuse of interface
 
 ## When do you want to have an interface
 
-Over-use of interfaces comes about from rote over-adherence to an often useful pattern: the idea that a class has an interface and then gets mocked in unit tests.
-
+Over-use of interfaces comes about from rote over-adherence to an often useful pattern: the idea that a class has an interface and then gets mocked in unit tests. 
 This is inseparable from [questions on "how best to unit test"](./TestPyramid).
 
 It is said that a class must have an interface "for testability". This statement might be misleading: adding an interface to a class doesn't make _that class_ more testable, it makes _other classes_ that use that class more testable, when they use the interface instead. This is a form of the [Dependency Inversion Principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle) - AKA the **D** in SOLID.
@@ -176,7 +175,7 @@ This should then divide up the code according the the packages that it depends o
 
 ## Builders
 
-Would you mock a `StringBuilder` in order to get the rest test value returned from the final concatenated string? Or would you just feed the correct strings in. Builders are designed to be used like this, there is ne need to mock them to get this result.
+Would you mock a `StringBuilder` in order to get the rest test value returned from the final concatenated string? Or would you just feed the correct strings in. Builders are designed to be used like this, there is no need to mock them to get this result.
 
 ## Services
 
