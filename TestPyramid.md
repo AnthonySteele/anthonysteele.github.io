@@ -94,7 +94,7 @@ Over-reliance on mocks in unit tests is a smell, it leads to tests that are not 
 Mr Cooper's solution: test a subsystem not a class, refactor the code to be easier to work with [by pushing Input and Output to the edges](https://www.goparamore.io/ports-adapters); consider eliminating interfaces that are there purely for DI. If you can mock the data stores and other external dependencies, you might have all the interfaces that you need.
 
  "Refactoring" means changing non-test code, with the support of existing tests.
- If you have to touch the tests a lot when doing refactoring, then you probably aren't doing it well.
+ If you have to touch the tests a lot when doing refactoring, then you probably aren't doing it well. Often this is due to close-coupling and [overuse of interfaces](./InterfacesAreOverused)
 
 ## Abstraction
 

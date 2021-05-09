@@ -4,11 +4,13 @@ Interfaces are overused in a lot of C# code, and in some cases are not merely ex
 
 These interfaces tend to be created _upfront_, with the object, in advance of any need of them; and are _wide_, mirroring all the public parts of the object.
 
-Apologies if you think this is obvious.  However, I see this misuse of interfaces in everyday c# code in multiple companies; and mentioning it on twitter generated a lot of replies. In fact, the most engagement in months. So clearly there's something to say here.
+Apologies if you think this is obvious.  However, I see this misuse of interfaces in everyday C# code in multiple companies; and mentioning it on twitter generated a lot of replies. In fact, the most engagement in months. So clearly there's something to say here.
 
 ## When do you want to have an interface
 
-Over-use of interfaces comes about from over-adherence to an often useful pattern: the idea that a class has an interface and then gets mocked in unit tests.
+Over-use of interfaces comes about from rote over-adherence to an often useful pattern: the idea that a class has an interface and then gets mocked in unit tests.
+
+This is inseparable from [questions on "how best to unit test"](./TestPyramid).
 
 It is said that a class must have an interface "for testability". This statement might be misleading: adding an interface to a class doesn't make _that class_ more testable, it makes _other classes_ that use that class more testable, when they use the interface instead. This is a form of the [Dependency Inversion Principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle) - AKA the **D** in SOLID.
 
@@ -31,17 +33,17 @@ Such interfaces typically have "one and a half" implementations. There is the re
 
 This usage of interfaces is not actually how they were first thought of. When interfaces were first conceived, they were intended to replace abstract base classes, and capture cross-cutting concerns. e.g. The `IDisposable` interface shows the concern that the object needs a cleanup notification when it goes out of scope, nothing else, and is implemented in many different ways. `IComparable` allows sorting. And they each have only one method.
 
-Allowing an object to implement multiple interfaces allows those concerns to be expressed as types. This is the [Interface Segregation Principle](https://en.wikipedia.org/wiki/Interface_segregation_principle) - AKA the **I** in SOLID. Although IMHO, this rhymes with the "Single Responsibility Principle" expressed in the language of type contracts: allow a class to have multiple (interface) types, each with a Single (contract) Responsibility.
+Allowing an object to implement multiple interfaces allows those concerns to be expressed as types. This is the [Interface Segregation Principle](https://en.wikipedia.org/wiki/Interface_segregation_principle) - AKA the **I** in SOLID. Although IMHO, this is not an independent principle, it derives from the "Single Responsibility Principle" expressed in the language of type contracts: allow a class to have multiple (interface) types, each with a Single (contract) Responsibility.
 
 By contrast to `IDisposable`, the `ICustomerStore` is not a cross-cutting concern at all, and it is rare for the `CustomerStore` to implement several interfaces. It is understood that `ICustomerStore` is tightly coupled to `CustomerStore` - it is merely the front door to that house.
 
-However, for enabling unit tests, this use of interfaces is a very useful tool. And it is overused when applied as a blanket policy.
+However, for enabling unit tests, this use of interfaces is a very useful tool. And it is overused when applied by rote to everything.
 
 When is it a bad idea?
 
 ## Data Transfer Objects should never have interfaces to the data
 
-A Data Transfer Object typically contains data from some source: It is a row from the database. It is a response from  a http service. The field names and data shapes match the requirements of serialisation. It is nothing but state, it usually has few or no methods.
+A Data Transfer Object typically contains just data from some source: It is a row from the database. It is a response from  a http service. The field names and data shapes match the requirements of serialisation. It is nothing but state, it usually has few or no methods.
 
 e.g.
 
@@ -78,7 +80,7 @@ A value object could contain values like e.g. an `x,y,z` co-ordinate (e.g. three
 
 A `DateTime` is a good example of a value object that we might define if it wasn't already built-in. Note that the [System.DateTime struct](https://docs.microsoft.com/en-us/dotnet/api/system.datetime) actually implements five or six interfaces, but all of them are small and focused around cross-cutting capabilities: e.g. be a Dictionary key, or be sorted in a list. Most of these interfaces are [implemented by a large number of unrelated types](https://docs.microsoft.com/en-us/dotnet/api/system.icomparable).
 
- But none of these interfaces are going to be interfaces to the Date and Time data, e.g. there is no interface with a `int Hour { get; }` property! It would serve no purpose.
+ But none of these interfaces are going to be interfaces to the Date and Time data, e.g. there is no interface with a `int Hour { get; }` property! as with a DTO, it would serve no purpose.
 
 A value object can be implemented as a `struct`, and are a good case for [the C# 9 record type syntax](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-9#record-types). It's hard to do more with less code than e.g.
 
@@ -88,7 +90,7 @@ A value object can be implemented as a `struct`, and are a good case for [the C#
 
 This gives you a value object with correct equality semantics, in  very little code.  Yes, it implements object overrides such as `Equals`  and interfaces such as `IEquatable`. It is also immutable. Being immutable works very well with value objects: change the value, and it's no longer the same object.
 
-The value object pattern is IMHO very much underused in C#, and this might be partly because of the assumption about how to implement it: I have seen more than one implementation of a a value, floundering as a class with an interface to the data.
+The value object pattern is IMHO very much underused in C#. I hope that this changes with record types. But  this might be partly because of the assumption about how to implement it: I have seen more than one implementation of a value, floundering as a class with an interface to the data.
 
 ```csharp
 // NB: this is bad code
@@ -111,8 +113,8 @@ This is pointless, this will get in your way. A value object can be unit tested 
   Assert.Throws<InvalidOperationException>(() => new AccountId("not valid"));
 ```
 
- But the issue is not testing them, it is how to test _with_ them. I have never seen a case where the interface adds a useful testability seam. Would you say "We need to pass in an `ITimeSpan` instead of a `TimeSpan` so that we can mock the result returned we add an hour? That is insanity. 
- 
+ But the issue is not testing them, it is how to test _with_ them. I have never seen a case where the interface adds a useful testability seam. Would you say "We need to pass in an `ITimeSpan` instead of a `TimeSpan` so that we can mock the result returned we add an hour? That is dysfunctional.
+
 Value objects work much more like an `int` than like a `CustomerStore`. You just pass in the value that you want to test with. Sometimes you make an interface for how to get these objects, e.g. a `ITimeSource` (also called an `IClock` ) so that you can test with a clock that returns a specific time. This is an example of when a factory is a useful pattern.
 
 ## Pure static functions are useful
@@ -169,17 +171,28 @@ In one company that I worked at, there was a library called "GeneralFunctions" t
 
 In time, the motto became "Just say no to General Functions", it being personified as an difficult old military man who really should have retired already.
 
-If this needs to be NuGet packages, then it should be several of those: e.g. `LoggingFunctions`, `DatabaseFunctions` etc. This should then divide up the code with its dependant packages. e.g. only `DatabaseFunctions`  would depend on the ADO database driver.
+If this needs to be NuGet packages, then it should be several of those: e.g. `LoggingFunctions`, `DatabaseFunctions` etc.
+This should then divide up the code according the the packages that it depends on. e.g. only `DatabaseFunctions`  would depend on the ADO database driver.
 
 ## Builders
 
-Would you mock a `StringBuilder` in order to get the rest test value returned from the final concatenated string? Or would you just feed the correct strings in.
+Would you mock a `StringBuilder` in order to get the rest test value returned from the final concatenated string? Or would you just feed the correct strings in. Builders are designed to be used like this, there is ne need to mock them to get this result.
 
 ## Services
 
 "Service" is one of those words that is often so general and overused as to not mean much. On classes that are not a data store or otherwise wrapping external code, and also contain business logic or other "doing stuff" code, consider not implementing interfaces if you can get away with it. Add an interface if it becomes necessary, not to pass code review or some inflexible rule.
 
 [Avoid testing implementation details, test behaviors](https://youtu.be/EZ05e7EMOLM?t=1441). Often the number of classes involved is an "implementation detail" that you want tests not to change even while it is be refactored.
+
+Consider if you can test with e.g.
+
+```csharp
+  var mockStore = Substitute.For<ICustomerStore>();
+  var controllerUnderTest = new CustomerController(new CustomerService(mockStore));
+```
+
+The question then is: does this give you better tests or not? is it easier to refactor under test? 
+If not, _then_ introduce the  `ICustomerService` interface to solve a problem that you have.
 
 ### Unit testing from outside
 
@@ -219,7 +232,7 @@ Sometimes you don't need to mock a dependency when the fake or [null object](htt
 
 ## Factory pattern
 
-There's whole lot of  jokes about Java that it over uses the "Factory" pattern. e.g. "I had a problem, so I thought to use Java, now I have a `ProblemFactory`". Well, the Factory pattern is a useful one, _sometimes_. e.g. the `IClock` mentioned above is a `DateTime` factory. The joke is that the common style is to do it always, without thinking, regardless of if it solves a problem or not. Much like interfaces in C#.
+There's whole lot of  jokes about Java that it over uses the "Factory" pattern. e.g. "I had a problem, so I thought to use Java, now I have a `ProblemFactory`". Well, the Factory pattern is a useful one, _sometimes_. e.g. the `IClock` mentioned above is a `DateTime` factory. The joke is that the common style is to do it always, without thinking, regardless of if it solves a problem or not - rote over-adherence to an often useful pattern. Much like interfaces in C#.
 
 ## Fin
 
