@@ -54,6 +54,20 @@ But I can also use a _subtype_ of `ParamType` for the input parameter and - note
 
 So I get the most value when the input types are a more base type (with more sub types) and the return type is a more derived type (with more base types).
 
+## Standards and guidelines
+
+But using the `IEnumerable<T>` or other base interface is a guideline! Not exactly. Here are the guidelines for [Collection Parameters](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/guidelines-for-collections#collection-parameters) and for [Collection Properties and Return Values](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/guidelines-for-collections#collection-properties-and-return-values).
+
+Note how they _differ_: For parameters, it is:
+
+> DO use the least-specialized type possible as a parameter type. Most members taking collections as parameters use the `IEnumerable<T>` interface.
+
+Where "least-specialized type" refers to a base class or interface.
+
+For return values, this guidance is not present, instead we have:
+
+> CONSIDER using subclasses
+
 ## Variance
 
 The "smell" that alerted me to this difference was an abundance of methods that made a `List<T>`, return it typed as an `IEnumerable<T>`, to callers who immediately call `.ToList()` on it,
