@@ -29,3 +29,7 @@
 
 * [Github](https://github.com/AnthonySteele/)
 * [Twitter](https://twitter.com/AnthonySteele)
+
+<div>
+ <a rel="me" href="https://dotnet.social/@anthony_steele">Mastodon</a>
+ </div>
