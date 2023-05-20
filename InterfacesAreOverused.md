@@ -69,7 +69,7 @@ interface ICustomerResponse
 }
 ```
 
-There is no benefit to this kind of interface on these objects. None at all. You can test with this data already: Anything that you want to do in test by mocking the interface can be done more easily by simply newing up a DTO instance with the required state in it.
+There is no benefit to this kind of interface on these objects. An interface allows for another seperate implementation, but the entire implementation of a DTO is the data in it.  You will never need another implementation, as the data values are the whole thing, there's nothing else to implement.  You can test with this data already: Anything that you want to do in test by mocking the interface can be done more easily by simply newing up a DTO instance with the required data in it.
 
 ## Value objects should not have interfaces to the data
 
