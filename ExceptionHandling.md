@@ -1,27 +1,26 @@
-# On the subleties of Exception handling in C#
+# On the subtleties of Exception handling in C##
 
-or, Why "throw new Exception(inner) is an act of vandalism"
+or, Why `throw new Exception(inner);` is an act of vandalism,
 
-Links
-https://enterprisecraftsmanship.com/posts/exceptions-for-flow-control/
+Links:
+
+* [Exceptions for flow control](https://enterprisecraftsmanship.com/posts/exceptions-for-flow-control/)
+* [Serilog.Exceptions](https://github.com/RehanSaeed/Serilog.Exceptions)
 
 People have different ideas about exceptions handling in C# code.
 And they often have simple patterns that work well enough, but could be improved upon.
 
 One example is the suggestion of wrapping all exceptions in `throw new Exception()` at a certain point in a library. In my opinion, this is an act of vandalism.
 
-Let me explain. It is said that “you have to know the rules before you decide when to break them”. The rules in this case are:
- 
-CA2201: do not throw the base exception https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2201
+Let me explain. It is said that "you have to know the rules before you decide when to break them". The rules in this case are:
 
-And CA1031: do not catch all exceptions https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1031
-
-And you should know these rules and why they exist before deciding if it’s appropriate to break them today.
+[CA2201: do not throw the base exception](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2201) and [CA1031: do not catch all exceptions](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1031). And you should know these rules and why they exist before deciding if it’s appropriate to break them today.
 
 Catching all exceptions is not ideal: when you wrap e.g. a database operation in “catch(Exception ex)” you’re going to catch 3 types of exception:
-The type that you wanted to catch, e.g. a SqlException
-Types that you didn’t expect to catch, and should instead be fixed with code changes to prevent them being thrown at all, e.g. NullReferenceException 
-Types that you shouldn't catch at all, as you can’t handle them, e.g. OutOfMemoryException
+
+* The type that you wanted to catch, e.g. a  `SqlException`.
+* Types that you didn’t expect to catch, and should instead be fixed with code changes to prevent them being thrown at all, e.g. a `NullReferenceException`.
+* Types that you shouldn't catch at all, as you can’t handle them, e.g. `OutOfMemoryException`.`
 
 Catch blocks should happen for "a very limited range of exception types that you know you can safely handle" - this means using specific exception types. Central to this is the idea that the Exception types matter, that they are not all the same type, and that the type is used as a filter.  
 
@@ -39,12 +38,12 @@ In Library code, there is benefit to
  Not catching all exceptions, so that typed exceptions come through as-is from underlying layers(e.g. If CosmosDb permission are not there, we get a CosmosDbException)
 Ensuring that all deliberately thrown exceptions are of a type (or have a base type) defined by that library, so that they can be caught separately to all other exceptions. (e.g. FooClientLibrary defines a FooClientException)
 
-And related, any logging system that receives an exception should behave like Serilog.Exceptions ( https://github.com/RehanSaeed/Serilog.Exceptions )  and record all public properties of the actual exception type. An exception is structured data, and due to inner exceptions it is also recursively structured data. Structured logging techniques apply. The logging or telemetry system should handle this for any exception type.
+And related, any logging system that receives an exception should behave like [Serilog.Exceptions](https://github.com/RehanSaeed/Serilog.Exceptions)  and record all public properties of the actual exception type. An exception is structured data, and due to inner exceptions it is also recursively structured data. Structured logging techniques apply. The logging or telemetry system should handle this for any exception type.
 
 Is this inefficient and will need reflection to build such a map of public properties?  IS this a performance issue? Maybe, but consider 
-Applications tend to throw a small set of exceptions regularly, and a map can be built when the exception type is first encountered, then re-used. 
-Efficiency in terms of time taken and data stored, is not the primary goal of exception handling. It should be infrequent (indeed, exceptional!)  When an exception does occur, performance is not the primary concern at all, complete and accurate recording is primary, so that the error can be mitigated to occur less frequently.
+
+* Applications tend to throw a small set of exceptions regularly, and a map can be built when the exception type is first encountered, then re-used. 
+* Efficiency in terms of time taken and data stored, is not the primary goal of exception handling. It should be infrequent (indeed, exceptional!)  When an exception does occur, performance is not the primary concern at all, complete and accurate recording is primary, so that the error can be mitigated to occur less frequently.
 
 
-This suggestion: https://timwise.co.uk/2014/05/10/throw-vs-throw-ex-vs-wrap-and-throw-in/
-Is very bad advice. It breaks the rules, and not in the expert way, but in the “didn’t know any better” way. We can do better than this.
+[This suggestion here](https://timwise.co.uk/2014/05/10/throw-vs-throw-ex-vs-wrap-and-throw-in/) is very bad advice. It breaks the rules, and not in the expert way, but in the “didn’t know any better” way. We can do better than this.
