@@ -1,6 +1,6 @@
 # On the subtleties of Exception handling in `C#`
 
-or, Why `throw new Exception(inner);` is an act of vandalism/
+Or, why `throw new Exception(inner);` is an act of vandalism.
 
 ## Links
 
@@ -20,13 +20,15 @@ One example is the suggestion of wrapping all exceptions in `throw new Exception
 Catching all exceptions is not ideal: when you wrap e.g. a database operation in `catch(Exception ex)` you’re going to catch several kinds of exception - [See Eric Lippert's taxonomy](https://learn.microsoft.com/en-us/archive/blogs/ericlippert/vexing-exceptions):
 
 * Exception types that you shouldn't catch at all, as you can’t handle them, e.g. `OutOfMemoryException`. These are often **fatal** exceptions.
-* Common Exception types that you did not anticipate, but are your own **boneheaded** fault.  e.g. a `NullReferenceException`. Humility is a virtue for coders, as we all make boneheaded mistakes from time to time. These should instead be fixed not b catching it, but with code changes to prevent the exception being thrown at all. Iteratively fixing your stuff is another virtue.
-* The type that you wanted to catch. These are often **exogenous** - arising due to processes outside of your control, and where you have to deal with them e.g. a  `SqlException` or network error.
+* Common Exception types that you did not anticipate, but are your own **boneheaded** fault.  e.g. a `NullReferenceException`. Humility is a virtue for coders, as we all make boneheaded mistakes from time to time. These should instead be fixed not by catching the error, but with code changes to prevent the code from throwing at all. Iteratively fixing your stuff is another virtue.
+* The type that you needed to catch. These are often **exogenous** - arising due to processes outside of your control, and where you have to deal with them e.g. a  `SqlException` or network error.
 
-Exception handling is often done poorly in this ways:
-Catch blocks should happen for "a very limited range of exception types that you know you can safely handle" - this means using specific exception types. Central to this is the idea that the **Exception types matter**, that they are not all the same type, and that the type is there to be used as a filter.  
+Exception handling is often done poorly in this way:
+Catch blocks should happen "[for a very limited range of exception types that you know you can safely handle](https://enterprisecraftsmanship.com/posts/exceptions-for-flow-control/)" - this means using specific exception types. Central to this is the idea that the **Exception types matter**, that they are not all the same type, and that the type is there to be used as a filter.  
 
-Exception handling is also often done poorly in another way: Catch blocks should often wrap a specific block that has known failure modes, rather than as a blanket around the whole thing. Poorly targeted as to the code inside the `try...catch` block. Rather than think of as "wrap this whole method in a catch all exceptions because it can fail" rather as "wrap this database operation in a catch `DbException` block because failures of that kind can happen in that block, and are `exogenous` as they happen at or en route to the database server, beyond my control.
+Exception handling is also often done poorly in another way:  Poorly targeted as to the code inside the `try...catch` block.
+
+Catch blocks should often wrap a specific block that has known failure modes, rather than as a blanket around lots of diverse code. Rather than think of as "wrap this whole method in a catch all exceptions because it can fail" rather as "wrap this database operation in a catch `DbException` block because failures of that kind can happen in that block, and are `exogenous` as they happen at or en route to the database server, beyond my control.
 
 Exclude the request building code before it or the response parsing code after it from this catch block as this code _cannot_ throw `DbException`.
 This ensures that you're not sweeping up other "unexpected failures.
@@ -51,8 +53,7 @@ In Library code, there is benefit to:
 
 I am going to be recommending the approach of [Serilog.Exceptions](https://github.com/RehanSaeed/Serilog.Exceptions) for a long time. Any logging system that receives an exception should behave like that.
 
-* An exception is not a string, nor a couple of strings for "type, message, stacktrace".  
-* An exception is a _structured_ object with named fields with typed value.  
+* An exception is not a string, nor a couple of strings for "type, message, stacktrace". An exception is a _structured_ object with named fields with typed values.  
 * An exception is a _recursively_ structured object due to `InnerException` or `InnerExceptions`.  
 * An exception can have _different properties_ due to differing exception types in the framework.  (e.g. if you have a [`ValidationException`](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.validationexception), then the [`ValidationResult`](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.validationexception.validationresult) and properties of that, are important).  
 * An exception can have _custom properties_ due to custom exception types declared in the application not the framework.
@@ -63,10 +64,13 @@ If e.g. an `UserException`  has a property `public Guid UserId { get; }`. Do I w
 
 The logging or telemetry system should handle this for any exception type.
 
+If your actual issue is wrapped in a `System.Exception` then accurately recording inner data becomes even more important.
+
 Is this inefficient and will need reflection to build such a map of public properties?  Is this a performance issue? Maybe, but consider that:
 
 * Efficiency in terms of time taken and data stored, is not the primary goal of exception handling. Reliability come before Efficiency.  It should be infrequent (indeed, exceptional!) to log exceptions. But when an exception does occur, performance is not the primary concern at all, complete and accurate recording is primary, so that the error can be mitigated to occur less frequently in future.
+* Even un-optimized, these times are actually quite small compared to e.g. Database server queries or HTTP round-trips.
 * Many frameworks (e.g. Dependency Injection tools, JSON serialization libraries) have succeeded in doing both performance and flexibility:
   * They can handle many types, even user-defined types that have not been seen before.
-  * Performance is more than good enough over the lifetime of the application, due e.g. using CodeGen, to not doing reflection from scratch every time.
-* Applications tend to throw a small set of exceptions regularly, and a map can be built when the exception type is first encountered.
+  * Performance is more than good enough over the lifetime of the application, due to e.g. using code generation to build efficient code for that type, and not doing reflection from scratch every time.
+* Applications tend to throw a small set of exceptions regularly, so the same types will be encountered again, therefor caching techniques will work well.
