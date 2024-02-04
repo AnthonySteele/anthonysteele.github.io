@@ -55,7 +55,9 @@ In Library code, there is benefit to:
 
 I am going to be recommending the approach of [Serilog.Exceptions](https://github.com/RehanSaeed/Serilog.Exceptions) for a long time. Any logging system that receives an exception should behave like that.
 
-* An exception is not a string, nor a couple of strings for "type, message, stacktrace". An exception is a _structured_ object with named fields with typed values.  
+A .NET exception is not a just a string, [nor is it a couple of strings for "type, message, stacktrace"](https://opentelemetry.io/docs/specs/otel/trace/exceptions/#attributes).
+
+* An exception is a _structured_ object with named fields with typed values.  
 * An exception is a _recursively_ structured object due to `InnerException` or `InnerExceptions`.  And if your actual issue is wrapped in a `System.Exception` then accurately recording inner data becomes even more important.
 * An exception can have _different properties_ due to differing exception types in the framework.  (e.g. if you have a [`ValidationException`](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.validationexception), then the [`ValidationResult`](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations.validationexception.validationresult) and properties of that, are important).  
 * An exception can have _custom properties_ due to custom exception types declared in the application not the framework.
