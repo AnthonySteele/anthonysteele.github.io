@@ -49,7 +49,7 @@ In terms of [the 4 DORA metrics](https://cloud.google.com/blog/products/devops-s
 
 The fear of change given relatively infrequent and expensive releases was noticeable. Quality and incremental change was starved out in favour of hacking in new features that had a JIRA and a manager wanting them, as these were much easier to justify to the test team.
 
-The test team and it's multi-day [manual testing process](https://dora.dev/devops-capabilities/technical/test-automation/) going through each release was viewed as vital. And they had no incentive to automate themselves out of their current job.
+Despite the existence of automated unit tests, these were low-level and tightly coupled. The separate test team and their [manual testing process](https://dora.dev/devops-capabilities/technical/test-automation/) going through each release was viewed as vital. It added a day or more to the release cycle. And they had no incentive to automate themselves out of their current job.
 
 It was around then that I started to say "These problems cannot be solved by adding process; the problems that can be solved by adding process have been  thus solved; so the remaining problems are those caused by too much process." I don't think that this was ever even taken seriously. The impacts were either not understood or not deemed important.
 
