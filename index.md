@@ -1,5 +1,8 @@
 # Various writings
 
+* 2024
+  * [It was the best of blue-green deployments, it was the worst of blue-green deployments](./TheBestAndWorstOfBlueGreenDeployments)
+  * [On the subtleties of Exception handling in C#](./ExceptionHandling)
 * 2021
   * [Interfaces are overused](./InterfacesAreOverused)
   * [Parameter types, Co- and Contravariance](./ParamTypesCoCon)
