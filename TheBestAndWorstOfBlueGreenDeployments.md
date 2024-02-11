@@ -63,7 +63,7 @@ This is a big reason why I don't work there any more.
 
 ## Afterword
 
-While working there, I had a copy of the _Accelerate_ book (Forsgren, Humble and Kim, 2018) but I could not bring myself to read it, as I felt that it would further elevate my stress levels when I knew that could not bring any of those desired practices into use. I was not the person who needed to read it.
+I did direct people to online writing such as those from [The DORA Institute](https://dora.dev/devops-capabilities/) to back up my suggestions, but did not get traction. I had a copy of the _Accelerate_ book (Forsgren, Humble and Kim, 2018) but I could not bring myself to read it, as I felt that it would further elevate my stress levels when I knew that could not bring any of those desired practices into use. I was not the person who needed to read it.
 
 Company culture matters. This is an example of the technical issues being easier to identify than the cultural issue, which they are actually downstream of. Cultural problems are often far harder to solve than the technical ones. You can't get the time to fix a problem if it's not even seen as a problem. You can't get the time to fix a problem if you're expected to only follow directions.
 
