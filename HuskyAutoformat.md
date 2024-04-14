@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Formatting code is a perennial issue. Some people love to get everything just right for readability - and I am one of those. And some think that this is just wasting time and introducing diffs with no actual content. And they also have a point. I don't think that this point is wrong as such, we just have different priorities. And that it's OK for different people to have priorities when working together.
+Formatting code is a perennial issue. Some people love to get everything just right for readability - and I am one of those. And some think that this is just wasting time and introducing diffs with no actual content. And they also have a point. I don't think that this point is wrong as such, we just have different priorities. And that it's OK for different people to have different priorities when working together: we don't have tyo work the exact same way, we just have to have synergy.
 
 But the real way to keep everyone happy  is to automate it, so that formatting happens consistently without wasting time.
 
@@ -89,7 +89,6 @@ Time to play! Create out a new disposable branch and change a file.
 Change a `.cs` file and make a commit: it should run dotnet format on the changed file!
 
 ![Expected output](./images/husky_install_5.png)
-
 
 Now work as before, and husky formatting will kick in when needed, on only the files that are part of the commit.
 
