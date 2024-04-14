@@ -1,4 +1,4 @@
-# Autoformatting
+# Autoformatting with Husky.NET
 
 ## Introduction
 
@@ -112,6 +112,6 @@ If you ever need to temporarily disable the autoformat, do this:
 
 ### Teamwork
 
-Depending on your team, you might want to keep this setup locally, or commit the files in `.config` and `.husky` to git so that the whole team has these tools. Make this decision after discussion.
+Depending on your team, you might want to keep this setup locally, or commit the files in `.config` and `.husky` to git so that the whole team has these tools. It's probably better to make this decision after discussion, rather than surprising your colleagues with it!
 
 It's certainly better when everyone does it. But you can still use Husky.NET for formatting yourself without that.
