@@ -2,9 +2,9 @@
 
 ## Introduction
 
-Formatting code is a perennial issue. Some people love to get everything just right for readability - and I am one of those. And some think that this is just wasting time and introducing diffs with no actual content. And they also have a point. I don't think that this point is wrong as such, we just have different priorities. And that it's OK for different people to have different priorities when working together: we don't have tyo work the exact same way, we just have to have synergy.
+Formatting code is a perennial issue. Some people love to get everything just right for readability - and I am one of those. And some think that this is just wasting time and introducing diffs with no actual content. And they also have a point. I don't think that this point is wrong as such, we just have different priorities. And that it's OK for different people to have different priorities when working together: we don't have to work the exact same way, we just have to have synergy of approaches.
 
-But the real way to keep everyone happy  is to automate it, so that formatting happens consistently without wasting time.
+But the better answer to keep everyone happy  is to _automate it_, so that formatting happens consistently without wasting time.
 
 We'll assume that you  have [an `.editorconfig` file](https://editorconfig.org/) with [preferred styles](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/code-style-rule-options) in the repository. That's a separate topic so we'll assume that it's already covered. The good news is that `dotnet format` will use this file's settings.
 
@@ -14,11 +14,11 @@ This can be done by glueing `git` and `dotnet format` together using a tool call
 
 ## Here's how
 
+Here are the step-by step instructions. We will assume that you have a  repository checked out from git in a local folder e.g. `C:\Code\SomeRepository`. And that you have a recent version of the `dotnet` command line installed, such that `dotnet format` works.
+
 ### 1: Prepare the repository to use dotnet local tools
 
-First, prepare the repository to [use dotnet local tools](https://learn.microsoft.com/en-us/dotnet/core/tools/local-tools-how-to-use) by creating a tools manifest.
-
-Assuming that your repository checkout folder is e.g. `C:\Code\SomeRepository`, it goes like this:
+First, prepare the repository to [use dotnet local tools](https://learn.microsoft.com/en-us/dotnet/core/tools/local-tools-how-to-use) by creating a tools manifest. It goes like this:
 
 ```cmd
 cd C:\Code\SomeRepository
@@ -27,7 +27,7 @@ dotnet new tool-manifest
 
 ![Expected output](./images/husky_install_1.png)
 
-NB: if you already have a tools manifest, this command can be skipped. and will in any case fail with an error message like this:
+NB: if you already have a tools manifest, this command can be skipped. In this case it will fail with an error message like this:
 
 ```txt
 Creating this template will make changes to existing files:
@@ -82,7 +82,7 @@ Configure the pre-commit action to run a `dotnet format` on changed `.cs` files.
 }
 ```
 
-### 5 try it out
+### 5 Try it out
 
 Time to play! Create out a new disposable branch and change a file.
 
@@ -90,7 +90,7 @@ Change a `.cs` file and make a commit: it should run dotnet format on the change
 
 ![Expected output](./images/husky_install_5.png)
 
-Now work as before, and husky formatting will kick in when needed, on only the files that are part of the commit.
+Now work as before, and husky formatting will kick in when needed, on only the files that are part of the commit. This should work with multiple different git tools. I use a mixture of command line git and the TortoiseGit GUI, and it works fine with both. 
 
 ![Expected output](./images/husky_install_6.png)
 
