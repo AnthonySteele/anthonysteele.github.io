@@ -107,10 +107,11 @@ Husky dotnet tool restore
 
 ## Solution filters
 
-If you are using solution filters, you can have a solution ( `.sln` file ) and one or more solution filters ( `.slnf` files ) in the same folder. In this case, `dotnet format` will fail with an error as it doesn't know which one to choose:
+If you are using solution filters, you can have a solution (a `.sln` file) and one or more solution filters ( `.slnf` files) in the same folder. In this case, `dotnet format` will fail with an error as it doesn't know which one to choose:
 
 ```text
-Multiple MSBuild solution files found in 'C:\code\SomeRepository\'. Specify which to use with the <workspace> argument.
+Multiple MSBuild solution files found in 'C:\code\SomeRepository\'. 
+Specify which to use with the <workspace> argument.
 ```
 
 In this case, include the `.sln` file in the `dotnet format` command line, In `task-runner.json` change the args line to have your solution file as the arg after `format`:
