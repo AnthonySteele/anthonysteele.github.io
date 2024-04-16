@@ -101,8 +101,8 @@ Now work as before, and husky formatting will kick in when needed, on only the f
 If you work on the same files in both Windows and WSL Linux command line (I often use git in this way), then it should all work. But you may need to run this  a second time, so that it has been executed on both environments:
 
 ```cmd
-dotnet tool install 
-Husky dotnet tool restore
+dotnet tool install Husky
+dotnet tool restore
 ```
 
 ## Solution filters
