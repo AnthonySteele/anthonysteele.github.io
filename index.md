@@ -1,6 +1,7 @@
 # Various writings
 
 * 2024
+  * [Autoformatting with dotnet format and Husky.NET](./HuskyAutoformat)
   * [It was the best of blue-green deployments, it was the worst of blue-green deployments](./TheBestAndWorstOfBlueGreenDeployments)
   * [On the subtleties of Exception handling in C#](./ExceptionHandling)
 * 2021

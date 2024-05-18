@@ -1,5 +1,7 @@
 # Autoformatting with Husky.NET
 
+Automating formatting on commit with `dotnet format`, git and Husky.NET
+
 ## Introduction
 
 Formatting code is a perennial issue. Some people love to get everything just right for readability - and I am one of those. And some think that this is just wasting time and introducing diffs with no actual content. And they also have a point. I don't think that this point is wrong as such, we just have different priorities. And that it's OK for different people to have different priorities when working together: we don't have to work the exact same way, we just have to have synergy of approaches.
@@ -8,7 +10,7 @@ But the better answer to keep everyone happy  is to _automate it_, so that forma
 
 We'll assume that you  have [an `.editorconfig` file](https://editorconfig.org/) with [preferred styles](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/code-style-rule-options) in the repository. That's a separate topic so we'll assume that it's already covered. The good news is that `dotnet format` will use this file's settings.
 
-What should happen is that when making a `git` commit, then `dotnet format` should be run over the changed files.
+What should happen is that when making a `git` commit, then `dotnet format` should be run over the changed files. And only the changed files!
 
 This can be done by glueing `git` and `dotnet format` together using a tool called [Husky.NET](https://alirezanet.github.io/Husky.Net/), which can be used to run command-line tools including `dotnet format` on [git's pre-commit hook](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks).
 
