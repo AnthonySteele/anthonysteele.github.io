@@ -46,7 +46,9 @@ This is better in some ways. We focus a bit more on outcome not implementation.
 
 The mocking code is extracted for re-use, which makes it less verbose.
 
-If this approach is taken, then we can refactor the service at will. The service does not even need to have an interface at all, and this extra code should be deleted. You should be able to "extract class" as a refactoring on the code and still verify that nothing is broken.
+If this approach is taken, then we can refactor the service at will. The service does not even need to have an interface at all, and this extra declaration should be deleted. We are at the point that the foolish dogma of "always put an interface on every class" is actually useless.
+
+You should also be able to "extract class" as a refactoring on the service code and without changing testes, still verify that nothing is broken.
 
 ## Decoupled style
 
@@ -86,9 +88,11 @@ https://www.infoq.com/articles/unit-testing-approach/
 
 ## the demo app decoupled
 
-We use the [Test Host](https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests). contrary to what that page says, this host is not _just_ for "integration tests" that "include the app's supporting infrastructure, such as the database, file system". It depends on how you set it up.
+We use the [Test Host](https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests). Contrary to what that page says, this host is not _just_ for "integration tests" that "include the app's supporting infrastructure, such as the database, file system". It depends on how you set it up.
 
  The demo app has [a `TestApplicationFactory`](https://github.com/AnthonySteele/CoupledTestDemo/blob/main/WeatherServiceTestsHost/TestApplicationFactory.cs) that  replaces repositories with mocks - there is only one in this simple case, but it can be as many as needed.
+
+ The _only_ classes that _need_ interfaces in this design are the ones that need to be mocked for unit testing, because they have dependencies such as databases that can't be unit tested.
 
 There's a bit of overhead to get it all set up, but this is a once-off cost so it matters less on larger apps. With a few helper classes it's fairly transparent. That is demonstrated with the `TestContext` This can be shared for even better performance. I have never found this technique to be "too slow".
 
@@ -98,8 +102,8 @@ It's clear that it tests more of the application as well: if you mess up your ht
 
 ## End note
 
-I don't advocate for these "decoupled" tests to be the _only_ kind of test, just the _default_ kind. i.e. about 80% of the test coverage, depending on the specifics of the app. There will be business logic cases where you are better off dropping down to a class-level test and pumping many test cases into that subsystem. Even then, these might be "sociable tests" that cover multiple classes, as the current exact subdivision of the code into classes is _not the test's concern at all_.
+I don't advocate for these "decoupled" tests to be the _only_ kind of test, just the _default_ kind. i.e. about 80% of the test coverage, depending on the specifics of the app. There will be business logic cases where you are better off dropping down to a class-level test and pumping many test cases into that subsystem. Even then, these might be "sociable tests" that cover multiple classes, as the current exact subdivision of the code into classes is _not the test's concern at all_ since you're testing the _behaviour_ of code and not coupled to the _structure_ of code.
 
-I didn't come to this position out of theoretical reasoning: This worked for me, even better than I thought it would, and it could work for you too.
+I didn't come to this position out of theoretical reasoning: This was given to me, it worked for me, even better than I thought it would, and it could work for you too.
 
 Use TestHost for more tests. If you find yourself unable to do a simple "extract class" refactoring because it would both break existing tests and the new class would require new tests, they something is wrong: The app code is too coupled to the test code.
