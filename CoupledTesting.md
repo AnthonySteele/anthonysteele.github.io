@@ -24,7 +24,7 @@ The same app is tested in multiple ways.
 
 Isolated, "Mock the interface" tests.
 
-Sadly this is the default. I have seen a co-worker get very good at this style. While I was saying "100% coverage isn't necessarily, important or even always possible", they turned in 100% coverage, even exception handling. And yet the app was still a terrible codebase to work on. Tech debt was the main impediment to process, but refactorings just didn't happen.
+Sadly this is the default. I have seen a co-worker get very good at this style. While I was saying "100% coverage isn't necessarily, important or even always possible", they turned in 100% coverage, even exception handling. And yet the app was still a terrible codebase to work on. Tech debt was the main impediment to process, but refactorings just didn't happen. A large body of tests in this style can be as much a tedious liability as it is a useful safety net.
 
 ## The Isolated tests
 
