@@ -140,3 +140,7 @@ If you ever need to temporarily disable the autoformat, do this:
 Depending on your team, you might want to keep this setup locally, or commit the files in `.config` and `.husky` to git so that the whole team has these tools. It's probably better to make this decision after discussion, rather than surprising your colleagues with it!
 
 It's certainly better when everyone does it. But you can still use Husky.NET for formatting yourself without that.
+
+### CSharpier
+
+There is another code formatter, [CSharpier](https://csharpier.com/). It can be integrated into husky and git in a very similar way, just with a different `.husky/task-runner.json`. [The documents are here](https://csharpier.com/docs/Pre-commit#huskynet).
