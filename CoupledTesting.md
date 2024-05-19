@@ -1,4 +1,4 @@
-# Testing
+# Testing  and Coupling
 
 Most unit testing in C#, .NET and ASP code could be done better. I mean in ways that produce better outcomes, better code and make your life as a developer easier.
 
@@ -14,7 +14,7 @@ Most tests that we see in practice are too closely coupled to the code under tes
 
 There is [demo code for this blog post](https://github.com/AnthonySteele/CoupledTestDemo), so that the techniques can be worked through. But bear in mind that this code does nothing, it is merely a reworking of the sample ASP "weather forecast controller". In itself, it is far to simple to need the testing done here. But it must be small to be a readable stand-in for a much larger app, that would have many more classes with multiple methods.
 
-There is a Controller, that calls a service that calls a repository that presumably does the data retrieval. So far so mundane.
+The demo code has a Controller, that calls a service that calls a repository that presumably does the data retrieval. So far so familiar.
 
 The repository in a real app would be e.g. a concrete dependency on a database. We cannot unit test it, so we must give it an interface, and then swap in a different implementation for tests, and test the rest of the app without the real repository.
 
