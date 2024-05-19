@@ -1,6 +1,6 @@
 # Testing
 
-Most unit testing in CSharp, ASP and .NET code could be done better. I mean in ways that produce better outcomes, better code and make your life as a developer easier.
+Most unit testing in C#, .NET and ASP code could be done better. I mean in ways that produce better outcomes, better code and make your life as a developer easier.
 
 Below I present a better way that you might already be aware of but probably would benefit from using more.
 
@@ -32,6 +32,8 @@ Sadly this is the default. I have seen a co-worker get very good at this style. 
 
 A mock repository is injected into the service, and then separately, a mock service is injected into the controller. Both service and repository must have interfaces for this.
 
+The code smells that we typically see include tests with dozens of mocks, verbose and repetitive mock setup to test very little logic, and even for extra insanity, [key business logic in AutoMapper mappers](https://www.anthonysteele.co.uk/AgainstAutoMapper), which are called in the middle of the code, but are not part of the test, but mocked for test.
+
 ## Sociable style
 
 This style is called ["sociable unit tests"](https://martinfowler.com/bliki/UnitTest.html) where an assembled subsystem is tested.
@@ -52,11 +54,11 @@ For the last, [decoupled style](https://github.com/AnthonySteele/CoupledTestDemo
 
 I started by thinking "this is a lot of indirection to accomplish the same outcome". And then a few months later I noticed that I had got into the habit of starting a feature task by making a failing test. Without touching a single line app code I was able to add a test that "when _new thing_ happens, then _outcome_ should result. It felt like starting a building work by putting up a scaffold that would support the structure safely. The tricky part was done when I had a failing test.
 
-This was a breakthrough. "Test first" is good, or so I had always heard. Yet it wasn't prevalent. Why? Was this purely because I lacked the self-discipline or the innate skill? But instead it seems that a major factor was that _the test style before now did not encourage test first coding_.
+This was a breakthrough. "Test first" is good, or so [I had always heard](https://www.youtube.com/watch?v=fPlBLlE8vOI). Yet it wasn't prevalent in most places where I have worked. I didn't do it much. Why? Was this purely because I lacked the self-discipline or the innate skill? But instead it seems that a major factor was that _the test style before now did not encourage test-first coding_.
 
 Consider this: if "refactoring" is changing code under test, then how well can you refactor if any change breaks tests?
 
-With this approach, we have freedom to refactor the code fairly freely. Split 1 controller into 2? No problem, as long as it's under test. Do away with controllers entirely and use [minimal web API routes](https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api) instead? No problem, it's under test!
+With this approach, we have freedom to refactor the code under test fairly freely. Split 1 controller into 2? No problem! Do away with controllers entirely and use [minimal web API routes](https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api) instead? No problem, it's under test!
 
 ### But is it _unit_ tests?
 
@@ -68,12 +70,13 @@ What is a "unit" in "unit tests" anyway? Views on what's a "unit" that I have he
 
 * It's called a neutral term, "unit" because it's your choice of what that unit is. If it was always "method" it would be called a "method test", and it's not called that, therefore it's not always that.
 * It tests a unit of app functionality, [a single logical concept in the system](https://www.artofunittesting.com/definition-of-a-unit-test).
+* [Test behaviors, not implementation details](https://www.youtube.com/watch?v=EZ05e7EMOLM&t=1428s) - this blog post would be _incomplete_ without referencing "TDD, Where Did It All Go Wrong" by Ian Cooper.
 
 Ultimately the only view that's wrong and harmful is that "a unit test always tests a method on a class, in isolation".
 
 Consider the definition of unit tests, where "A test is not a unit test if: It talks to the database; It communicates across the network; It touches the file system" (from ["A Set of Unit Testing Rules", Michael Feathers, 2005](https://www.artima.com/weblogs/viewpost.jsp?thread=126923) )   - these decoupled tests _meet all of those criteria_.
 
-Consider the other definition of unit tests, where they are small, fast, cheap, numerous, can be run concurrently etc: these decoupled tests meet all of those criteria too.
+Consider the other definition of unit tests, where they are small, fast, cheap, numerous, reliable, can be run frequently, can be run concurrently: these decoupled tests meet all of those criteria too.
 
 By reasonable and pragmatic definitions, these are unit tests.
 
