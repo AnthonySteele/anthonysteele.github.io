@@ -98,11 +98,11 @@ We use the [Test Host](https://learn.microsoft.com/en-us/aspnet/core/test/integr
 
 There's a bit of overhead to get it all set up, but this is a once-off cost so it matters less on larger apps. With a few helper classes it's fairly transparent. That is demonstrated with the `TestContext` This can be shared for even better performance in cases where this doesn't affect the test. I have never found this technique to be "too slow".
 
-It's clear that it tests more of the application as well: if you mess up your http configuration so that the route is wrong, or forget to register a necessary service, you'll know it, wheras the other tests don't get to that before actual "deploy and run tests on the deployed app" integration tests.
+It's clear that it tests more of the application as well: if you mess up your http configuration so that the route is wrong, or forget to register a necessary service, you'll know it, whereas the other tests don't get to that before actual "deploy and run tests on the deployed app" integration tests.
 
-We also demo [a `FakeWeatherForecastDataStore`](https://github.com/AnthonySteele/CoupledTestDemo/blob/main/WeatherServiceTestsHost/FakeWeatherForecastDataStore.cs) a fake implementation, instead of a mock using a mocking tool. It tracks calls with a `CallCount` property. This technique is also underused. In many cases, this is simpler, clearer code than the equivalent using mocking framework.
+We also demo [a `FakeWeatherForecastDataStore`](https://github.com/AnthonySteele/CoupledTestDemo/blob/main/WeatherServiceTestsHost/FakeWeatherForecastDataStore.cs) [a fake implementation](http://xunitpatterns.com/Fake%20Object.html), instead of a mock using a mocking tool. It tracks calls with a `CallCount` property. This technique is also underused. In many cases, this is simpler, clearer code than the equivalent using mocking framework.
 
-What I typically find that this kind of Fake is simpler, but a bit more verbose - more lines of code, but simpler lines of code - than the mocking framework equivalent. But then the mocking equivalent gets repeated multiple times in the codebase, adding up to far more lines of code then declaring a "Fake data store" or "In-memory repository" once.
+What I typically find that this kind of Fake is simpler, but a bit more verbose - more lines of code, but simpler lines of code - than the mocking framework equivalent. But then the mocking equivalent gets repeated multiple times in the codebase, adding up to far more lines of code than declaring a "Fake data store" or "In-memory repository" once.
 
 ## End note
 
@@ -114,6 +114,8 @@ Favour State-Based Testing over Interaction  testing: favour test that test _out
 
 [Interaction vs State-Based Testing](https://thinkster.io/tutorials/blogs/interaction-vs-state-based-testing)
 
-I don't advocate for these "decoupled" tests to be the _only_ kind of test, just the _default_ kind. i.e. about 80% of the test coverage, depending on the specifics of the app. There will be business logic cases where you are better off dropping down to a class-level test and pumping many test cases into that subsystem. Even then, these might be "sociable tests" that cover multiple classes, as the current exact subdivision of the code into classes is _not the test's concern at all_ since you're testing the _behaviour_ of code and not coupled to the _structure_ of code.
+I don't advocate for these "decoupled" tests to be the _only_ kind of test, just the _default_ kind that you [should use](https://datatracker.ietf.org/doc/html/rfc2119). 
+
+About 80% of the test coverage can be decoupled, depending on the specifics of the app. There will be business logic cases where you are better off dropping down to a class-level test and pumping many test cases into that subsystem. Even then, these might be "sociable tests" that cover multiple classes, as the current exact subdivision of the code into classes is _not the test's concern at all_ since you're testing the _behaviour_ of code and not coupled to the _structure_ of code.
 
 I didn't come to this position out of theoretical reasoning: This was given to me by a team already using it. And it worked for me, even better than I thought it would. And it could work for you too.
