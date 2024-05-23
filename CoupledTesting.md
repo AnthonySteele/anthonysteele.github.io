@@ -123,3 +123,5 @@ I don't advocate for these "decoupled" tests to be the _only_ kind of test, just
  There will be business logic cases where you are better off dropping down to a class-level test and pumping many test cases into that subsystem, instead. Even then, these might be "sociable tests" that cover multiple classes, as the current exact subdivision of the code into classes is _not the test's concern at all_ since you're testing the _behaviour_ of code and not coupled to the _structure_ of code.
 
 I didn't come to this position out of theoretical reasoning: This was given to me by a team already using it. And it worked for me, even better than I thought it would. And it could work for you too.
+
+The second-order conclusions are that like with Continuous Delivery, it's the downstream effects that deliver the big benefits over time. Also that you can work for many years in "good practice" employers, with ever seeing first-hand what good really looks like, or even knowing that better exists.
