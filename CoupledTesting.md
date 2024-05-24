@@ -1,4 +1,4 @@
-# Testing  and Coupling
+# Decouple your unit tests
 
 Most unit testing in C#, .NET and ASP code could be done better. Less coupled. And that would produce better outcomes, better code, and make your life as a developer easier.
 
@@ -30,7 +30,7 @@ A large body of tests in this style can be as much a tedious liability as it is 
 
 ### The Isolated tests
 
-[In `WeatherForecastControllerIsolatedTests.cs`](https://github.com/AnthonySteele/CoupledTestDemo/blob/main/WeatherServiceTestsWithMocks/WeatherForecastControllerIsolatedTests.cs), Each class is tested in isolation with mocks. The test coverage is high. mocking code is verbose and repetitive.
+[In `WeatherForecastControllerIsolatedTests.cs`](https://github.com/AnthonySteele/CoupledTestDemo/blob/main/WeatherServiceTestsWithMocks/WeatherForecastControllerIsolatedTests.cs), Each class is tested in isolation with mocks. The test coverage is high. Mocking code is everywhere, it is verbose and repetitive.
 
 A mock repository is injected into the service, and then separately, a mock service is injected into the controller. Both service and repository must have interfaces for this. We verify the the correct method was called.
 
@@ -113,13 +113,13 @@ A technique that scales a bit better is doing it all in a test base class; but s
 
 It's clear that it tests more of the application as well: if you mess up your http configuration so that the route is wrong, or forget to register a necessary service, you'll know it, whereas the other tests don't get to that before actual "deploy and run tests on the deployed app" integration tests.
 
-We also demo [a `FakeWeatherForecastDataStore`](https://github.com/AnthonySteele/CoupledTestDemo/blob/main/WeatherServiceTestsHost/FakeWeatherForecastDataStore.cs) [a fake implementation](http://xunitpatterns.com/Fake%20Object.html), instead of a mock using a mocking tool. It tracks calls with a `CallCount` property. This technique is also underused. In many cases, this is simpler, clearer code than the equivalent using mocking framework.
+We also demo [a `FakeWeatherForecastDataStore`](https://github.com/AnthonySteele/CoupledTestDemo/blob/main/WeatherServiceTestsHost/FakeWeatherForecastDataStore.cs). This is a [fake implementation](http://xunitpatterns.com/Fake%20Object.html), instead of a mock using a mocking tool. It tracks calls with a `CallCount` property. This technique is also underused. In many cases, this is simpler, clearer code than the equivalent using mocking framework.
 
 What I typically find that this kind of Fake is simpler, but a bit more verbose - more lines of code, but simpler lines of code - than the mocking framework equivalent. But then the mocking equivalent gets repeated multiple times in the codebase, adding up to far more lines of code than declaring a "Fake data store" or "In-memory repository" once.
 
 ## End note
 
-Decouple. If you find yourself unable to do a simple "extract class" refactoring because it would both break existing tests and the new class would require new tests, they something is wrong: The app code is too coupled to the test code.
+Decouple your unit tests. If you find yourself unable to do a simple "extract class" refactoring because it would both break existing tests and the new class would require new tests, they something is wrong: The app code is too coupled to the test code.
 
 Use [the Test Host](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.testhost) for more of your tests. Push mocks to the edges off the app. Use them for the _sinks_ where state leaves or enters the app.
 
@@ -140,4 +140,3 @@ The second-order conclusions are that like with Continuous Delivery, it's the do
 And that semantic drift happens, such that over time the practice ends up substantially different, easier, and often worse, not giving much of those benefits.
 
 Also that you can work for many years in "good practice" employers, with ever seeing first-hand what good really looks like, or even knowing that better exists. After all "we do testing" ticks the box.
-
