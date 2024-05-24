@@ -84,21 +84,32 @@ By reasonable and pragmatic definitions, these are unit tests.
 
 Kent Beck:
 
-> "Unit tests are completely isolated from each other, creating their test fixtures from scratch each time." the word unit in unit testing refers to the test itself: unit tests are isolated from other tests. Beck argues that "tests should be coupled to the behaviour of code and decoupled from the structure of code."
-
-https://www.infoq.com/articles/unit-testing-approach/
+> "Unit tests are completely isolated from each other, creating their test fixtures from scratch each time." the word unit in unit testing refers to the test itself: unit tests are isolated from other tests. Beck argues that "tests should be coupled to the behaviour of code and decoupled from the structure of code."  
+  [The Unit in Unit Testing](https://www.infoq.com/articles/unit-testing-approach/)
 
 Ultimately the only views are wrong and harmful are that "a unit test always tests a method on a class, in isolation" and that "every class has a matching test class, no more and no less is needed".
 
 ## the demo app Decoupled
 
-We use the [Test Host](https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests). Contrary to what that page says, this host is not _just_ for "integration tests" that "include the app's supporting infrastructure, such as the database, file system". It depends on how you set it up.
+We use the [Test Host](https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests). Contrary to what that page says, this host is not _just_ for "integration tests" that "include the app's supporting infrastructure, such as the database, file system". They can be mocked here.
 
  The demo app has [a `TestApplicationFactory`](https://github.com/AnthonySteele/CoupledTestDemo/blob/main/WeatherServiceTestsHost/TestApplicationFactory.cs) that  replaces repositories with mocks - there is only one that needs to be replaced in this simple app, but it can be as many as needed.
 
- The _only_ classes that _need_ interfaces in this design are the ones that need to be mocked for unit testing, because they have dependencies such as databases that can't be unit tested. Other interfaces can simply be deleted.
+ I have never found this technique to be "too slow".
 
-There's a bit of overhead to get it all set up, but this is a once-off cost so it matters less on larger apps. With a few helper classes it's fairly transparent. That is demonstrated with the `TestContext` This can be shared for even better performance in cases where this doesn't affect the test. I have never found this technique to be "too slow".
+We can [create the `TestApplicationFactory` new for each test like this](https://github.com/AnthonySteele/CoupledTestDemo/blob/main/WeatherServiceTestsHost/WeatherForecastHostTests.cs) or [abstract it into an injectable `TestContext`](https://github.com/AnthonySteele/CoupledTestDemo/blob/main/WeatherServiceTestsHost/WeatherForecastHostTestsWithSharedContext.cs).
+In this case it is shared for even better performance in cases where this doesn't affect the test.
+
+ There's a bit of overhead to get it all set up, but this is a once-off cost so it matters less on larger apps. With a few helper classes it's fairly transparent.
+ Bear in mind that as your test suite grows, this layer becomes more worthwhile. So that the test is concise and more readable, and does not specify everything at the http request level.
+
+You can do it all in the test method, including the `WebApplicationFactory` code, but this technique that doesn't scale at all to many tests.
+
+A technique that scales a bit better is doing it all in a test base class; but soon that class becomes far too large and lacks coherence. i.e. "favour composition over inheritance".
+
+ You would be better off with separate helper classes for common code for wrappers and abstractions that you might find in a larger app's test suite.
+
+ The _only_ classes in the app that _need_ interfaces in this design are the ones that need to be mocked for unit testing, because they have dependencies such as databases that can't be unit tested. Other interfaces are noise, and can simply be deleted.
 
 It's clear that it tests more of the application as well: if you mess up your http configuration so that the route is wrong, or forget to register a necessary service, you'll know it, whereas the other tests don't get to that before actual "deploy and run tests on the deployed app" integration tests.
 
@@ -124,4 +135,9 @@ I don't advocate for these "decoupled" tests to be the _only_ kind of test, just
 
 I didn't come to this position out of theoretical reasoning: This was given to me by a team already using it. And it worked for me, even better than I thought it would. And it could work for you too.
 
-The second-order conclusions are that like with Continuous Delivery, it's the downstream effects that deliver the big benefits over time. Also that you can work for many years in "good practice" employers, with ever seeing first-hand what good really looks like, or even knowing that better exists.
+The second-order conclusions are that like with Continuous Delivery, it's the downstream effects that deliver the big benefits over time.
+
+And that semantic drift happens, such that over time the practice ends up substantially different, easier, and often worse, not giving much of those benefits.
+
+Also that you can work for many years in "good practice" employers, with ever seeing first-hand what good really looks like, or even knowing that better exists. After all "we do testing" ticks the box.
+
