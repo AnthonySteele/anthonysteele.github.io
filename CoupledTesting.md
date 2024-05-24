@@ -1,10 +1,10 @@
 # Testing  and Coupling
 
-Most unit testing in C#, .NET and ASP code could be done better. I mean in ways that produce better outcomes, better code, and make your life as a developer easier.
+Most unit testing in C#, .NET and ASP code could be done better. Less coupled. And that would produce better outcomes, better code, and make your life as a developer easier.
 
 Below I present a better way that you might already be aware of but probably would benefit from using more.
 
- I was sold on the better way not from a good logical argument but by working with these approaches. This is all from experience, I have seen these code testing styles, for years on end.
+ I was sold on the better, less coupled way not from a good logical argument but by working with these approaches. This is all from experience, I have seen these code testing styles, for years on end.
 
 ## Preamble
 
@@ -119,9 +119,9 @@ What I typically find that this kind of Fake is simpler, but a bit more verbose 
 
 ## End note
 
-If you find yourself unable to do a simple "extract class" refactoring because it would both break existing tests and the new class would require new tests, they something is wrong: The app code is too coupled to the test code.
+Decouple. If you find yourself unable to do a simple "extract class" refactoring because it would both break existing tests and the new class would require new tests, they something is wrong: The app code is too coupled to the test code.
 
-Use [the Test Host](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.testhost) for more of your tests. Push mocks to the edges off the app.
+Use [the Test Host](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.testhost) for more of your tests. Push mocks to the edges off the app. Use them for the _sinks_ where state leaves or enters the app.
 
 Favour State-Based Testing over Interaction  testing: favour test that test _outcomes_ such as returning a result, enqueueing a message, or modifying a state in a data store correctly, over tests that test that the code calls the expected _method_.
 
