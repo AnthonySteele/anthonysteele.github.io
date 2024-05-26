@@ -32,6 +32,31 @@ A large body of tests in this style can be as much a tedious liability as it is 
 
 ### The Isolated tests
 
+```csharp
+    [Fact]
+    public void Controller_Should_CallService()
+    {
+        var service = Substitute.For<IWeatherForecastService>();
+        service.Get().Returns(new List<WeatherForecast>
+        {
+            new WeatherForecast
+            {
+                Date = DateOnly.FromDateTime(DateTime.Today),
+                Summary = "Testy",
+                TemperatureC = 20
+            }
+        });
+
+        var controller = new WeatherForecastController(new NullLogger<WeatherForecastController>(), service);
+
+        controller.Get();
+
+        service.Received().Get();
+    }
+
+    // etc
+```
+
 [In `WeatherForecastControllerIsolatedTests.cs`](https://github.com/AnthonySteele/CoupledTestDemo/blob/main/WeatherServiceTestsWithMocks/WeatherForecastControllerIsolatedTests.cs), Each class is tested in isolation with mocks. The test coverage is high. Mocking code is everywhere, it is verbose and repetitive.
 
 A mock repository is injected into the service, and then separately, a mock service is injected into the controller. Both service and repository must have interfaces for this. We verify the the correct method was called.
@@ -39,6 +64,22 @@ A mock repository is injected into the service, and then separately, a mock serv
 The code smells that we typically see include tests with dozens of mocks, verbose and repetitive mock setup to test very little logic, and even for extra insanity, [key business logic in AutoMapper mappers](https://www.anthonysteele.co.uk/AgainstAutoMapper), which are called in the middle of the code, but are not part of the test, but mocked for test.
 
 ## Sociable style
+
+```csharp
+    [Fact]
+    public void Controller_Should_ReturnExpectedData()
+    {
+        var forecastDataStore = CreateMockWeatherForecastDataStore();
+        var controller = new WeatherForecastController(new NullLogger<WeatherForecastController>(), new WeatherForecastService(forecastDataStore));
+
+        var response = controller.Get();
+
+        Assert.NotEmpty(response);
+        Assert.Equal("Testy", response.First().Summary);
+    }
+
+    /// etc
+```
 
 This style is called ["sociable unit tests"](https://martinfowler.com/bliki/UnitTest.html) where an assembled subsystem is tested.
 
@@ -93,7 +134,37 @@ Ultimately the only views are wrong and harmful are that "a unit test always tes
 
 ## the demo app Decoupled
 
+```csharp
+    [Fact]
+    public async Task GetForecast_Should_ReturnData()
+    {
+        var response = await _testContext.GetForecastTyped();
+
+        Assert.NotNull(response);
+        Assert.NotEmpty(response);
+        Assert.Equal("Testy", response.First().Summary);
+    }
+
+    // etc
+```
+
 We use the [Test Host](https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests). Contrary to what that page says, this host is not _just_ for "integration tests" that "include the app's supporting infrastructure, such as the database, file system". They can be mocked here.
+
+```csharp
+public class TestApplicationFactory : WebApplicationFactory<Program>
+{
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        builder.ConfigureServices(services =>
+        {
+            // this is where services that have concrete dependencies
+            // are replaced by fakes/mocks
+
+            RemoveService<IWeatherForecastDataStore>(services);
+            services.AddSingleton<IWeatherForecastDataStore>(new FakeWeatherForecastDataStore());
+        });
+    }
+```
 
  The demo app has [a `TestApplicationFactory`](https://github.com/AnthonySteele/CoupledTestDemo/blob/main/WeatherServiceTestsHost/TestApplicationFactory.cs) that  replaces repositories with mocks - there is only one that needs to be replaced in this simple app, but it can be as many as needed.
 
