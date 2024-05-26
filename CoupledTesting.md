@@ -194,6 +194,25 @@ We also demo [a `FakeWeatherForecastDataStore`](https://github.com/AnthonySteele
 
 What I typically find that this kind of Fake is simpler, but a bit more verbose - more lines of code, but simpler lines of code - than the mocking framework equivalent. But then the mocking equivalent gets repeated multiple times in the codebase, adding up to far more lines of code than declaring a "Fake data store" or "In-memory repository" once.
 
+I made [another example of an in-memory data store here](https://github.com/AnthonySteele/CoupledTestDemo/blob/main/WeatherServiceTestsHost/FakeRepo/FakeCustomerRepository.cs), with more complete Create, Read and Update operations.
+
+```csharp
+public class FakeCustomerRepository : ICustomerRepository
+{
+    private readonly List<Customer> _data = new();
+
+    public void Add(Customer customer)
+        => _data.Add(customer);
+    
+    public Customer? Get(int id) 
+        => _data.SingleOrDefault(c => c.Id == id);
+        
+    /// etc
+}
+```
+
+Typically these are backed by a `List` or `Dictionary` but it's code, it can do whatever you code it to do.
+
 ## End note
 
 Decouple your unit tests. If you find yourself unable to do a simple "extract class" refactoring because it would both break existing tests and the new class would require new tests, they something is wrong: The app code is too coupled to the test code.
