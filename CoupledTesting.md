@@ -16,7 +16,7 @@ Most tests that we see in practice are too closely coupled to the code under tes
 
 The demo code is a .NET 8 [ASP.NET Core](https://dotnet.microsoft.com/en-us/apps/aspnet) Web Api. It has [a controller](https://github.com/AnthonySteele/CoupledTestDemo/blob/main/WeatherService/Controllers/WeatherForecastController.cs), that calls [a service](https://github.com/AnthonySteele/CoupledTestDemo/blob/main/WeatherService/Controllers/WeatherForecastService.cs) that calls a repository that presumably does the data retrieval. So far, so familiar.
 
-In a real application there would be sufficient complexity to make multiple layers a good iea, and  multiple repositories that would have e.g. a concrete dependency on a database, along with other ways to get and send data to http services, message queues etc.
+In a real application there would be sufficient complexity to make multiple layers a good idea, and  multiple repositories that would have e.g. a concrete dependency on a database, along with other ways to get and send data to http services, message queues etc.
 
 The one repository stands in for all of those. We cannot _unit test_ this repository, so we must give it an interface, and then swap in a different implementation for tests. Then we can test the rest of the application without the real repository.
 
@@ -109,7 +109,7 @@ This was a breakthrough. "Test first" is good, or so [I had always heard](https:
 
 Consider this: if "refactoring" is changing code under test, then how well can you refactor if any change breaks tests?
 
-With this approach, we have freedom to refactor the code under test liberally. The service layer is not doing anything except forwarding calls and could be deleted? Go ahead, tests should still compile and pass. Split one large controller into two? No problem! Do away with controllers entirely and use [minimal web API routes](https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api) instead? Fine, it's under test!
+With this approach, we have freedom to refactor the code under test liberally. When a service layer class is not doing anything except forwarding calls, and could be deleted? Go ahead, tests should still compile and pass. Split one large controller into two? No problem! Do away with controllers entirely and use [minimal web API routes](https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api) instead? Fine, it's under test!
 
 ### But is it _Unit_ tests?
 
@@ -207,7 +207,7 @@ public class FakeCustomerRepository : ICustomerRepository
     public Customer? Get(int id) 
         => _data.SingleOrDefault(c => c.Id == id);
         
-    /// etc
+    // etc
 }
 ```
 
@@ -231,8 +231,8 @@ I don't advocate for these "decoupled" tests to be the _only_ kind of test, just
 
 I didn't come to this position out of theoretical reasoning: This was given to me by a team already using it. And it worked for me, even better than I thought it would. And it could work for you too.
 
-The second-order conclusions are that like with Continuous Delivery, it's the downstream effects that deliver the big benefits over time.
+The second-order conclusions are that like with Continuous Delivery, it's the downstream effects that deliver the big benefits over time. And they support each other. If you can make that refactoring with confidence due to tests, then the next step is to deploy it continuously, and see it working through to production. Then you can incrementally maintain quality
 
-And that semantic drift happens, such that over time the practice ends up substantially different, easier, and often worse, not giving much of those benefits.
+And that semantic drift happens, such that over time the practice such as "unit testing" ends up substantially different, and easier. And often worse, not giving much of the original benefits.
 
 Also that you can work for many years in "good practice" employers, with ever seeing first-hand what good really looks like, or even knowing that better exists. After all "we do testing" ticks the box.
