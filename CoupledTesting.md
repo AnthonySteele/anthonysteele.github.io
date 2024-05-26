@@ -12,11 +12,13 @@ Below I present a better way that you might already be aware of but probably wou
 
 Most tests that we see in practice are too closely coupled to the code under test.
 
-[There is demo code for this blog post](https://github.com/AnthonySteele/CoupledTestDemo), so that the techniques can be worked through. But bear in mind that this code does nothing, it is merely a reworking of the sample ASP "weather forecast controller". In itself, it is far to simple to need the testing done here. But it must be small to be a readable demo stand-in for a much larger app, that would have many more classes with multiple methods arranged in more layers.
+[There is demo code in a github repository for this blog post](https://github.com/AnthonySteele/CoupledTestDemo), so that the techniques can be worked through. But bear in mind that this code does nothing, it is merely a reworking of the sample ASP "weather forecast controller". In itself, it is far to simple to need the testing done here. But it must be small to be a readable demo stand-in for a much larger application, that would have many more classes with multiple methods arranged in more layers.
 
-The demo code has a Controller, that calls a service that calls a repository that presumably does the data retrieval. So far, so familiar.
+The demo code is a .NET 8 [ASP.NET Core](https://dotnet.microsoft.com/en-us/apps/aspnet) Web Api. It has [a controller](https://github.com/AnthonySteele/CoupledTestDemo/blob/main/WeatherService/Controllers/WeatherForecastController.cs), that calls [a service](https://github.com/AnthonySteele/CoupledTestDemo/blob/main/WeatherService/Controllers/WeatherForecastService.cs) that calls a repository that presumably does the data retrieval. So far, so familiar.
 
-In a real app there would be multiple repositories that would be e.g. a concrete dependency on a database, along with other ways to get and send data to http services etc. We cannot _unit_ test this repository, so we must give it an interface, and then swap in a different implementation for tests, and so test the rest of the app without the real repository.
+In a real application there would be sufficient complexity to make multiple layers a good iea, and  multiple repositories that would have e.g. a concrete dependency on a database, along with other ways to get and send data to http services, message queues etc.
+
+The one repository stands in for all of those. We cannot _unit test_ this repository, so we must give it an interface, and then swap in a different implementation for tests. Then we can test the rest of the application without the real repository.
 
 The same app is tested in multiple ways.
 
@@ -62,7 +64,7 @@ This was a breakthrough. "Test first" is good, or so [I had always heard](https:
 
 Consider this: if "refactoring" is changing code under test, then how well can you refactor if any change breaks tests?
 
-With this approach, we have freedom to refactor the code under test fairly freely. Split 1 controller into 2? No problem! Do away with controllers entirely and use [minimal web API routes](https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api) instead? No problem, it's under test!
+With this approach, we have freedom to refactor the code under test liberally. The service layer is not doing anything except forwarding calls and could be deleted? Go ahead, tests should still compile and pass. Split one large controller into two? No problem! Do away with controllers entirely and use [minimal web API routes](https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api) instead? Fine, it's under test!
 
 ### But is it _Unit_ tests?
 
@@ -76,7 +78,7 @@ What is a "unit" in "unit tests" anyway? Views on what's a "unit" that I have he
 * It tests a unit of app functionality, [a single logical concept in the system](https://www.artofunittesting.com/definition-of-a-unit-test).
 * A unit test [Tests behaviors, not implementation details](https://www.youtube.com/watch?v=EZ05e7EMOLM&t=1428s) - this blog post would be _incomplete_ without referencing "TDD, Where Did It All Go Wrong" by Ian Cooper. Who in turn quotes [Kent Beck](https://www.goodreads.com/book/show/387190.Test_Driven_Development).
 
-Consider the definition of unit tests, where "A test is not a unit test if: It talks to the database; It communicates across the network; It touches the file system" (from ["A Set of Unit Testing Rules", Michael Feathers, 2005](https://www.artima.com/weblogs/viewpost.jsp?thread=126923) )   - these decoupled tests _meet all of those criteria_.
+Consider the definition of unit tests, where "A test is not a unit test if: It talks to the database; It communicates across the network; It touches the file system" (from ["A Set of Unit Testing Rules", Michael Feathers, 2005](https://www.artima.com/weblogs/viewpost.jsp?thread=126923) )   - these decoupled tests _meet all of those criteria_ by [configuring the test host to replace such dependencies with fakes](https://github.com/AnthonySteele/CoupledTestDemo/blob/main/WeatherServiceTestsHost/TestApplicationFactory.cs#L15).
 
 Consider the other definition of unit tests, where they are small, fast, cheap, numerous, reliable, can be run frequently, can be run concurrently: these decoupled tests meet all of those criteria too.
 
