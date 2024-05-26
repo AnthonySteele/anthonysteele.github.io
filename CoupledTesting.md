@@ -12,7 +12,7 @@ Below I present a better way that you might already be aware of but probably wou
 
 Most tests that we see in practice are too closely coupled to the code under test.
 
-[There is demo code in a github repository for this blog post](https://github.com/AnthonySteele/CoupledTestDemo), so that the techniques can be worked through. But bear in mind that this code does nothing, it is merely a reworking of the sample ASP "weather forecast controller". In itself, it is far to simple to need the testing done here. But it must be small to be a readable demo stand-in for a much larger application, that would have many more classes with multiple methods arranged in more layers.
+[There is demo code in a GitHub repository for this blog post](https://github.com/AnthonySteele/CoupledTestDemo), so that the techniques can be worked through. But bear in mind that this code does nothing, it is merely a reworking of the sample ASP "weather forecast controller". In itself, it is far to simple to need the testing done here. But it must be small to be a readable demo stand-in for a much larger application, that would have many more classes with multiple methods arranged in more layers.
 
 The demo code is a .NET 8 [ASP.NET Core](https://dotnet.microsoft.com/en-us/apps/aspnet) Web Api. It has [a controller](https://github.com/AnthonySteele/CoupledTestDemo/blob/main/WeatherService/Controllers/WeatherForecastController.cs), that calls [a service](https://github.com/AnthonySteele/CoupledTestDemo/blob/main/WeatherService/Controllers/WeatherForecastService.cs) that calls a repository that presumably does the data retrieval. So far, so familiar.
 
@@ -47,7 +47,9 @@ A large body of tests in this style can be as much a tedious liability as it is 
             }
         });
 
-        var controller = new WeatherForecastController(new NullLogger<WeatherForecastController>(), service);
+        var controller = new WeatherForecastController(
+            new NullLogger<WeatherForecastController>(), 
+            service);
 
         controller.Get();
 
@@ -70,7 +72,9 @@ The code smells that we typically see include tests with dozens of mocks, verbos
     public void Controller_Should_ReturnExpectedData()
     {
         var forecastDataStore = CreateMockWeatherForecastDataStore();
-        var controller = new WeatherForecastController(new NullLogger<WeatherForecastController>(), new WeatherForecastService(forecastDataStore));
+        var controller = new WeatherForecastController(
+            new NullLogger<WeatherForecastController>(), 
+            new WeatherForecastService(forecastDataStore));
 
         var response = controller.Get();
 
