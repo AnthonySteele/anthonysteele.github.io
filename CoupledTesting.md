@@ -105,6 +105,8 @@ For the last, [decoupled style](https://github.com/AnthonySteele/CoupledTestDemo
 
 I started by thinking "this is a lot of indirection to accomplish the same outcome". And then a few months later I noticed that I had got into the habit of starting a feature task by first making a failing test. Without touching a single line app code I was able to add a test that "when _new thing_ happens, then _outcome_ should result." It felt like starting a building work by putting up a scaffold that would support the construction, safely. The tricky part was done already when I had a failing test.
 
+### Test First
+
 This was a breakthrough. "Test first" is good, or so [I had always heard](https://www.youtube.com/watch?v=fPlBLlE8vOI). Yet it wasn't prevalent in most places where I have worked. They didn't do it much. And I didn't do it much. Why? Was this purely because I lacked the self-discipline or the innate skill? But instead it seems that a major factor was that _the test style before now did not support test-first coding_.
 
 Consider this: if "refactoring" is changing code under test, then how well can you refactor if any change breaks tests?
@@ -227,7 +229,7 @@ Favour State-Based Testing over Interaction  testing: favour test that test _out
 
 I don't advocate for these "decoupled" tests to be the _only_ kind of test, just the _default_ kind. About 80% of the test coverage can be decoupled, depending on the specifics of the app. [They are a "Should" recommendation](https://datatracker.ietf.org/doc/html/rfc2119).
 
- There will be business logic cases where you are better off dropping down to a class-level test and pumping many test cases into that subsystem, instead. Even then, these might be "sociable tests" that cover multiple classes, as the current exact subdivision of the code into classes is _not the test's concern at all_ since you're testing the _behaviour_ of code and not coupled to the _structure_ of code.
+ There will be business logic cases where you are better off dropping down to a class-level test and pumping many test cases into that subsystem, instead. Even then, these might be "sociable tests" that cover multiple classes, as the current exact subdivision of the code into classes is _not the test's concern_ since you're testing the _behaviour_ of the code. You should aim to minimise the inevitable coupling to the _structure_ of the code.
 
 I didn't come to this position out of theoretical reasoning: This was given to me by a team already using it. And it worked for me, even better than I thought it would. And it could work for you too.
 
