@@ -65,6 +65,8 @@ A mock repository is injected into the service, and then separately, a mock serv
 
 The code smells that we typically see include tests with dozens of mocks, verbose and repetitive mock setup to test very little logic, and even for extra insanity, [key business logic in AutoMapper mappers](https://www.anthonysteele.co.uk/AgainstAutoMapper), which are called in the middle of the code, but are not part of the test, but mocked for test.
 
+The one good feature of the code above is that instead of declaring a mock logger, the code makes use of [the pre-defined Null Logger](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.abstractions.nulllogger) that supports cases like this.
+
 ## Sociable style
 
 ```csharp
