@@ -235,7 +235,9 @@ I don't advocate for these "decoupled" tests to be the _only_ kind of test, just
 
 I didn't come to this position out of theoretical reasoning: This was given to me by a team already using it. And it worked for me, even better than I thought it would. And it could work for you too.
 
-The second-order conclusions are that like with Continuous Delivery, it's the downstream effects that deliver the big benefits over time. And they support each other. If you can make that refactoring with confidence due to tests, then the next step is to deploy it continuously, and see it working through to production. Then you can incrementally maintain and increase quality. And quality and feature productivity are not a trade-off, they correlate.
+The second-order conclusions are that like with Continuous Delivery, it's the downstream effects that deliver the big benefits over time. And they support each other. If you can make that refactoring with confidence due to tests, then the next step is to deploy it continuously, and see it working through to production. Then you can incrementally maintain and increase quality.
+
+And quality and feature productivity are not a trade-off, they correlate. i.e. you choose to be good at both, or you succeed at neither. [See "Accelerate"](https://www.goodreads.com/book/show/35747076-accelerate) for more on this.
 
 And that semantic drift happens, such that over time the practice such as "unit testing" ends up substantially different, and easier. And often worse, not giving much of the original benefits.
 
