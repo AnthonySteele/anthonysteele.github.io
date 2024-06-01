@@ -111,9 +111,9 @@ I started by thinking "this is a lot of indirection to accomplish the same outco
 
 This was a breakthrough. "Test first" is good, or so [I had always heard](https://www.youtube.com/watch?v=fPlBLlE8vOI). Yet it wasn't prevalent in most places where I have worked. They didn't do it much. And I didn't do it much. Why? Was this purely because I lacked the self-discipline or the innate skill? But instead it seems that a major factor was that _the test style before now did not support test-first coding_.
 
-Consider this: if "refactoring" is changing code under test, then how well can you refactor if any change breaks tests?
+Consider this: if "refactoring" is changing code under test, then how well can you refactor if any change breaks tests? Tests should support change, not hinder it.
 
-A large body of tests written in a coupled, mocked, "test after" style, seems to make it much harder to even begin to test first.
+A large body of tests written in a coupled, mocked, "test after" style seems to make it much harder to even begin to test first, or to refactor.
 
 But, with this decoupled approach, we have freedom to refactor the code under test liberally. When a service layer class is not doing anything except forwarding calls, and could be deleted? Go ahead, tests should still compile and pass. Split one large controller into two? No problem! Do away with controllers entirely and use [minimal web API routes](https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api) instead? Fine, it's under test!
 
