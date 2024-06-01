@@ -113,7 +113,9 @@ This was a breakthrough. "Test first" is good, or so [I had always heard](https:
 
 Consider this: if "refactoring" is changing code under test, then how well can you refactor if any change breaks tests?
 
-With this approach, we have freedom to refactor the code under test liberally. When a service layer class is not doing anything except forwarding calls, and could be deleted? Go ahead, tests should still compile and pass. Split one large controller into two? No problem! Do away with controllers entirely and use [minimal web API routes](https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api) instead? Fine, it's under test!
+A large body of tests written in a coupled, mocked, "test after" style, seems to make it much harder to even begin to test first.
+
+But, with this decoupled approach, we have freedom to refactor the code under test liberally. When a service layer class is not doing anything except forwarding calls, and could be deleted? Go ahead, tests should still compile and pass. Split one large controller into two? No problem! Do away with controllers entirely and use [minimal web API routes](https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api) instead? Fine, it's under test!
 
 ### But is it _Unit_ tests?
 
@@ -234,6 +236,8 @@ I don't advocate for these "decoupled" tests to be the _only_ kind of test, just
  There will be business logic cases where you are better off dropping down to a class-level test and pumping many test cases into that subsystem, instead. Even then, these might be "sociable tests" that cover multiple classes, as the current exact subdivision of the code into classes is _not the test's concern_ since you're testing the _behaviour_ of the code. You should aim to minimise the inevitable coupling to the _structure_ of the code.
 
 I didn't come to this position out of theoretical reasoning: This was given to me by a team already using it. And it worked for me, even better than I thought it would. And it could work for you too.
+
+But if you set out testing afterwards with mocks, you will lock in that pattern.
 
 The second-order conclusions are that like with Continuous Delivery, it's the downstream effects that deliver the big benefits over time. And they support each other. If you can make that refactoring with confidence due to tests, then the next step is to deploy it continuously, and see it working through to production. Then you can incrementally maintain and increase quality.
 
