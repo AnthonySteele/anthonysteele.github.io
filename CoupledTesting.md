@@ -142,6 +142,18 @@ Kent Beck:
 
 Ultimately the only views are wrong and harmful are that "a unit test always tests a method on a class, in isolation" and that "every class has a matching test class, no more and no less is needed".
 
+### So what are _Integration_ tests?
+
+Again, [these are hard to define](https://buttondown.email/hillelwayne/archive/integration-tests-are-just-vibes/). and you will need to forge your own definition.
+
+But, pragmatically, they are "Tests that come after unit tests". i.e. Slower but less numerous, a bit higher on the test pyramid.
+
+So if a test does meet the standard for a unit test, it lives there and isn't an integration test. In my terms, Integration tests _do_ these things that unit tests don't - "A test is an Integration test if: it queries an actual database; communicates http across the network etc.". In other words, it is an integration test if and only if it integrates one or more real dependency on an external service, be that as simple as file storage, or as complex as a SQL database or message queueing system. They are not "I/O-free".
+
+I like this definition since as with unit tests, it's about things that matter to testing, and has absolutely nothing to do with the number of classes or other units of code organisation under test.
+
+In the end, names aren't universal, and this matters less than the ability to safely deploy good code. So your project or organisation might need to supply local definitions of names, i.e. what you do and don't expect to see in each test layer. I present that as a choice that I think leads to good outcomes.
+
 ## the demo app Decoupled
 
 ```csharp
@@ -238,6 +250,8 @@ I don't advocate for these "decoupled" tests to be the _only_ kind of test, just
 I didn't come to this position out of theoretical reasoning: This was given to me by a team already using it. And it worked for me, even better than I thought it would. And it could work for you too.
 
 But if you set out testing afterwards with mocks, you will lock in that pattern.
+
+Define your terms: document what you and don't expect to see in each test layer. reach local understanding, even when it's not possible across the industry.
 
 The second-order conclusions are that like with Continuous Delivery, it's the downstream effects that deliver the big benefits over time. And they support each other. If you can make that refactoring with confidence due to tests, then the next step is to deploy it continuously, and see it working through to production. Then you can incrementally maintain and increase quality.
 
