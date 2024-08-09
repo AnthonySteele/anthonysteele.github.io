@@ -14,6 +14,8 @@ What should happen is that when making a `git` commit, then `dotnet format` shou
 
 This can be done by glueing `git` and `dotnet format` together using a tool called [Husky.NET](https://alirezanet.github.io/Husky.Net/), which can be used to run command-line tools including `dotnet format` on [git's pre-commit hook](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks).
 
+Husky.NET is a "dotnet tool" so it [is hosted on nuGet](https://www.nuget.org/packages/Husky/) and installed via the dotnet command line.
+
 ## Here's how
 
 Here are the step-by step instructions. We will assume that you have a  repository checked out from git in a local folder e.g. `C:\Code\SomeRepository`. And that you have a recent version of the `dotnet` command line installed, such that `dotnet format` works.
@@ -124,7 +126,9 @@ In this case, include the `.sln` file in the `dotnet format` command line, In `t
 
 ### Disabling
 
-If you ever need to temporarily disable the autoformat, do this:
+The [git documentation on hooks](https://git-scm.com/docs/githooks) says that the pre-commit hook can be bypassed for a commit with the `--no-verify` option.
+
+Or you can manually disable the autoformat for a while, like this:
 
 * Take a copy of  `.husky/task-runner.json` for when it's time to re-enable it.
 * replace the contents of `.husky/task-runner.json` with:

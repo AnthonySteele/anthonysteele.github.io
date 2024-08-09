@@ -233,7 +233,7 @@ Typically these are backed by a `List` or `Dictionary` but it's code, it can do 
 
 ## End note
 
-Decouple your unit tests. If you find yourself unable to do a simple "extract class" refactoring because it would both break existing tests and the new class would require new tests, they something is wrong: The app code is too coupled to the test code.
+[Decouple your unit tests](https://www.youtube.com/watch?v=WDFN_u5FTyM&t=803s). If you find yourself unable to do a simple "extract class" refactoring because it would both break existing tests and the new class would require new tests, they something is wrong: The app code is too coupled to the test code.
 
 Use [the Test Host](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.testhost) for more of your tests. Push mocks to the edges off the app. Use them for the _sinks_ where state leaves or enters the app.
 
