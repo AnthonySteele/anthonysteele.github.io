@@ -2,7 +2,7 @@
 
 Decoupled unit tests are a test type that I consider to be "unit tests". But if you don't, then you can still understand structure and benefits  of what I am describing. Naming is a semantic argument, but under any name I have found them to provide great value.
 
-We find that this style leads to better outcomes. It also supports both Test-Driven Development and Refactoring so much better than the default, mocks and isolation style of unit tests.
+We find that this decoupled, outside-in style leads to better outcomes. It also supports both Test-Driven Development and Refactoring so much better than the default, mocks and isolation style of unit tests.
 
 ## Rules and definitions
 
@@ -20,7 +20,7 @@ A test is a unit test if it is "I/O free": if it follows ["A set of Unit testing
 
 **Integration**: We specifically reject the use of "integration test" to describe tests that test multiple application classes at once. That is an irrelevant, actively unhelpful definition here. It doesn't lead to good tests. This definition makes sense only in as much as it follows from a false premise: if only single-class tests count as "unit tests", then a name is needed for tests that cover 2 or more classes.
 
-And so long as the tests are I/0-free, and can be made small, fast and deterministic, these are just unit tests to us, they are not "integration" or any other different kind of test. This follows from tests not being coupled to application code structure.
+And so long as the tests are I/0-free, and can be made small, fast and deterministic, these are just unit tests to us. They are not "integration" or any other different kind of test. This follows from tests not being coupled to application code structure.
 
 We express tests in the language of the business domain, not of the class structure. We can even stand up most of the applications for unit tests. This is how we decouple.
 
@@ -34,9 +34,9 @@ But behind the scenes, "interception" frameworks such as [Wiremock library](http
 
 We don't pay a lot of attention to the categories of test doubles. The fine grained-distinction between a "spy" and a "mock" is not generally relevant, and the same test double can be used for both purposes, interchangeably.
 
-**Setup**: There may be more test setup than before. Especially if you use e.g. Messages queues. But other parts of the application, e.g. application startup is also largely tested.
+**Interfaces**: we add interfaces to classes when it is needed. Often it is not, and so we do not do it. The Dependency Injection container does not need all classes to have interfaces. classes with no interface can easily be registered for DI. When an interface that adds no value is encountered, we delete it, like any other kind of dead code.
 
-**Interfaces**: we add interfaces to classes when it is needed. Often it is not, and we do not add it. The DI container does not need all classes to have interfaces, classes with no interface can easily be registered. When an interface that adds no value is encountered, we delete it, like any other kind of dead code.
+**Setup**: There may be more test setup than before. Especially if you use e.g. Messages queues. But other parts of the application, e.g. application startup is also largely tested. We mostly test from the outside-in.
 
 ## Other kinds of tests
 
@@ -60,10 +60,12 @@ But, this decoupled kind of test is a useful and productive practice, and it can
 
 I said that if you don't want to call these tests "unit tests", that's would be fine. That I would not dispute it. Anyway, I didn't quite tell the truth.
 
-These tests are closer than most to what is described in the literature as "unit tests". And the stated benefits of "unit testing" might be found here more than with other practices that are coupled and full of mocks. This is what was meant by unit tests.
+These tests are closer than most to what is described in the literature as "unit tests". And the stated benefits of "unit testing" might be found here more than with other practices that are coupled and full of mocks. This style is what was meant by unit tests.
 
 And these tests, in my experience, better deliver the stated benefits of unit tests: both TDD and fearless refactoring.
 
 ## Related
 
-[Decouple your unit tests](https://www.anthonysteele.co.uk/CoupledTesting), [Interfaces are overused](Interfaces are overused), [The Test Pyramid](https://www.anthonysteele.co.uk/TestPyramid).
+* [Decouple your unit tests](https://www.anthonysteele.co.uk/CoupledTesting)
+* [Interfaces are overused](https://www.anthonysteele.co.uk/InterfacesAreOverused)
+* [The Test Pyramid](https://www.anthonysteele.co.uk/TestPyramid).
