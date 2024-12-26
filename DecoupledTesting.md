@@ -63,3 +63,7 @@ I said that if you don't want to call these tests "unit tests", that's fine. And
 These tests might be closer than most to what is described in the literature as "unit tests", and that the stated benefits of "unit testing" might be found here more than with other practices that are coupled and full of mocks. This is what was meant by unit tests.
 
 Mainly, these tests are in my experience better suited to enabling both TDD and fearless refactoring.
+
+## Related
+
+[Decouple your unit tests](https://www.anthonysteele.co.uk/CoupledTesting), [Interfaces are overused](Interfaces are overused), [The Test Pyramid](https://www.anthonysteele.co.uk/TestPyramid).
