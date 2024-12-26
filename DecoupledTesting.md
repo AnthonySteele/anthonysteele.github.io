@@ -58,11 +58,11 @@ If your definitions are different, then ok, you're doing something else. We can 
 
 But, this decoupled kind of test is a useful and productive practice, and it can be usefully done even if you don't use these names for it.
 
-I said that if you don't want to call these tests "unit tests", that's fine. And I won't dispute it. I didn't quite tell the truth.
+I said that if you don't want to call these tests "unit tests", that's would be fine. That I would not dispute it. Anyway, I didn't quite tell the truth.
 
-These tests might be closer than most to what is described in the literature as "unit tests", and that the stated benefits of "unit testing" might be found here more than with other practices that are coupled and full of mocks. This is what was meant by unit tests.
+These tests are closer than most to what is described in the literature as "unit tests". And the stated benefits of "unit testing" might be found here more than with other practices that are coupled and full of mocks. This is what was meant by unit tests.
 
-Mainly, these tests are in my experience better suited to enabling both TDD and fearless refactoring.
+And these tests, in my experience, better deliver the stated benefits of unit tests: both TDD and fearless refactoring.
 
 ## Related
 
