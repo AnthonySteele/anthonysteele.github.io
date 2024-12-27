@@ -22,9 +22,7 @@ A test is a unit test if it is "I/O free": if it follows ["A set of Unit testing
 
 And so long as the tests are I/0-free, and can be made small, fast and deterministic, these are just unit tests to us. They are not "integration" or any other different kind of test. This follows from tests not being coupled to application code structure.
 
-We express tests in the language of the business domain, not of the class structure. We can even stand up most of the applications for unit tests. This is how we decouple.
-
-We use the word "integration" to refer to external dependencies, only. Historically, this is accurate: Mr Feathers lists things that unit tests do not use: external databases, external http services, etc, and uses the word "integration" once, with regard to "the integration of your code with that other software" as a thing that unit tests do not do. As a corollary, if only I/0-free count as "unit tests", then tests that have I/O are something else. They test "the integration of your code", i.e. are "integration tests".
+We use the word "integration" to refer to external dependencies, only. Historically, this is accurate: Mr Feathers lists things that unit tests do not use: external databases, external HTTP services, etc, and uses the word "integration" once only, with regard to them. He refers to "the integration of your code with that other software" as a thing that unit tests do not do. As a corollary, if only I/0-free tests count as "unit tests", then tests that have I/O are something else. They test "the integration of your code _with other software_", i.e. are "integration tests".
 
 **Mocks**: We use test doubles (mocks, fakes, etc) sparingly. Typically they are used only when needed, to stub out I/O, to avoid using these external service integrations. Not actually calling that database or HTTP web service is when mocking is _necessary_ in order to have unit tests.  We avoid mocks when it is not necessary.
 
@@ -36,7 +34,11 @@ We don't pay a lot of attention to the categories of test doubles. The fine grai
 
 **Interfaces**: we add interfaces to classes when it is needed. Often it is not, and so we do not do it. The Dependency Injection container does not need all classes to have interfaces. classes with no interface can easily be registered for DI. When an interface that adds no value is encountered, we delete it, like any other kind of dead code.
 
-**Setup**: There may be more test setup than before. Especially if you use e.g. Messages queues. But other parts of the application, e.g. application startup is also largely tested. We mostly test from the outside-in.
+**Setup**:
+
+We express tests in the language of the business domain, not of the class structure. We can even stand up most of the applications for unit tests. We mostly test from the outside-in. This is how we decouple.
+
+There may be more test setup than before. Especially if you use e.g. Messages queues. But other parts of the application, e.g. application startup is also largely tested. However this setup is not verbosely repeated in each test.
 
 ## Other kinds of tests
 
