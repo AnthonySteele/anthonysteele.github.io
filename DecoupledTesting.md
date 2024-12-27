@@ -1,6 +1,6 @@
 # Decoupled Unit Tests Manifesto
 
-Decoupled unit tests are a test type that I consider to be "unit tests". But if you don't, then you can still understand structure and benefits  of what I am describing. Naming is a semantic argument, but under any name I have found them to provide great value.
+Decoupled unit tests are a test type that I consider to be "unit tests". But you can still understand structure and benefits  of what I am describing even if you don't call them "unit tests". Naming is a semantic argument, but under any name I have found them to provide great value.
 
 We find that this decoupled, outside-in style leads to better outcomes. It also supports both Test-Driven Development and Refactoring so much better than the default, mocks and isolation style of unit tests.
 
@@ -8,9 +8,9 @@ We find that this decoupled, outside-in style leads to better outcomes. It also 
 
 The rules and names used in this context are:
 
-**Decoupled**: tests should couple to application behaviour, not to class methods. [The test should be sensitive to the behaviour of the code under test, but not to its structure.](https://www.youtube.com/watch?v=C5IH0ABmyc0&t=2108s) A test should in general fail when application behaviour changes, but not when the structure changes, e.g. a method is renamed. This means testing mostly "from the outside in".
+**Decoupled**:  [A test should be sensitive to the behaviour of the code under test, but not to its structure.](https://www.youtube.com/watch?v=C5IH0ABmyc0&t=2108s) A test should in general fail when application behaviour changes, but not when the structure changes, e.g. a method is renamed. This means testing mostly "from the outside in".
 
-**Unit**: We reject entirely the idea that the "unit" in "unit test" is a method or a class. This is not our definition of a unit test. Although these class-method tests are unit tests, they are not the only kind of unit tests. They are not even the primary, most common kind of unit tests. While these tests are useful in some cases, they should not be our first choice, and should form only a small portion of the tests, deployed in cases where they clearly make the most sense. You might see these low-level tests form maybe 10% of the test cases.
+**Unit**: We reject entirely the idea that a unit test always tests a single method or a class. This is not our definition of a unit test. Although these class-method tests are unit tests, they are not the only kind of unit tests. They are not even the primary, most common kind of unit tests. While these tests are useful in some cases, they should not be our first choice, and should form only a small portion of the tests, deployed in cases where they clearly make the most sense. You might see these low-level tests form maybe 10% of the test cases.
 
 Instead individual tests test pieces of application functionality: [we test behaviours not implementation details](https://www.youtube.com/watch?v=EZ05e7EMOLM&t=1428s). While often the behaviour under test actually is located in one method of one class, that fact about the structure of the code is not the concern of the test.  
 
@@ -26,7 +26,7 @@ We use the word "integration" to refer to external dependencies, only. Historica
 
 **Mocks**: We use test doubles (mocks, fakes, etc) sparingly. Typically they are used only when needed, to stub out I/O, to avoid using these external service integrations. Not actually calling that database or HTTP web service is when mocking is _necessary_ in order to have unit tests.  We avoid mocks when it is not necessary.
 
-We use mocking frameworks even more sparingly. It is often better to simply equip the class that has a concrete dependency with an interface, and in test supply an in-memory fake implementation of the interface, that can also be coded to respond and record as needed. This is often simpler and easier to do this once, than to scatter loads of mock setup and verification code throughout each test. Using a mocking library, then adding complex mocking code everywhere is a false economy.
+We use mocking frameworks even more sparingly. It is often better to simply equip the class that has a concrete dependency with an interface, and in tests [use an in-memory fake implementation of the interface](https://dunnhq.com/posts/2024/prefer-test-doubles-over-mocking/), that can also be coded to respond and record as needed. This is often simpler and easier to create this class  once, than to scatter loads of mock setup and verification code throughout each test. Using a mocking library, then adding complex mocking code everywhere is a false economy.
 
 But behind the scenes, "interception" frameworks such as [Wiremock library](https://github.com/WireMock-Net/WireMock.Net) may be useful, as they maximise the code that is under test, before the test implementation has to take over.
 
@@ -40,15 +40,19 @@ We express tests in the language of the business domain, not of the class struct
 
 There may be more test setup than before. Especially if you use e.g. Messages queues. But other parts of the application, e.g. application startup is also largely tested. However this setup is not verbosely repeated in each test.
 
+In the ASP .NET world we use the [test server](https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests) to allow this test style. We customise the startup where needed by adding using fakes for external dependencies, but otherwise leave it as is. Thus tests also test a lot of the application's startup code, and will tell us if e.g. a new service is missing from the Dependency Injection Container.
+
 ## Other kinds of tests
 
 Other kinds of tests are also OK. The general concept of a "testing pyramid" has merit. We recognise that there is no one single test style that will do everything. I have mentioned lower-level tests and integration tests. Tests on an application that has been deployed to a development environment are also useful. As is production monitoring. However, these decoupled unit tests can form the backbone, the single largest and most thorough part of the testing part of the process.
 
-In the ASP .NET world we use the [test server](https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests) to allow this test style. We customise the startup where needed by adding using fakes for external dependencies, but otherwise leave it as is. Thus tests also test a lot of the application's startup code, and will tell us if e.g. a new service is missing from the Dependency Injection Container.
+## Other considerations
 
-Refactoring: We have found this test style to be better for refactoring.  Refactoring is "changing code, while tests still pass". It is better to be free to refactor, even extract classes, or merge classes, and immediately afterwards get green tests, rather than tests that don't even compile as they are so tightly bound to public methods on classes. The test should fail when the application is doing something different, not when the code is moved around.
+Refactoring: We have found this test style to be better for refactoring.  Refactoring is "changing code, while tests still pass". But how can refactoring happen at all, if your tests are so coupled that changing anything breaks tests - and not due to changes of functionality, but merely due to e.g. extracting a class, renaming a method, adding or removing a method parameter?
 
-Coupled tests are fragile. Coupled tests are verbose and hard to read. Coupled tests impede refactoring but don't give good assurances that the app as a whole works well. They promote a "test after implementation" workflow, which cannot be TDD. The one thing that they excel at is test coverage.
+It is better to be free to refactor, even extract classes, or merge classes, and immediately afterwards get green tests, rather than tests that don't even compile as they are so tightly bound to public methods on classes. The test should fail when the application is doing something different, not when the code is moved around.
+
+Coupled tests are fragile. Coupled tests are verbose and hard to read. Coupled tests impede refactoring but don't give good assurances that the app as a whole works well. They promote a "test after implementation" workflow, which cannot be TDD. The one thing that they excel at is test coverage. And past a certain point, this is not an important metric.
 
 We have also found that decoupled tests much better support Test-Driven Development. Working from the outside in, it is much easier to code up e.g. a new field on a request and the expected outcome, before even touching the code under test.
 
