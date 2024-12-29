@@ -12,11 +12,15 @@ The rules and names used in this context are:
 
 **Unit**: We reject entirely the idea that a unit test always tests a single method or a class. This is not our definition of a unit test. Although these class-method tests are unit tests, they are not the only kind of unit tests. They are not even the primary, most common kind of unit tests. While these tests are useful in some cases, they should not be our first choice, and should form only a small portion of the tests, deployed in cases where they clearly make the most sense. You might see these low-level tests form maybe 10% of the test cases.
 
-Instead individual tests test pieces of application functionality: [we test behaviours not implementation details](https://www.youtube.com/watch?v=EZ05e7EMOLM&t=1428s). While often the behaviour under test actually is located in one method of one class, that fact about the structure of the code is not the concern of the test.  
+The word "Unit" is the source of much confusion, as there are two distinct ideas here: _what_ is under test, and _how_ it is tested.
 
-[The word "unit" refers to the isolated way in which things are tested more than it does what is tested](https://www.infoq.com/articles/unit-testing-approach/). It tests in a unitary way, rather than testing "units". The scope of what a unit test tests is intentionally loosely defined, and can be used flexibly.
+**How** is the primary meaning: [The word "unit" refers to the isolated way how things are tested, more than it does what is tested](https://www.infoq.com/articles/unit-testing-approach/). It tests in a unitary way, rather than testing "units".
 
-A test is a unit test if it is "I/O free": if it follows ["A set of Unit testing rules" (Michael Feathers, 2005)](https://www.artima.com/weblogs/viewpost.jsp?thread=126923) and can be made fast and deterministic with no external dependencies or special rules that prevent it being run quickly, reliability and on a number of machines.
+A unit test can be run on its own, or run in parallel with any or all other unit tests: they should  not affect each other, as they are units independent of each other. It is not using any external service that might fail, it is an unit independent of that. It is "I/O free", it follows ["A set of Unit testing rules" (Michael Feathers, 2005)](https://www.artima.com/weblogs/viewpost.jsp?thread=126923). It can be made fast and deterministic, with no external dependencies or special rules that prevent it being run quickly, reliability and on a number of machines as an independent unit.
+
+**What**:  The scope of what a unit test tests is intentionally loosely defined, and can be used flexibly.
+
+Individual tests test pieces of application functionality: [we test behaviours not implementation details](https://www.youtube.com/watch?v=EZ05e7EMOLM&t=1428s). While often the behaviour under test actually is located in one method or one class, that fact about the structure of the code is not the concern of the test. It can change without affecting the test.
 
 **Integration**: We specifically reject the use of "integration test" to describe tests that test multiple application classes at once. That is an irrelevant, actively unhelpful definition here. It doesn't lead to good tests. This definition makes sense only in as much as it follows from a false premise: if only single-class tests count as "unit tests", then a name is needed for tests that cover 2 or more classes.
 
