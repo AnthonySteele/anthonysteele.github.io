@@ -1,6 +1,8 @@
-# Decoupled Unit Tests Manifesto
+# Decoupled Unit Tests Style
 
-Decoupled unit tests are a test type that I consider to be "unit tests". But you can still understand structure and benefits  of what I am describing even if you don't call them "unit tests". Naming is a semantic argument, but under any name I have found them to provide great value.
+Decoupled unit tests are a test type that I consider to be good "unit tests". They are very [sociable unit tests](https://martinfowler.com/bliki/UnitTest.html). 
+
+But you can still understand structure and benefits  of what I am describing even if you don't call them "unit tests". Naming is a semantic argument, but under any name I have found them to provide great value.
 
 We find that this decoupled, outside-in style leads to better outcomes. It also supports both Test-Driven Development and Refactoring so much better than the default, mocks and isolation style of unit tests.
 
@@ -32,7 +34,7 @@ We use the word "integration" to refer to external dependencies, only. Historica
 
 We use mocking frameworks even more sparingly. It is often better to simply equip the class that has a concrete dependency with an interface, and in tests [use an in-memory fake implementation of the interface](https://dunnhq.com/posts/2024/prefer-test-doubles-over-mocking/), that can also be coded to respond and record as needed. This is often simpler and easier to create this class  once, than to scatter loads of mock setup and verification code throughout each test. Using a mocking library, then adding complex mocking code everywhere is a false economy.
 
-But behind the scenes, "interception" frameworks such as [Wiremock library](https://github.com/WireMock-Net/WireMock.Net) may be useful, as they maximise the code that is under test, before the test implementation has to take over.
+But behind the scenes, "interception" frameworks such as [WireMock library](https://github.com/WireMock-Net/WireMock.Net) may be useful, as they maximise the code that is under test, before the test implementation has to take over.
 
 We don't pay a lot of attention to the categories of test doubles. The fine grained-distinction between a "spy" and a "mock" is not generally relevant, and the same test double can be used for both purposes, interchangeably.
 
@@ -45,6 +47,18 @@ We express tests in the language of the business domain, not of the class struct
 There may be more test setup than before. Especially if you use e.g. Messages queues. But other parts of the application, e.g. application startup is also largely tested. However this setup is not verbosely repeated in each test.
 
 In the ASP .NET world we use the [test server](https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests) to allow this test style. We customise the startup where needed by adding using fakes for external dependencies, but otherwise leave it as is. Thus tests also test a lot of the application's startup code, and will tell us if e.g. a new service is missing from the Dependency Injection Container.
+
+## Bad tests
+
+Tests can be bad in a number of ways:
+
+Bad tests can be hard to read. Bad tests can fail to explain the application functionality.
+
+Bad tests can be flaky, and fail sometimes for mysterious reasons such as timing. Bad tests can always pass, even when important parts of the code are removed. Bad tests can fail to cover all the important functionalities of the application.
+
+The under-recognised issue that that bad unit tests break hard when the code under test is changed slightly. They are tightly coupled to implementation details. If _refactoring_ is changing code without breaking tests, then how can you even refactor when any change to a public method or constructor breaks tests?
+
+"overly coupled tests" is a far larger failure mode than most. I've seen vast hellscapes of verbose mocking tests that prevented some issues, but also prevented positive change to the code under test.
 
 ## Other kinds of tests
 
