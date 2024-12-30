@@ -18,7 +18,7 @@ The rules and names used in this context are:
 
 We reject entirely the idea that a unit test always tests a single method or a class. This is not our definition of a unit test. Although these class-method tests are unit tests, they are not the only kind of unit tests. They are not even the primary, most common kind of unit tests. While these tests are useful in some cases, they should not be our first choice, and should form only a small portion of the tests, deployed in cases where they clearly make the most sense. You might see these low-level tests form maybe 10% of the test cases.
 
-### The meaning of "unit"
+### The meaning of "Unit"
 
 The word "Unit" is the source of much confusion, as there are two distinct ideas here that get conflated: _what_ is under test, and _how_ it is tested.
 
@@ -104,6 +104,6 @@ And these tests, in my experience, better deliver the stated benefits of unit te
 
 ## Related
 
-* [Decouple your unit tests](https://www.anthonysteele.co.uk/CoupledTesting)
-* [Interfaces are overused](https://www.anthonysteele.co.uk/InterfacesAreOverused)
-* [The Test Pyramid](https://www.anthonysteele.co.uk/TestPyramid).
+* [Decouple your Unit Tests](https://www.anthonysteele.co.uk/CoupledTesting)
+* [Interfaces are Overused](https://www.anthonysteele.co.uk/InterfacesAreOverused)
+* [The Test Pyramid](https://www.anthonysteele.co.uk/TestPyramid)

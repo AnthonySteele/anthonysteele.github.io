@@ -1,6 +1,7 @@
 # Various writings
 
 * 2024
+  * [Decoupled unit testing style](./DecoupledTestingStyle)
   * [Decouple your unit tests](./CoupledTesting)
   * [Autoformatting with dotnet format and Husky.NET](./HuskyAutoformat)
   * [It was the best of blue-green deployments, it was the worst of blue-green deployments](./TheBestAndWorstOfBlueGreenDeployments)
