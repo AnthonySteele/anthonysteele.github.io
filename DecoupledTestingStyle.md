@@ -12,7 +12,7 @@ The rules and names used in this context are:
 
 ### Decoupled
 
-[A test should be sensitive to the behaviour of the code under test, but not to its structure.](https://www.youtube.com/watch?v=C5IH0ABmyc0&t=2108s) A test should in general fail when application behaviour changes, but not when the structure changes, e.g. a method is renamed. This means testing mostly "from the outside in".
+[A test should be sensitive to the behaviour of the code under test, but not to its structure.](https://www.youtube.com/watch?v=C5IH0ABmyc0&t=2108s) A test should in general fail when application behaviour changes, but not when the structure changes, e.g. a method is renamed. This means testing mostly "from the outside in". [We test pieces of application functionality](https://www.artofunittesting.com/definition-of-a-unit-test), not class methods.
 
 ### Unit as method
 
@@ -30,7 +30,7 @@ A unit test is "I/O free", it follows ["A set of Unit testing rules" (Michael Fe
 
 **What**:  The scope of what a unit test tests is intentionally loosely defined, and can be used flexibly.
 
-Individual tests test pieces of application functionality: [we test behaviours not implementation details](https://www.youtube.com/watch?v=EZ05e7EMOLM&t=1428s). While often the behaviour under test actually is located in one method or one class, that fact about the structure of the code is not the concern of the test. It can change without affecting the test.
+[We test behaviours not implementation details](https://www.youtube.com/watch?v=EZ05e7EMOLM&t=1428s). While often the behaviour under test actually is located in one method or one class, that fact about the structure of the code is not the concern of the test. It can change without affecting the test. Rather, what the application does is what's under test. And the application structure can be changed, under test.
 
 ### Integration tests
 
