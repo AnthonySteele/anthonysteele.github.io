@@ -102,6 +102,12 @@ These tests are closer than most to what is described in the literature as "unit
 
 And these tests, in my experience, better deliver the stated benefits of unit tests: both TDD and fearless refactoring. And are what was originally meant.
 
+## Origin
+
+I did not originate this style. I'm linking to pioneers of unit testing to emphasise that. But while I liked these ideas, I didn't get to experience them in full until I joined a project that had been recently set up, where they were already in use as the existing default style.
+
+It took me a while, from thinking that the tests read nicely, but had a lot of setup and indirection to get the same results. Then and over weeks realising that the results were better. Then noticing that actual test-first development was somehow happening a lot more often, and refactoring was much smoother. Eventually I decided that the style is undersold, not overrated.
+
 ## Related
 
 * [Decouple your Unit Tests](https://www.anthonysteele.co.uk/CoupledTesting)
