@@ -84,9 +84,9 @@ We have found this test style to be better for refactoring.  Refactoring is "cha
 
 It is better to be free to refactor, even extract classes, or merge classes, and immediately afterwards get green tests, rather than tests that don't even compile as they are so tightly bound to public methods on classes. The test should fail when the application is doing something different, not when the code is moved around.
 
-Coupled tests are fragile. Coupled tests are verbose and hard to read. Coupled tests impede refactoring but don't give good assurances that the app as a whole works well. They promote a "test after implementation" workflow, which cannot be TDD. The one thing that they excel at is test coverage. And past a certain point, this is not an important metric.
+Coupled tests are fragile. Coupled tests are verbose and hard to read. Coupled tests impede refactoring but don't give good assurances that the app as a whole works well. They promote a "test after implementation" workflow, which cannot be Test-Driven Development. The one thing that they excel at is test coverage. And past a certain point, this is not an important metric.
 
-We have also found that decoupled tests much better support Test-Driven Development. Working from the outside in, it is much easier to code up e.g. a new field on a request and the expected outcome, before even touching the code under test.
+We have also found that decoupled tests much better support Test-Driven Development. Working from the outside in, it is much easier to code up e.g. test for a new field on a request and the expected outcome of setting it, before even touching the code under test.
 
 ## The original meaning
 
