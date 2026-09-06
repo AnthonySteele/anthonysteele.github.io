@@ -1,5 +1,7 @@
 # Who's afraid of Friday Deploys?
 
+_September 2026_
+
 How often have you read or heard someone say "We have a rule to never deploy on Fridays. This is a best practice!"
 
 I do not agree entirely. It's a practice, it might in context be a good practice, and it can be a process improvement. But don't mistake it for always the "best", the pinnacle for all people.
