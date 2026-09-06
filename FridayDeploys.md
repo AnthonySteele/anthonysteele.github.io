@@ -50,7 +50,7 @@ Process. To  prevent costly outages, we have put down rules on when we can deplo
 
 ### Level 2
 
-Invisible process. Our automation is good enough that deploys have been de-risked. We have done the work and have the discipline. Deploying at the end of day or week has the same very low risk as any other time. The rules and the consequent increase in cycle time are no longer needed or beneficial.
+Invisible process. We can deploy at any time, and we do. Our automation is good enough that deploys have been de-risked. We have done the work and have the discipline. Deploying at the end of day or week has the same very low risk as any other time. The rules and the consequent increase in cycle time are no longer needed or beneficial.
 
 We can safely deploy at any time, and we do.
 
@@ -64,7 +64,7 @@ If your organisation is at level 1 and you are telling management "deploy more f
 
 Code freezes are not good. They are sometimes necessary, e.g. for a shopping site on the busiest day of the year. But this should be limited and infrequent.
 
-This applies to "deploy once per month" being better than "deploy quarterly". But it also applies to "deploy today" being better than "don't deploy today".
+This applies to "deploy once per week" being better than "deploy quarterly". But it also applies to "deploy today" being better than "don't deploy today".
 
 The end point of course is to deploy one change at a time as soon as it's ready, and monitor afterwards. And then work on making changes right-sized - smaller Pull requests merged more frequently! too often they're just too large and to infrequent.  
 
