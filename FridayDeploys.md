@@ -4,7 +4,7 @@ _September 2026_
 
 How often have you read or heard someone say "We have a rule to never deploy on Fridays. This is a best practice!"
 
-I do not agree entirely. It's a practice, it might in context be a good practice, and it can be a process improvement. But don't mistake it for always the "best", the pinnacle for all people.
+I do not really agree. It's a practice, it might in context be a good practice, and it can be a process improvement. But don't mistake it for always the "best", the pinnacle for all people.
 
 See [Charity Majors, 2019: Friday Deploy Freezes Are Exactly Like Murdering Puppies](https://charity.wtf/p/friday-deploy-freezes-are-exactly-like-murdering-puppies)
 
@@ -18,9 +18,9 @@ But "guardrails" are needed: Rigour to deployment.
 
 The issue is that there are many kinds of guardrails. What comes to mind first? Different things to different people.  Some "guardrails" slow things down, some do not.
 
-Some read that as "needs sign-off" after manual test by an external team. With the inevitable slowdown and batching.
+Some read that as "It needs sign-off" after manual test by an external team. With the inevitable slowdown and batching.
 
-some read that as "meeds automation". Preferring test coverage and automation that makes deployment faster and simpler.
+some read that as "It needs automation", preferring test coverage and automation that makes deployment faster and simpler.
 
 Neither sees the other as having actual rigour.
 
@@ -54,7 +54,7 @@ Invisible process. We can deploy at any time, and we do. Our automation is good 
 
 We can safely deploy at any time, and we do.
 
-_A one-sentence description of level 0 and of level 2 can sound the same, but they really are quite different._
+_A one-sentence description of level 0 and of level 2 can sound the same._ And on a good day the result is the same! But the process is quite different, in the work that has gone into building tests and tools that execute during the level 2 deploy, and halt it when a potential issue is detected.
 
 ## Automation up the ladder
 
@@ -70,12 +70,13 @@ The end point of course is to deploy one change at a time as soon as it's ready,
 
 Deployment Risk is in no way limited to one day of the week. What makes deploys on Thursday safe? De-risking deploys by avoiding a specific day is just superstition.
 
-
 No test automation is perfect, that's why level 1 can contextually be a sensible option. But you can decide if your automation is good enough to de-risk deploys. You can also move the dial on lowering the risk.
 
 If you're not deploying new code on Friday, why not work on your tests on Friday? Make your deployment verification wider, faster, more robust, etc.
 
-No-ones tests are perfect, no-one's test coverage is perfect. The issue is, it it good enough?
+No-ones tests are perfect, no-one's test coverage is perfect. The question is, it it good enough?
+
+I't not about the absence of issues, it's about what do you do when there is an issue - do you increase the cycle time or do do you look for a way to de-risk the change and automate the check?
 
 Fear of deploying on Friday where you are may be justified, but it _is not_ a signal that "Friday deploys are a bad practice", for everyone, always, fullstop. It is a signal that you may not have the maturity of automation to do it safely. It would be mistake to elevate your lack of capability to a universal principle.
 
@@ -92,3 +93,7 @@ This is scary as it requires trust.
 But there is something liberating in looking a person in the eye and saying "Yes, I chose that my update went live today, just like any other day. It's Friday, what of it? Our process is robust. We have the discipline to do this, do you? Why are you afraid, and what are you doing about it?"
 
 But once you achieve Friday deploys, your work to keep the deploy safe and productive is ongoing. Then some myopic "best-practice" merchant will confidently and incorrectly tell you that you're doing it wrong, and that they chose better, because they do not have confidence in a specific time of week only.
+
+## Obligatory Mention
+
+This is becoming ever more relevant currently, as senior people are ever more hypnotised by LLMs, and have the simplistic belief that "whatever the problem, AI is the tool for it". Continuous delivery does not flow from a chatbot. Proven best practices should not be exchanged for a chatbot.
