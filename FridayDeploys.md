@@ -74,13 +74,13 @@ No test automation is perfect, that's why level 1 can contextually be a sensible
 
 If you're not deploying new code on Friday, why not work on your tests on Friday? Make your deployment verification wider, faster, more robust, etc.
 
-No-ones tests are perfect, no-one's test coverage is perfect. The question is, it it good enough?
-
-I't not about the absence of issues, it's about what do you do when there is an issue - do you increase the cycle time or do do you look for a way to de-risk the change and automate the check?
+Nobody's tests are perfect, nobody's test coverage is perfect. The question is, it it good enough? It's not about the absence of issues, it's about what do you do when there is an issue - do you increase the cycle time or do do you look for a way to de-risk the change and automate the check? Whichever you choose, you are going to do again.
 
 Fear of deploying on Friday where you are may be justified, but it _is not_ a signal that "Friday deploys are a bad practice", for everyone, always, fullstop. It is a signal that you may not have the maturity of automation to do it safely. It would be mistake to elevate your lack of capability to a universal principle.
 
 So, work on that capability instead.
+
+This is not about "low-risk front-end" teams having more latitude to deploy, except in that they might be fortunate in needing less effort than others to get to level 2. Even crucial back-end teams can get there.
 
 ## The opposite of rules
 
