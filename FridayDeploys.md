@@ -66,11 +66,13 @@ Code freezes are not good. They are sometimes necessary, e.g. for a shopping sit
 
 This applies to "deploy once per week" being better than "deploy quarterly". But it also applies to "deploy today" being better than "don't deploy today".
 
-The end point of course is to deploy one change at a time as soon as it's ready, and monitor afterwards. And then work on making changes right-sized - smaller Pull requests merged more frequently! too often they're just too large and to infrequent.  
+The end point of course is to deploy one change at a time as soon as it's ready, and monitor afterwards. And then work on making changes right-sized - smaller Pull requests merged more frequently! Too often they're just too large and too infrequent.
 
 Deployment Risk is in no way limited to one day of the week. What makes deploys on Thursday safe? De-risking deploys by avoiding a specific day is just superstition.
 
 No test automation is perfect, that's why level 1 can contextually be a sensible option. But you can decide if your automation is good enough to de-risk deploys. You can also move the dial on lowering the risk.
+
+Weekly freezes are at best a stepping-stone on the way to having good enough process to do full Continuous Delivery. And it isn't the same thing for reasons of words having meaning: something that _stops_ on Thursday afternoon does not _continue_.
 
 If you're not deploying new code on Friday, why not work on your tests on Friday? Make your deployment verification wider, faster, more robust, etc.
 
@@ -84,9 +86,9 @@ This is not about "low-risk front-end" teams having more latitude to deploy, exc
 
 ## The opposite of rules
 
-The opposite of "A hard rule of no friday deploys" isn't "Just go live with a huge feature late in the day, and head off to the pub" although that is a common straw man.
+The opposite of "A hard rule of no friday deploys" isn't "Just go live with a huge feature late in the day, and head off to the pub" although that is a common straw man. Because you can, doesn't mean that you always have to.
 
-No, the opposite of "That's a rule" is "Use _judgement_. Do so at your _discretion_." The capability that "you _can_ deploy on Friday" is not "you _must_". It is completely compatible with "I will merge this minor update to metrics on Friday morning, so that we have good data by Monday" and also "This big feature? Let's hold off on that until Monday".
+The opposite of "That's a rule" is "Use _judgement_. Do so at your _discretion_." Assess the impact and urgency. The capability that "you _can_ deploy on Friday" is not "you _must_". It is completely compatible with "I will merge this minor update to metrics on Friday morning, so that we have good data by Monday" and also "This big feature? Let's hold off on that until Monday".
 
 This is scary as it requires trust.
 
