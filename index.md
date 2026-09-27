@@ -1,5 +1,7 @@
 # Various writings
 
+* 2026
+  * [Who's afraid of Friday Deploys?](./FridayDeploys)
 * 2024
   * [Decoupled unit testing style](./DecoupledTestingStyle)
   * [Decouple your unit tests](./CoupledTesting)

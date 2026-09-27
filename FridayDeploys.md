@@ -86,7 +86,7 @@ This is not about "low-risk front-end" teams having more latitude to deploy, exc
 
 ## The opposite of rules
 
-The opposite of "A hard rule of no friday deploys" isn't "Just go live with a huge feature late in the day, and head off to the pub" although that is a common straw man. Because you can, doesn't mean that you always have to.
+The opposite of "A hard rule of no friday deploys" isn't "Always go live with a huge feature late in the day, and head off to the pub" although that is a common straw man. Because you can, doesn't mean that you always have to.
 
 The opposite of "That's a rule" is "Use _judgement_. Do so at your _discretion_." Assess the impact and urgency. The capability that "you _can_ deploy on Friday" is not "you _must_". It is completely compatible with "I will merge this minor update to metrics on Friday morning, so that we have good data by Monday" and also "This big feature? Let's hold off on that until Monday".
 
