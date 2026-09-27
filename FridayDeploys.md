@@ -54,35 +54,35 @@ Invisible process. We can deploy at any time, and we do. Our automation is good 
 
 We can safely deploy at any time, and we do.
 
-_A one-sentence description of level 0 and of level 2 can sound the same._ And on a good day the result is the same! But the process is quite different, in the work that has gone into building tests and tools that execute during the level 2 deploy, and halt it when a potential issue is detected.
+_A one-sentence description of level 0 and of level 2 can sound the same._ And on a good day the successful result is the same! But the process is quite different, in the work that has gone into building tests and tools that execute during the level 2 deploy, and halt it when a potential issue is detected. There is much more machinery involved, and making this look seamless isn't easy, it takes work.
 
 ## Automation up the ladder
 
 Automation is mostly tests of various kinds, but also covers automated blue-greening, monitoring and automated rollback.
 
-If your organisation is at level 1 and you are telling management "deploy more frequently" you run the risk of being seen as a cowboy who wants to go down to level zero, a risk-taker who wants outages, rather than pushing for productivity and quality. The idea that short cycles and small batches are just safer and more productive is still not widely accepted.
+If your organisation is at level 1 and you are telling management "deploy more frequently" you run the risk of being seen as a cowboy who wants to go down to Level Zero, a risk-taker who wants outages, rather than someone pushing for productivity and quality. The data that short cycles and small batches are just safer and more productive is sadly still not widely accepted.
 
 Code freezes are not good. They are sometimes necessary, e.g. for a shopping site on the busiest day of the year. But this should be limited and infrequent.
 
 This applies to "deploy once per week" being better than "deploy quarterly". But it also applies to "deploy today" being better than "don't deploy today".
 
-The end point of course is to deploy one change at a time as soon as it's ready, and monitor afterwards. And then work on making changes right-sized - smaller Pull requests merged more frequently! Too often they're just too large and too infrequent.
-
 Deployment Risk is in no way limited to one day of the week. What makes deploys on Thursday safe? De-risking deploys by avoiding a specific day is just superstition.
 
-No test automation is perfect, that's why level 1 can contextually be a sensible option. But you can decide if your automation is good enough to de-risk deploys. You can also move the dial on lowering the risk.
+The end point of course is to deploy one change at a time as soon as it's ready, and monitor afterwards. And then work on making changes right-sized - smaller Pull requests merged more frequently! Too often they're just too large and too infrequent. This itself is a skill and disciple that can be developed if the necessary conditions are present.
 
-Weekly freezes are at best a stepping-stone on the way to having good enough process to do full Continuous Delivery. And it isn't the same thing for reasons of words having meaning: something that _stops_ on Thursday afternoon does not _continue_.
+No test automation is perfect, that's why Level One can contextually be a sensible option. But you can decide if your automation is good enough to de-risk deploys. You can also move the dial on lowering the risk.
 
-If you're not deploying new code on Friday, why not work on your tests on Friday? Make your deployment verification wider, faster, more robust, etc.
+Weekly freezes are at best a stepping-stone on the way to having good enough process to do full Continuous Delivery. And it isn't the same thing for reasons of words having meaning, and for simple  reasons of linear time: something that _stops_ on Thursday afternoon does not _continue_.
 
-Nobody's tests are perfect, nobody's test coverage is perfect. The question is, it it good enough? It's not about the absence of issues, it's about what do you do when there is an issue - do you increase the cycle time or do do you look for a way to de-risk the change and automate the check? Whichever you choose, you are going to do again.
+If you're at that point - not deploying new code on Friday, why not work on your tests on Friday? Make your deployment verification wider, faster, more robust, etc.
+
+Nobody's tests are perfect, nobody's test coverage is perfect. But "you'd need perfect test coverage" is a straw man argument. The question is, it it good enough to make one day the same as any other? It's not about the absence of issues, it's about what do you do when there is an issue - do you increase the cycle time or do do you look for a way to de-risk the change and automate the check? Whichever you choose, you are going to do again, so beware of ever-increasing cycle time.
 
 Fear of deploying on Friday where you are may be justified, but it _is not_ a signal that "Friday deploys are a bad practice", for everyone, always, fullstop. It is a signal that you may not have the maturity of automation to do it safely. It would be mistake to elevate your lack of capability to a universal principle.
 
 So, work on that capability instead.
 
-This is not about "low-risk front-end" teams having more latitude to deploy, except in that they might be fortunate in needing less effort than others to get to level 2. Even crucial back-end teams can get there.
+This is not about "low-risk front-end" teams having more latitude to deploy, except in that they might be fortunate in needing less effort than others to get to Level Two. Even crucial back-end teams can get there.
 
 ## The opposite of rules
 
@@ -92,10 +92,10 @@ The opposite of "That's a rule" is "Use _judgement_. Do so at your _discretion_.
 
 This is scary as it requires trust.
 
-But there is something liberating in looking a person in the eye and saying "Yes, I chose that my update went live today, just like any other day. It's Friday, what of it? Our process is robust. We have the discipline to do this, do you? Why are you afraid, and what are you doing about it?"
+But there is something liberating in looking a person in the eye and saying "Yes, I chose that my update went live today, just like any other day. It's Friday, what of it? Our process is robust. We have the discipline and trust to do this, do you? Why are you afraid, and what are you doing about it?"
 
 But once you achieve Friday deploys, your work to keep the deploy safe and productive is ongoing. Then some myopic "best-practice" merchant will confidently and incorrectly tell you that you're doing it wrong, and that they chose better, because they do not have confidence in a specific time of week only.
 
 ## Obligatory Mention
 
-This is becoming ever more relevant currently, as senior people are ever more hypnotised by LLMs, and have the simplistic belief that "whatever the problem, AI is the tool for it". Continuous delivery does not flow from a chatbot. Proven best practices should not be exchanged for a chatbot.
+This is becoming ever more relevant currently, as senior people are ever more hypnotised by LLMs, and have the simplistic belief that "whatever the problem, AI is the tool for it". Continuous delivery does not flow from a chatbot. Proven best practices should not be exchanged for a chatbot. Big drops of unreviewable change are not continuous. It is possible for an engineering field to retreat as well as to advance, to lose maturity in the face of change.
